@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">commonLib</string>
+    <string name="com_label_loading">玩命加载中...</string>
+
+    <string name="label_check_network">检查手机网络</string>
+    <string name="label_reload">重新加载</string>
+    <string name="label_empty_page">页面暂无数据</string>
+    <string name="label_empty_search">无结果</string>
+    <string name="label_load_error">页面加载失败</string>
+    <string name="toast_download_fail">下载失败</string>
+</resources>

@@ -1,4 +1,4 @@
-package com.zj.mqtt.bean;
+package com.zj.mqtt.bean.todev;
 
 import lombok.Data;
 
@@ -11,4 +11,5 @@ public class CmdNetworkParaBean {
     int channel;
     int power;
     String panId;
+
 }

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    //标题栏
+    <declare-styleable name="HeaderView">
+        <attr format="string" name="titleText" />
+        <attr format="string" name="rightText" />
+        <attr format="string" name="leftText" />
+        <attr format="reference" name="titleIcon" />
+        <attr format="reference" name="rightIcon" />
+        <attr format="reference" name="leftIcon" />
+        <attr format="boolean" name="showRight" />
+        <attr format="boolean" name="showBack" />
+        <attr format="boolean" name="showDivide" />
+    </declare-styleable>
+
+
+    //我的页面itemView属性
+    <declare-styleable name="MyItemView">
+        <attr format="reference" name="item_icon" />
+        <attr format="reference" name="item_arrows" />
+        <attr format="string" name="item_title" />
+        <attr format="string" name="item_content" />
+        <attr format="boolean" name="item_enable" />
+        <attr format="boolean" name="item_divide" />
+        <attr format="boolean" name="item_checked" />
+        <attr format="boolean" name="item_arrows_show" />
+        <attr format="string" name="item_content_hint" />
+        <attr format="dimension" name="item_content_size" />
+        <attr format="color" name="item_content_color" />
+        <attr format="reference" name="item_content_drawright" />
+    </declare-styleable>
+
+
+    <declare-styleable name="VerifyCodeView">
+        <attr format="color" name="textColor" />
+        <attr format="string" name="text" />
+    </declare-styleable>
+
+
+    <declare-styleable name="BGAIndicator">
+        <attr format="color|reference" name="indicator_textColor" />
+        <attr format="dimension|reference" name="indicator_textSizeNormal" />
+        <attr format="dimension|reference" name="indicator_textSizeSelected" />
+        <attr format="dimension|reference" name="indicator_triangleHorizontalMargin" />
+        <attr format="color|reference" name="indicator_triangleColor" />
+        <attr format="dimension|reference" name="indicator_triangleHeight" />
+        <attr format="boolean" name="indicator_hasDivider" />
+        <attr format="color|reference" name="indicator_dividerColor" />
+        <attr format="dimension|reference" name="indicator_dividerWidth" />
+        <attr format="dimension|reference" name="indicator_dividerVerticalMargin" />
+    </declare-styleable>
+
+
+    <declare-styleable name="MyTabLayout">
+        <attr name="showCount" format="integer" />
+    </declare-styleable>
+
+
+</resources>

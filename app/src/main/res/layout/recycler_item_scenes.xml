@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".ui.HomeFragment"
     android:orientation="vertical">
 
@@ -10,13 +10,11 @@
        android:id="@+id/iv"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:src="@drawable/ic_launcher_foreground"
-       android:background="@drawable/ic_launcher_background"/>
+       android:src="@mipmap/ic_launcher"/>
 
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white"/>
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

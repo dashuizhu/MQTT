@@ -3,4 +3,13 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="label_delete">删除</string>
+    <string name="label_scenes_name">请输入场景名</string>
+    <string name="label_add">添加</string>
+    <string name="label_save">保存</string>
+    <string name="label_edit">编辑</string>
+    <string name="label_switch_on">开</string>
+    <string name="label_linking">连接中...</string>
+    <string name="label_link_fail">连接失败，点击重连</string>
+    <string name="label_unlink">未连接设备</string>
 </resources>

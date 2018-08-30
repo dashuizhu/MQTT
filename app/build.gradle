@@ -1,21 +1,56 @@
 apply plugin: 'com.android.application'
+apply plugin: 'realm-android'
+
 
 android {
   compileSdkVersion 27
+  signingConfigs {
+    signing {
+      keyAlias 'buddy'
+      keyPassword 'person2017'
+      storeFile file('person.jks')
+      storePassword 'person2017'
+    }
+  }
   defaultConfig {
     applicationId "com.zj.mqtt"
     minSdkVersion 16
     targetSdkVersion 27
     versionCode 1
     versionName "1.0"
+    signingConfig signingConfigs.signing
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    javaCompileOptions {
+      annotationProcessorOptions {
+        includeCompileClasspath true
+      }
+    }
   }
   buildTypes {
     release {
-      minifyEnabled false
+      zipAlignEnabled true
+      minifyEnabled true
+      shrinkResources true //去掉不用资源
+      signingConfig signingConfigs.signing
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
   }
+
+  applicationVariants.all { variant ->
+    variant.outputs.all { output ->
+      def fileName
+      if (variant.buildType.name.equals('release')) {
+        fileName = 'mqtt-v' + defaultConfig.versionName + '-' + releaseTime() + '.apk'
+      } else if (variant.buildType.name.equals('debug')) {
+        fileName = 'mqtt-' + defaultConfig.versionName + '-' + releaseTime() + "-debug" + '.apk'
+      }
+      outputFileName = new File("../../" + defaultConfig.versionName + "/", fileName)
+    }
+  }
+}
+
+def releaseTime() {
+  return new Date().format("yyyyMMdd", TimeZone.getTimeZone("UTC"))
 }
 
 dependencies {
@@ -40,6 +75,14 @@ dependencies {
   implementation 'com.hwangjr.rxbus:rxbus:1.0.6'
 
   compileOnly 'org.projectlombok:lombok:1.16.14'
+  compileOnly 'org.glassfish:javax.annotation:10.0-b28'
   implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.41'
   implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+  implementation project(path: ':commonlib')
+
+  implementation 'com.umeng.sdk:common:1.5.0'
+  implementation 'com.umeng.sdk:analytics:7.5.0'
+
+  compile 'com.alibaba:fastjson:1.1.70.android'
+
 }
