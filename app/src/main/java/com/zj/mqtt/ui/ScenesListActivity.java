@@ -7,7 +7,6 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,6 +28,7 @@ import com.person.commonlib.view.HeaderView;
 import com.zj.mqtt.AppApplication;
 import com.zj.mqtt.R;
 import com.zj.mqtt.adapter.ScenesListAdapter;
+import com.zj.mqtt.bean.ActionBean;
 import com.zj.mqtt.constant.AppString;
 import com.zj.mqtt.constant.RxBusString;
 import com.zj.mqtt.database.ScenesDao;
@@ -55,7 +55,8 @@ public class ScenesListActivity extends BaseActivity {
         registerRxBus();
     }
 
-    @OnClick(R.id.layout_header_right) public void onClickEdit() {
+    @OnClick(R.id.layout_header_right)
+    public void onClickEdit() {
         boolean isEdit = !mAdapter.isEdit();
         mAdapter.setEdit(isEdit);
 
@@ -97,8 +98,8 @@ public class ScenesListActivity extends BaseActivity {
     }
 
     private void initViews() {
-        //mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //mRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
 
         OnItemDragListener listener = new OnItemDragListener() {
             @Override
@@ -168,19 +169,28 @@ public class ScenesListActivity extends BaseActivity {
         mAdapter.setOnItemSwipeListener(onItemSwipeListener);
         //mAdapter.enableDragItem(mItemTouchHelper);
         mAdapter.setOnItemDragListener(listener);
-                //mRecyclerView.addItemDecoration(new GridItemDecoration(this ,R.drawable.list_divider));
+        //mRecyclerView.addItemDecoration(new GridItemDecoration(this ,R.drawable.list_divider));
 
         mRecyclerView.setAdapter(mAdapter);
-
 
         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         //mRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent(ScenesListActivity.this, ActionListActivity.class);
+                Intent intent = new Intent(ScenesListActivity.this, ScenesDetailActivity.class);
                 intent.putExtra(AppString.KEY_BEAN, mAdapter.getData().get(position));
                 startActivity(intent);
+            }
+        });
+        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                if (mAdapter.getData().get(position).getActionList() != null) {
+                    for (ActionBean actionBean : mAdapter.getData().get(position).getActionList()) {
+                        getApp().publishMsgToServer(actionBean.getControlBean());
+                    }
+                }
             }
         });
     }
@@ -190,6 +200,4 @@ public class ScenesListActivity extends BaseActivity {
         unRegisterRxBus();
         super.onDestroy();
     }
-
-
 }

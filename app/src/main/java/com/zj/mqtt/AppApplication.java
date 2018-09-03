@@ -179,6 +179,18 @@ public class AppApplication extends Application {
     }
 
     /**
+     * 模拟发送数据给自己，
+     */
+    public void testPublishToApp(String string) {
+        if (mConnectService == null || !mConnectService.isConnect()) {
+            ToastUtils.showToast(this, R.string.label_unlink);
+            return;
+        }
+
+        mConnectService.testPublishMsgToApp(string);
+    }
+
+    /**
      * 发送数据
      * @param msg
      */
@@ -233,6 +245,9 @@ public class AppApplication extends Application {
      * @return
      */
     public boolean isConnect() {
+        if (mConnectService == null) {
+            return false;
+        }
         return mConnectService.isConnect();
     }
 

@@ -14,10 +14,16 @@ import com.zj.mqtt.R;
 import com.zj.mqtt.bean.device.DeviceBean;
 import com.zj.mqtt.bean.toapp.CmdResult;
 import com.zj.mqtt.bean.todev.CmdControlBean;
+import com.zj.mqtt.bean.todev.HuaSetBean;
+import com.zj.mqtt.bean.todev.LevelBean;
+import com.zj.mqtt.bean.todev.ReportParaBean;
 import com.zj.mqtt.constant.AppString;
 import com.zj.mqtt.constant.CmdString;
 import com.zj.mqtt.constant.RxBusString;
 import com.zj.mqtt.protocol.CmdPackage;
+import com.zj.mqtt.protocol.CmdTest;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 设备控制详情
@@ -56,11 +62,14 @@ public class DeviceDetailActivity extends BaseActivity {
 
     @OnClick(R.id.iv_switch)
     public void onClickSwitch() {
-        CmdControlBean control = CmdPackage.setOnOff( !mDeviceBean.isControlOnOff(),
-                mDeviceBean.getDeviceEndpoint().getMac(),
-                mDeviceBean.getDeviceEndpoint().getEndpoint());
+        //CmdControlBean control = CmdPackage.setOnOff( !mDeviceBean.isControlOnOff(),
+        //        mDeviceBean.getDeviceEndpoint().getMac(),
+        //        mDeviceBean.getDeviceEndpoint().getEndpoint());
+        //
+        //getApp().publishMsgToServer(control);
 
-        getApp().publishMsgToServer(control);
+        CmdTest.testSendCmd(mDeviceBean.getDeviceEndpoint().getMac(), mDeviceBean.getDeviceEndpoint().getEndpoint());
+        CmdTest.testParse();
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD)
@@ -75,4 +84,5 @@ public class DeviceDetailActivity extends BaseActivity {
         super.onDestroy();
         unRegisterRxBus();
     }
+
 }

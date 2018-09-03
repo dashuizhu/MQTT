@@ -2,6 +2,7 @@ package com.zj.mqtt.bean.device;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.zj.mqtt.bean.todev.CmdControlBean;
 import lombok.Data;
 
 /**
@@ -24,11 +25,16 @@ public class DeviceBean implements Parcelable {
     private String deviceType;
     private DeviceEndpointBean deviceEndpoint;
 
+
+    private String cmd;
     private boolean controlOnOff;
+    private int controlLevel;
+    private int controlTime;
+    private int controlHua;
+    private int controlSet;
 
-    public DeviceBean() {
 
-    }
+    public DeviceBean() { }
 
     @Override
     public int describeContents() {
@@ -42,7 +48,12 @@ public class DeviceBean implements Parcelable {
         dest.writeInt(this.deviceState);
         dest.writeString(this.deviceType);
         dest.writeParcelable(this.deviceEndpoint, flags);
+        dest.writeString(this.cmd);
         dest.writeByte(this.controlOnOff ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.controlLevel);
+        dest.writeInt(this.controlTime);
+        dest.writeInt(this.controlHua);
+        dest.writeInt(this.controlSet);
     }
 
     protected DeviceBean(Parcel in) {
@@ -51,7 +62,12 @@ public class DeviceBean implements Parcelable {
         this.deviceState = in.readInt();
         this.deviceType = in.readString();
         this.deviceEndpoint = in.readParcelable(DeviceEndpointBean.class.getClassLoader());
+        this.cmd = in.readString();
         this.controlOnOff = in.readByte() != 0;
+        this.controlLevel = in.readInt();
+        this.controlTime = in.readInt();
+        this.controlHua = in.readInt();
+        this.controlSet = in.readInt();
     }
 
     public static final Creator<DeviceBean> CREATOR = new Creator<DeviceBean>() {

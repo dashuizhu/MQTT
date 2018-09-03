@@ -19,8 +19,7 @@ import com.zj.mqtt.R;
 import com.zj.mqtt.adapter.ActionAdapter;
 import com.zj.mqtt.bean.ActionBean;
 import com.zj.mqtt.bean.ScenesBean;
-import com.zj.mqtt.bean.device.DeviceBean;
-import com.zj.mqtt.protocol.CmdPackage;
+import com.zj.mqtt.bean.todev.CmdControlBean;
 import com.zj.mqtt.constant.AppString;
 import com.zj.mqtt.constant.RxBusString;
 import com.zj.mqtt.database.ScenesDao;
@@ -30,7 +29,7 @@ import com.zj.mqtt.database.ScenesDao;
  *
  * @author zhuj 2018/8/28 下午2:58
  */
-public class ActionListActivity extends BaseActivity {
+public class ScenesDetailActivity extends BaseActivity {
 
     private final int ACTIVITY_DEVICE_LIST = 11;
     private final int ACTIVITY_DEVICE = 12;
@@ -47,7 +46,7 @@ public class ActionListActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_action_list);
+        setContentView(R.layout.activity_scenes_detail);
         ButterKnife.bind(this);
         initViews();
     }
@@ -59,7 +58,7 @@ public class ActionListActivity extends BaseActivity {
 
     @OnClick(R.id.btn_add)
     public void onAdd() {
-        Intent intent = new Intent(ActionListActivity.this, DeviceListActivity.class);
+        Intent intent = new Intent(ScenesDetailActivity.this, DeviceListActivity.class);
         startActivityForResult(intent, ACTIVITY_DEVICE_LIST);
     }
 
@@ -76,7 +75,7 @@ public class ActionListActivity extends BaseActivity {
         }
         mEtName.setEnabled(edit);
         mAdapter.setEdit(edit);
-        mHeaderView.getTextHeaderRight().setText(edit ? R.string.label_save: R.string.label_edit);
+        mHeaderView.getTextHeaderRight().setText(edit ? R.string.label_save : R.string.label_edit);
     }
 
     private void initViews() {
@@ -97,8 +96,9 @@ public class ActionListActivity extends BaseActivity {
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent(ActionListActivity.this, DeviceDetailActivity.class);
-                intent.putExtra(AppString.KEY_BEAN, mAdapter.getData().get(position));
+                Intent intent = new Intent(ScenesDetailActivity.this, DeviceControlActivity.class);
+                intent.putExtra(AppString.KEY_BEAN,
+                        mAdapter.getData().get(position).getControlBean());
                 startActivityForResult(intent, ACTIVITY_DEVICE);
             }
         });
@@ -110,17 +110,37 @@ public class ActionListActivity extends BaseActivity {
         if (resultCode != RESULT_OK) {
             return;
         }
-        if (requestCode == ACTIVITY_DEVICE_LIST) {
-            DeviceBean bean = data.getParcelableExtra(AppString.KEY_BEAN);
-            String cmdJson = "";
+        CmdControlBean bean;
+        //String deviceMac;
+        switch (requestCode) {
+            case ACTIVITY_DEVICE_LIST:
+                bean = data.getParcelableExtra(AppString.KEY_BEAN);
+                //deviceMac = data.getStringExtra(AppString.KEY_MAC);
+                String deviceName = getApp().getDevice(bean.getDeviceMac()).getName();
 
-            ActionBean ab = new ActionBean();
-            ab.setDeviceMac(bean.getDeviceEndpoint().getMac());
-            ab.setDeviceName(bean.getName());
-            ab.setCmdJson(cmdJson);
+                ActionBean ab = new ActionBean();
+                ab.setDeviceMac(bean.getDeviceMac());
+                ab.setDeviceName(deviceName);
+                ab.setControlBean(bean);
 
-            mScenesBean.getActionList().add(ab);
-            mAdapter.notifyDataSetChanged();
+                mScenesBean.getActionList().add(ab);
+                mAdapter.notifyItemInserted(mScenesBean.getActionList().size() - 1);
+                break;
+            case ACTIVITY_DEVICE:
+                bean = data.getParcelableExtra(AppString.KEY_BEAN);
+                //deviceMac = data.getStringExtra(AppString.KEY_MAC);
+                //cmdJson = JSON.toJSONString(CmdPackage.getCmdByDevice(bean));
+
+                int listSize = mAdapter.getData().size();
+                for (int i = 0; i < listSize; i++) {
+                    if (mAdapter.getData().get(i).getDeviceMac().equals(bean.getDeviceMac())) {
+                        mAdapter.getData().get(i).setControlBean(bean);
+                        mAdapter.notifyItemChanged(i);
+                        break;
+                    }
+                }
+                break;
+            default:
         }
     }
 }

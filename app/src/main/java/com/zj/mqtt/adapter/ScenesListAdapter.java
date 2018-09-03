@@ -23,6 +23,7 @@ public class ScenesListAdapter extends BaseItemDraggableAdapter<ScenesBean, Base
     protected void convert(BaseViewHolder helper, ScenesBean item) {
         helper.setText(R.id.tv_name, item.getName())
                 .setGone(R.id.iv_drag, mEdit);
+        helper.addOnClickListener(R.id.btn_send);
     }
 
     public void setEdit(boolean isEdit) {

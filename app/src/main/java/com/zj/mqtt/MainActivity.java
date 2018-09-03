@@ -43,6 +43,10 @@ public class MainActivity extends BaseActivity {
         });
         registerRxBus();
         getApp().connectService();
+
+        if (getApp().isConnect()) {
+            mTvStatus.setVisibility(View.GONE);
+        }
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.zj.mqtt.protocol;
 
+import com.zj.mqtt.bean.device.DeviceBean;
 import com.zj.mqtt.bean.toapp.NodeBean;
 import com.zj.mqtt.bean.todev.CmdControlBean;
 import com.zj.mqtt.bean.todev.CmdNetworkParaBean;
@@ -58,6 +59,12 @@ public class CmdPackage {
      */
     public static CmdControlBean addDevice(String mac, String key) {
         CmdControlBean bean = new CmdControlBean(CmdString.DEV_OPEN_NETWORK_KEYS);
+
+        NodeBean nodeBean = new NodeBean();
+        nodeBean.setMac(mac);
+        nodeBean.setKey(key);
+
+        bean.setNode(nodeBean);
         return bean;
     }
 
@@ -157,4 +164,39 @@ public class CmdPackage {
 
         return bean;
     }
+
+
+
+    public static CmdControlBean getCmdByDevice(DeviceBean deviceBean) {
+        CmdControlBean bean = null;
+        switch (deviceBean.getCmd()) {
+            case CmdString.DEV_ONOFF:
+                bean = CmdPackage.setOnOff(deviceBean.isControlOnOff(),
+                        deviceBean.getDeviceEndpoint().getMac(),
+                        deviceBean.getDeviceEndpoint().getEndpoint());
+                break;
+            case CmdString.DEV_COLOR_CONTROL:
+                HuaSetBean huaSetBean = new HuaSetBean();
+                huaSetBean.setTime(deviceBean.getControlTime());
+                huaSetBean.setSat(deviceBean.getControlSet());
+                huaSetBean.setHua(deviceBean.getControlHua());
+
+                bean = CmdPackage.setColorControl(deviceBean.getDeviceEndpoint().getMac(),
+                        deviceBean.getDeviceEndpoint().getEndpoint(),
+                        huaSetBean);
+                break;
+            case CmdString.DEV_LEVEL_CONTROL:
+                LevelBean levelBean = new LevelBean();
+                levelBean.setTime(deviceBean.getControlTime());
+                levelBean.setLevel(deviceBean.getControlLevel());
+
+                bean = CmdPackage.setLevelControl(deviceBean.getDeviceEndpoint().getMac(),
+                        deviceBean.getDeviceEndpoint().getEndpoint(),
+                        levelBean);
+                break;
+            default:
+        }
+        return bean;
+    }
+
 }

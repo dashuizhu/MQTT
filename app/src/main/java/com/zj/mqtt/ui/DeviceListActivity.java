@@ -23,7 +23,9 @@ import com.zj.mqtt.bean.toapp.CmdNodeResult;
 import com.zj.mqtt.bean.toapp.CmdResult;
 import com.zj.mqtt.bean.toapp.CmdStateChagneResult;
 import com.zj.mqtt.bean.device.DeviceBean;
+import com.zj.mqtt.bean.todev.CmdControlBean;
 import com.zj.mqtt.constant.AppString;
+import com.zj.mqtt.constant.CmdString;
 import com.zj.mqtt.constant.RxBusString;
 
 /**
@@ -37,6 +39,7 @@ public class DeviceListActivity extends BaseActivity {
 
     private DeviceAdapter mAdapter;
 
+    private final int ACTIVITY_CONTROL = 11;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,9 +78,13 @@ public class DeviceListActivity extends BaseActivity {
                 //setResult(RESULT_OK, intent);
                 //finish();
 
-                Intent intent = new Intent(DeviceListActivity.this, DeviceDetailActivity.class);
-                intent.putExtra("mac", mAdapter.getData().get(position).getDeviceEndpoint().getMac());
-                startActivityForResult(intent, 1);
+                Intent intent = new Intent(DeviceListActivity.this, DeviceControlActivity.class);
+
+                // TODO: 2018/8/31 这里默认值，一定要注意 设备类型， 和 默认控制数据
+                CmdControlBean controlBean = new CmdControlBean(CmdString.DEV_ONOFF);
+                controlBean.setDeviceMac(mAdapter.getData().get(position).getDeviceEndpoint().getMac());
+                intent.putExtra(AppString.KEY_BEAN, controlBean);
+                startActivityForResult(intent, ACTIVITY_CONTROL);
             }
         });
 
@@ -122,5 +129,22 @@ public class DeviceListActivity extends BaseActivity {
     protected void onStop() {
         unRegisterRxBus();
         super.onStop();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+        if (requestCode == ACTIVITY_CONTROL) {
+            CmdControlBean bean = data.getParcelableExtra(AppString.KEY_BEAN);
+
+            Intent intent = new Intent();
+            intent.putExtra(AppString.KEY_BEAN, bean);
+            setResult(RESULT_OK, intent);
+            finish();
+
+        }
     }
 }

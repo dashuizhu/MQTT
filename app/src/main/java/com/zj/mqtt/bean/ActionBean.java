@@ -2,6 +2,10 @@ package com.zj.mqtt.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.alibaba.fastjson.JSON;
+import com.zj.mqtt.bean.device.DeviceBean;
+import com.zj.mqtt.bean.device.DeviceEndpointBean;
+import com.zj.mqtt.bean.todev.CmdControlBean;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -12,7 +16,6 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class ActionBean implements Parcelable {
 
-    private String id;
     /**
      * 对应的设备
      */
@@ -21,12 +24,25 @@ public class ActionBean implements Parcelable {
     private String deviceName;
 
     /**
-     * 对应的操作
+     * 对应的操作， 避免CmdControlBean parcelable麻烦，用个字符串代替。
+     * 并存在于数据库中
      */
-    private String cmdJson;
+    //private String cmdJson;
+
+    private CmdControlBean controlBean;
 
     public ActionBean() {
 
+    }
+
+    //public CmdControlBean getControlBean() {
+    //    controlBean = JSON.parseObject(cmdJson, CmdControlBean.class);
+    //    return controlBean;
+    //}
+
+
+    public String getControlBeanJson() {
+        return JSON.toJSONString(controlBean);
     }
 
     @Override
@@ -36,29 +52,27 @@ public class ActionBean implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.id);
         dest.writeString(this.deviceMac);
         dest.writeString(this.deviceName);
-        dest.writeString(this.cmdJson);
+        dest.writeParcelable(this.controlBean, flags);
     }
 
     protected ActionBean(Parcel in) {
-        this.id = in.readString();
         this.deviceMac = in.readString();
         this.deviceName = in.readString();
-        this.cmdJson = in.readString();
+        this.controlBean = in.readParcelable(CmdControlBean.class.getClassLoader());
     }
 
-    public static final Parcelable.Creator<ActionBean> CREATOR =
-            new Parcelable.Creator<ActionBean>() {
-                @Override
-                public ActionBean createFromParcel(Parcel source) {
-                    return new ActionBean(source);
-                }
+    public static final Creator<ActionBean> CREATOR = new Creator<ActionBean>() {
+        @Override
+        public ActionBean createFromParcel(Parcel source) {
+            return new ActionBean(source);
+        }
 
-                @Override
-                public ActionBean[] newArray(int size) {
-                    return new ActionBean[size];
-                }
-            };
+        @Override
+        public ActionBean[] newArray(int size) {
+            return new ActionBean[size];
+        }
+    };
+
 }

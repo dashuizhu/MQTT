@@ -1,8 +1,10 @@
 package com.zj.mqtt.database;
 
 import android.util.Log;
+import com.alibaba.fastjson.JSON;
 import com.zj.mqtt.bean.ActionBean;
 import com.zj.mqtt.bean.ScenesBean;
+import com.zj.mqtt.bean.todev.CmdControlBean;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
@@ -92,7 +94,7 @@ public class ScenesDao extends RealmObject {
             for (ActionBean actBean : bean.getActionList()) {
                 ActionDao actDao = new ActionDao();
                 actDao.setDeviceMac(actBean.getDeviceMac());
-                actDao.setCmdJson(actBean.getCmdJson());
+                actDao.setCmdJson(actBean.getControlBeanJson());
                 actDao.setDeviceName(actBean.getDeviceName());
                 actionList.add(actDao);
             }
@@ -112,7 +114,8 @@ public class ScenesDao extends RealmObject {
         if (actionList != null) {
             for (ActionDao actDao : actionList) {
                 ActionBean actBean = new ActionBean();
-                actBean.setCmdJson(actDao.getCmdJson());
+                CmdControlBean controlBean = JSON.parseObject(actDao.getCmdJson(), CmdControlBean.class);
+                actBean.setControlBean(controlBean);
                 actBean.setDeviceMac(actDao.getDeviceMac());
                 actBean.setDeviceName(actDao.getDeviceName());
 

@@ -12,4 +12,10 @@
     <string name="label_linking">连接中...</string>
     <string name="label_link_fail">连接失败，点击重连</string>
     <string name="label_unlink">未连接设备</string>
+    <string name="label_time">时间</string>
+    <string name="label_level">level</string>
+    <string name="label_level_control">调光控制</string>
+    <string name="label_hua">hua</string>
+    <string name="label_set">set</string>
+    <string name="label_execute">执行</string>
 </resources>

@@ -6,18 +6,9 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import com.alibaba.fastjson.JSON;
 import com.hwangjr.rxbus.RxBus;
-import com.zj.mqtt.AppApplication;
-import com.zj.mqtt.bean.device.DeviceBean;
-import com.zj.mqtt.bean.toapp.CmdResult;
-import com.zj.mqtt.bean.todev.CmdControlBean;
-import com.zj.mqtt.constant.AppString;
-import com.zj.mqtt.constant.CmdString;
 import com.zj.mqtt.constant.RxBusString;
 import com.zj.mqtt.protocol.CmdParse;
-import java.util.HashMap;
-import java.util.Map;
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -26,7 +17,6 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.json.JSONObject;
 
 /**
  * @author zhuj 2018/8/29 下午3:15.
@@ -101,7 +91,7 @@ public class ConnectService extends Service {
         //心跳时间，单位为秒。即多长时间确认一次Client端是否在线
         options.setKeepAliveInterval(60);
         //允许同时发送几条消息（未收到broker确认信息）
-        options.setMaxInflight(10);
+        options.setMaxInflight(15);
         //进行连接  有多个重载方法  看需求选择
         RxBus.get().post(RxBusString.LINKING);
         isLinking = true;
@@ -131,11 +121,11 @@ public class ConnectService extends Service {
                     Log.e(TAG, "onFailure  " + str2);
                     Log.e(TAG, "onFailure  " + str);
                     //if ("已连接客户机".equals(exception.getMessage())) {
-                        try {
-                            mMqttClient.disconnect();
-                        } catch (MqttException e) {
-                            e.printStackTrace();
-                        }
+                    try {
+                        mMqttClient.disconnect();
+                    } catch (MqttException e) {
+                        e.printStackTrace();
+                    }
                     //}
                 }
             }
@@ -149,7 +139,7 @@ public class ConnectService extends Service {
             }
 
             @Override
-            public void messageArrived(String topic, MqttMessage message) throws Exception {
+            public void messageArrived(String topic, MqttMessage message) {
                 String receMsg = new String(message.getPayload());
                 ////接收消息
                 Log.d(TAG, "messageArrived  "
@@ -159,7 +149,6 @@ public class ConnectService extends Service {
                         + " ~"
                         + message.getQos());
                 CmdParse.parseMsg(receMsg);
-
             }
 
             @Override
@@ -194,29 +183,32 @@ public class ConnectService extends Service {
         }
     }
 
-    //private Map<Integer, CmdControlBean> map = new HashMap<>();
-    //public void publishMsgToServer(final String cmd) {
-    //    try {
-    //        Log.w(TAG, " isConnect " + mMqttClient.isConnected());
-    //        mMqttClient.publish(TOPIC_PUBLISH, cmd.getBytes(), 2, false, null,
-    //                new IMqttActionListener() {
-    //                    @Override
-    //                    public void onSuccess(IMqttToken asyncActionToken) {
-    //                        Log.w(TAG, "publish onSuccess");
-    //                    }
-    //
-    //                    @Override
-    //                    public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-    //                        Log.w(TAG, "publish onFailure ");
-    //                        if (exception != null) {
-    //                            exception.printStackTrace();
-    //                        }
-    //                    }
-    //                });
-    //    } catch (MqttException e) {
-    //        e.printStackTrace();
-    //    }
-    //}
+    /**
+     * 模拟测试使用
+     */
+    public void testPublishMsgToApp(final String msg) {
+        try {
+            Log.w(TAG, " isConnect " + mMqttClient.isConnected());
+
+            mMqttClient.publish(TOPIC_SUBSCRIBE, msg.getBytes(), 2, false, null,
+                    new IMqttActionListener() {
+                        @Override
+                        public void onSuccess(IMqttToken asyncActionToken) {
+                            Log.w(TAG, "publish onSuccess");
+                        }
+
+                        @Override
+                        public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                            Log.w(TAG, "publish onFailure ");
+                            if (exception != null) {
+                                exception.printStackTrace();
+                            }
+                        }
+                    });
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * 停止连接

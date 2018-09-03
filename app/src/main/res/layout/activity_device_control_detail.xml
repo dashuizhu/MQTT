@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.DeviceDetailActivity">
+
+
+    <com.person.commonlib.view.HeaderView
+        android:id="@+id/headerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:showRight="true"
+        app:rightText="@string/label_save"/>
+
+
+
+    <RadioGroup
+        android:id="@+id/rb_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <RadioButton
+            android:id="@+id/rb_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/layout_height"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:text="开关"/>
+
+        <RelativeLayout
+            android:id="@+id/layout_switch"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/layout_height"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <CheckBox
+                android:id="@+id/cb_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/cb_status"/>
+
+        </RelativeLayout>
+
+
+        <RadioButton
+            android:id="@+id/rb_color"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/layout_height"
+            android:text="颜色控制"/>
+
+        <LinearLayout
+            android:id="@+id/layout_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/layout_height"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_hua"/>
+
+                <TextView
+                    android:id="@+id/tv_color_hua"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"/>
+
+                <SeekBar
+                    android:id="@+id/sb_color_hua"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:maxHeight="2dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:progressDrawable="@drawable/bg_seekbar_white"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="@dimen/layout_height"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_set"/>
+
+                <TextView
+                    android:id="@+id/tv_color_set"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text=""/>
+
+                <SeekBar
+                    android:id="@+id/sb_color_set"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:maxHeight="2dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:progressDrawable="@drawable/bg_seekbar_white"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/layout_height"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_time"/>
+
+                <TextView
+                    android:id="@+id/tv_color_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text=""/>
+
+                <SeekBar
+                    android:id="@+id/sb_color_time"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:maxHeight="2dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:progressDrawable="@drawable/bg_seekbar_white"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <RadioButton
+            android:id="@+id/rb_level"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/layout_height"
+            android:text="@string/label_level_control"/>
+
+        <LinearLayout
+            android:id="@+id/layout_level"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/layout_height"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_level"/>
+
+                <TextView
+                    android:id="@+id/tv_level_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text=""/>
+
+                <SeekBar
+                    android:id="@+id/sb_level_value"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:maxHeight="2dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:progressDrawable="@drawable/bg_seekbar_white"
+                    />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/layout_height"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_time"/>
+
+                <TextView
+                    android:id="@+id/tv_level_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text=""/>
+
+                <SeekBar
+                    android:id="@+id/sb_level_time"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:maxHeight="2dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:progressDrawable="@drawable/bg_seekbar_white"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </RadioGroup>
+
+
+
+
+</LinearLayout>

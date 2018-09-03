@@ -105,7 +105,7 @@ public class CmdParse {
                     parseNormal(result);
                     break;
             }
-
+            Log.w(TAG, "解析success " + result.getCmd());
             RxBus.get().post(RxBusString.RXBUS_PARSE, result);
             return result;
         } catch (Exception e) {
