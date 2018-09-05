@@ -55,6 +55,11 @@ public class ScenesListActivity extends BaseActivity {
         registerRxBus();
     }
 
+    @OnClick(R.id.layout_header_back)
+    public void onClickBack() {
+        finish();
+    }
+
     @OnClick(R.id.layout_header_right)
     public void onClickEdit() {
         boolean isEdit = !mAdapter.isEdit();
@@ -70,6 +75,7 @@ public class ScenesListActivity extends BaseActivity {
             ScenesDao.saveOrUpdate(mAdapter.getData());
             mAdapter.disableDragItem();
             mAdapter.disableSwipeItem();
+            setResult(RESULT_OK);
         }
     }
 
@@ -85,6 +91,7 @@ public class ScenesListActivity extends BaseActivity {
     public void onKidChange(String action) {
         if (action.equals(RxBusString.RXBUS_SCENES)) {
             mRefresh = true;
+            setResult(RESULT_OK);
         }
     }
 
@@ -128,7 +135,7 @@ public class ScenesListActivity extends BaseActivity {
         final Paint paint = new Paint();
         paint.setAntiAlias(true);
         paint.setTextSize(20);
-        paint.setColor(Color.BLACK);
+        paint.setColor(Color.WHITE);
         OnItemSwipeListener onItemSwipeListener = new OnItemSwipeListener() {
             @Override
             public void onItemSwipeStart(RecyclerView.ViewHolder viewHolder, int pos) {
@@ -153,8 +160,8 @@ public class ScenesListActivity extends BaseActivity {
             public void onItemSwipeMoving(Canvas canvas, RecyclerView.ViewHolder viewHolder,
                     float dX, float dY, boolean isCurrentlyActive) {
                 canvas.drawColor(
-                        ContextCompat.getColor(ScenesListActivity.this, R.color.colorPrimary));
-                canvas.drawText("Just some text", 0, 40, paint);
+                        ContextCompat.getColor(ScenesListActivity.this, R.color.red));
+                canvas.drawText("滑动删除", 40, 40, paint);
             }
         };
 

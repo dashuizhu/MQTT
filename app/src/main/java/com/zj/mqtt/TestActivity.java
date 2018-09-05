@@ -16,7 +16,7 @@ import com.zj.mqtt.constant.RxBusString;
 import com.zj.mqtt.ui.BaseActivity;
 import com.zj.mqtt.ui.ScenesListActivity;
 
-public class MainActivity extends BaseActivity {
+public class TestActivity extends BaseActivity {
 
     @BindView(R.id.tv_status) TextView mTvStatus;
     @BindView(R.id.tv_message) TextView mTvMessage;
@@ -37,7 +37,7 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.btn_scenes).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ScenesListActivity.class);
+                Intent intent = new Intent(TestActivity.this, ScenesListActivity.class);
                 startActivity(intent);
             }
         });

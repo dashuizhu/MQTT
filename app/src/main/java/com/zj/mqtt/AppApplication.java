@@ -84,6 +84,12 @@ public class AppApplication extends Application {
         return list;
     }
 
+    public List<ScenesBean> getScenesListShow() {
+        List<ScenesBean> array = getScenesList();
+        int subSize= Math.min(4, array.size());
+        return array.subList(0, subSize);
+    }
+
     public List<DeviceBean> getDevcieList() {
         if (mDeviceList == null) {
             mDeviceList = new ArrayList<>();
@@ -100,6 +106,18 @@ public class AppApplication extends Application {
             }
         }
         return mDeviceList;
+    }
+
+    public List<DeviceBean> getDeviceListShow() {
+        List<DeviceBean> array = getDevcieList();
+        int subSize= Math.min(7, array.size());
+        array.subList(0, subSize);
+
+        DeviceBean moreDevice = new DeviceBean();
+        moreDevice.setMoreDevice(true);
+        moreDevice.setName("更多");
+        array.add(moreDevice);
+        return array;
     }
 
     public void setDeviceList(List<DeviceBean> list) {

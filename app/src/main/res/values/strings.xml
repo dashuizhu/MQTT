@@ -18,4 +18,10 @@
     <string name="label_hua">hua</string>
     <string name="label_set">set</string>
     <string name="label_execute">执行</string>
+    <string name="label_device_add">添加设备</string>
+    <string name="label_device_name">输入设备名字</string>
+    <string name="label_device_place">摆放位置</string>
+    <string name="label_next">下一步</string>
+    <string name="title_device_name7place">设置设备名称及位置</string>
+    <string name="toast_input_empty">输入不能为空</string>
 </resources>

@@ -25,6 +25,8 @@ public class DeviceBean implements Parcelable {
     private String deviceType;
     private DeviceEndpointBean deviceEndpoint;
 
+    private String place;
+    private boolean moreDevice;
 
     private String cmd;
     private boolean controlOnOff;

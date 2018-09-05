@@ -4,8 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".ui.HomeFragment"
-    android:gravity="center_vertical"
-    android:orientation="horizontal">
+    android:gravity="center"
+    android:background="@drawable/layout_selector"
+    android:paddingTop="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_horizontal_margin"
+    android:orientation="vertical">
 
    <ImageView
        android:id="@+id/iv"

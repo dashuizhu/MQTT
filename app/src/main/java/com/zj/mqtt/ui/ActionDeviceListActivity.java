@@ -17,12 +17,12 @@ import com.hwangjr.rxbus.thread.EventThread;
 import com.person.commonlib.view.HeaderView;
 import com.zj.mqtt.R;
 import com.zj.mqtt.adapter.DeviceAdapter;
+import com.zj.mqtt.bean.device.DeviceBean;
 import com.zj.mqtt.bean.toapp.CmdNodeLeftResult;
 import com.zj.mqtt.bean.toapp.CmdNodeListResult;
 import com.zj.mqtt.bean.toapp.CmdNodeResult;
 import com.zj.mqtt.bean.toapp.CmdResult;
 import com.zj.mqtt.bean.toapp.CmdStateChagneResult;
-import com.zj.mqtt.bean.device.DeviceBean;
 import com.zj.mqtt.bean.todev.CmdControlBean;
 import com.zj.mqtt.constant.AppString;
 import com.zj.mqtt.constant.CmdString;
@@ -30,9 +30,10 @@ import com.zj.mqtt.constant.RxBusString;
 
 /**
  * 设备列表
+ *
  * @author zhuj 2018/8/28 下午4:03
  */
-public class DeviceListActivity extends BaseActivity {
+public class ActionDeviceListActivity extends BaseActivity {
 
     @BindView(R.id.headerView) HeaderView mHeaderView;
     @BindView(R.id.recyclerView) RecyclerView mRecyclerView;
@@ -44,7 +45,7 @@ public class DeviceListActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_device_list);
+        setContentView(R.layout.activity_action_device_list);
         ButterKnife.bind(this);
         initViews();
     }
@@ -63,10 +64,11 @@ public class DeviceListActivity extends BaseActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         //mRecyclerView.addItemDecoration(new RecyclerViewDivider(this, LinearLayoutManager.VERTICAL));
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        mRecyclerView.addItemDecoration(
+                new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
         mAdapter = new DeviceAdapter();
-        mAdapter.setNewData( getApp().getDevcieList());
+        mAdapter.setNewData(getApp().getDevcieList());
 
         mRecyclerView.setAdapter(mAdapter);
 
@@ -78,11 +80,13 @@ public class DeviceListActivity extends BaseActivity {
                 //setResult(RESULT_OK, intent);
                 //finish();
 
-                Intent intent = new Intent(DeviceListActivity.this, DeviceControlActivity.class);
+                Intent intent =
+                        new Intent(ActionDeviceListActivity.this, DeviceControlActivity.class);
 
                 // TODO: 2018/8/31 这里默认值，一定要注意 设备类型， 和 默认控制数据
                 CmdControlBean controlBean = new CmdControlBean(CmdString.DEV_ONOFF);
-                controlBean.setDeviceMac(mAdapter.getData().get(position).getDeviceEndpoint().getMac());
+                controlBean.setDeviceMac(
+                        mAdapter.getData().get(position).getDeviceEndpoint().getMac());
                 intent.putExtra(AppString.KEY_BEAN, controlBean);
                 startActivityForResult(intent, ACTIVITY_CONTROL);
             }
@@ -92,16 +96,13 @@ public class DeviceListActivity extends BaseActivity {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 DeviceBean bean = mAdapter.getData().get(position);
-                bean.setControlOnOff( !bean.isControlOnOff());
+                bean.setControlOnOff(!bean.isControlOnOff());
                 mAdapter.notifyItemChanged(position);
             }
         });
-
     }
 
-    @Subscribe(thread = EventThread.MAIN_THREAD
-            , tags = @Tag(RxBusString.RXBUS_PARSE)
-    )
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = @Tag(RxBusString.RXBUS_PARSE))
     public void onDeviceChange(CmdResult result) {
         if (result instanceof CmdStateChagneResult
                 || result instanceof CmdNodeLeftResult
@@ -144,7 +145,6 @@ public class DeviceListActivity extends BaseActivity {
             intent.putExtra(AppString.KEY_BEAN, bean);
             setResult(RESULT_OK, intent);
             finish();
-
         }
     }
 }

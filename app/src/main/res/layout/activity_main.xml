@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".TestActivity">
 
     <com.person.commonlib.view.HeaderView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:showBack="false"
-        app:titleText="@string/app_name"
-        app:showDivide="false"/>
+        app:showDivide="false"
+        app:titleText="@string/app_name" />
 
     <TextView
         android:id="@+id/tv_status"

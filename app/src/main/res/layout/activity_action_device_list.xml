@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.HomeFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ui.ScenesDetailActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerViewScenes"
+    <com.person.commonlib.view.HeaderView
+        android:id="@+id/headerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"/>
+        app:showRight="true"
+        app:rightText="@string/label_edit"/>
+
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerViewDevice"
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
 
 </LinearLayout>

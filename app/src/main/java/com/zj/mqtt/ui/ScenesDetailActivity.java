@@ -58,7 +58,7 @@ public class ScenesDetailActivity extends BaseActivity {
 
     @OnClick(R.id.btn_add)
     public void onAdd() {
-        Intent intent = new Intent(ScenesDetailActivity.this, DeviceListActivity.class);
+        Intent intent = new Intent(ScenesDetailActivity.this, ActionDeviceListActivity.class);
         startActivityForResult(intent, ACTIVITY_DEVICE_LIST);
     }
 

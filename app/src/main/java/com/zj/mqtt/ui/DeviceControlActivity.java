@@ -62,12 +62,15 @@ public class DeviceControlActivity extends BaseActivity {
     private void initViews() {
         mControlBean = getIntent().getParcelableExtra(AppString.KEY_BEAN);
         mDeviceBean = getApp().getDevice(mControlBean.getDeviceMac());
-        // TODO: 2018/8/31 如果mac 找不到对应的deivce ， 该如何
+        if (mDeviceBean == null) {
+            showToast("未找到设备");
+            finish();
+            return;
+        }
         mHeaderView.setTitle(mDeviceBean.getName());
 
         initSeekBarListener();
         initData();
-
     }
 
     private void initData() {
@@ -153,7 +156,8 @@ public class DeviceControlActivity extends BaseActivity {
     public void onRightClick() {
         switch (mRbGroup.getCheckedRadioButtonId()) {
             case R.id.rb_switch:
-                mControlBean = CmdPackage.setOnOff(mCbSwitch.isChecked(), mDeviceBean.getDeviceEndpoint().getMac(),
+                mControlBean = CmdPackage.setOnOff(mCbSwitch.isChecked(),
+                        mDeviceBean.getDeviceEndpoint().getMac(),
                         mDeviceBean.getDeviceEndpoint().getEndpoint());
                 break;
             case R.id.rb_color:
@@ -162,7 +166,7 @@ public class DeviceControlActivity extends BaseActivity {
                 huaSetBean.setSat(mSbColorSet.getProgress());
                 huaSetBean.setHua(mSbColorTime.getProgress());
 
-                mControlBean = CmdPackage.setColorControl( mDeviceBean.getDeviceEndpoint().getMac(),
+                mControlBean = CmdPackage.setColorControl(mDeviceBean.getDeviceEndpoint().getMac(),
                         mDeviceBean.getDeviceEndpoint().getEndpoint(), huaSetBean);
                 break;
             case R.id.rb_level:
