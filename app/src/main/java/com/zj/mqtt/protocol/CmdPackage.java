@@ -172,7 +172,7 @@ public class CmdPackage {
         switch (deviceBean.getCmd()) {
             case CmdString.DEV_ONOFF:
                 bean = CmdPackage.setOnOff(deviceBean.isControlOnOff(),
-                        deviceBean.getDeviceEndpoint().getMac(),
+                        deviceBean.getDeviceMac(),
                         deviceBean.getDeviceEndpoint().getEndpoint());
                 break;
             case CmdString.DEV_COLOR_CONTROL:
@@ -181,7 +181,7 @@ public class CmdPackage {
                 huaSetBean.setSat(deviceBean.getControlSet());
                 huaSetBean.setHua(deviceBean.getControlHua());
 
-                bean = CmdPackage.setColorControl(deviceBean.getDeviceEndpoint().getMac(),
+                bean = CmdPackage.setColorControl(deviceBean.getDeviceMac(),
                         deviceBean.getDeviceEndpoint().getEndpoint(),
                         huaSetBean);
                 break;
@@ -190,7 +190,7 @@ public class CmdPackage {
                 levelBean.setTime(deviceBean.getControlTime());
                 levelBean.setLevel(deviceBean.getControlLevel());
 
-                bean = CmdPackage.setLevelControl(deviceBean.getDeviceEndpoint().getMac(),
+                bean = CmdPackage.setLevelControl(deviceBean.getDeviceMac(),
                         deviceBean.getDeviceEndpoint().getEndpoint(),
                         levelBean);
                 break;

@@ -27,6 +27,8 @@ public class DeviceBean implements Parcelable {
 
     private String place;
     private boolean moreDevice;
+    private String deviceMac;
+    private int seq;
 
     private String cmd;
     private boolean controlOnOff;
@@ -37,6 +39,14 @@ public class DeviceBean implements Parcelable {
 
 
     public DeviceBean() { }
+
+    public DeviceEndpointBean getDeviceEndpoint() {
+        if (deviceEndpoint == null) {
+            deviceEndpoint = new DeviceEndpointBean();
+            deviceEndpoint.setMac(deviceMac);
+        }
+        return deviceEndpoint;
+    }
 
     @Override
     public int describeContents() {
@@ -50,6 +60,10 @@ public class DeviceBean implements Parcelable {
         dest.writeInt(this.deviceState);
         dest.writeString(this.deviceType);
         dest.writeParcelable(this.deviceEndpoint, flags);
+        dest.writeString(this.place);
+        dest.writeByte(this.moreDevice ? (byte) 1 : (byte) 0);
+        dest.writeString(this.deviceMac);
+        dest.writeInt(this.seq);
         dest.writeString(this.cmd);
         dest.writeByte(this.controlOnOff ? (byte) 1 : (byte) 0);
         dest.writeInt(this.controlLevel);
@@ -64,6 +78,10 @@ public class DeviceBean implements Parcelable {
         this.deviceState = in.readInt();
         this.deviceType = in.readString();
         this.deviceEndpoint = in.readParcelable(DeviceEndpointBean.class.getClassLoader());
+        this.place = in.readString();
+        this.moreDevice = in.readByte() != 0;
+        this.deviceMac = in.readString();
+        this.seq = in.readInt();
         this.cmd = in.readString();
         this.controlOnOff = in.readByte() != 0;
         this.controlLevel = in.readInt();

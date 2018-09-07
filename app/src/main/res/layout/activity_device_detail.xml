@@ -10,7 +10,10 @@
     <com.person.commonlib.view.HeaderView
         android:id="@+id/headerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:titleText="设备操作界面"
+        app:showRight="true"
+        app:rightText="编辑"/>
 
     <TextView
         android:id="@+id/tv_name"

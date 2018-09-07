@@ -19,6 +19,9 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-keepnames class com.zj.mqtt.bean.**{*;}
+
+
 ##-------------------------RXBUS -------------------------------
 -keepnames class com.hwangjr.rxbus.thread.**{*;}
 -keepattributes *Annotation*
@@ -102,6 +105,6 @@
     public static ** valueOf(java.lang.String);
 }
 
--keep public class [您的应用包名].R$*{
+-keep public class com.zj.mqtt.R$*{
 public static final int *;
 }

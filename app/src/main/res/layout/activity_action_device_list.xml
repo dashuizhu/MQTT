@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:showRight="true"
-        app:rightText="@string/label_edit"/>
+        app:titleText="选择执行设备"/>
 
 
     <android.support.v7.widget.RecyclerView

@@ -15,7 +15,6 @@ public class ClusterInfoBean implements Parcelable {
     private String clusterType;
 
     public ClusterInfoBean () {
-
     }
 
     @Override

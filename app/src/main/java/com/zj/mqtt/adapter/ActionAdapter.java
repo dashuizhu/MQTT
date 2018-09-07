@@ -1,5 +1,7 @@
 package com.zj.mqtt.adapter;
 
+import android.text.TextUtils;
+import android.util.Log;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.zj.mqtt.R;
@@ -15,11 +17,12 @@ public class ActionAdapter extends BaseQuickAdapter<ActionBean, BaseViewHolder> 
     private boolean mEdit;
 
     public ActionAdapter() {
-        super(R.layout.recycler_item_scenes);
+        super(R.layout.recycler_item_action);
     }
 
     @Override
     protected void convert(BaseViewHolder helper, ActionBean item) {
+        Log.w("test",  helper.getAdapterPosition() + " " + item.toString());
         helper.setText(R.id.tv_name,
                 item.getDeviceName() + "\n" + item.getDeviceMac() + "\n" + getControlDetail(
                         item.getControlBean()));
@@ -34,6 +37,9 @@ public class ActionAdapter extends BaseQuickAdapter<ActionBean, BaseViewHolder> 
     }
 
     public String getControlDetail(CmdControlBean controlBean) {
+        if (controlBean == null || TextUtils.isEmpty(controlBean.getCmd())) {
+            return null;
+        }
         StringBuffer sb = new StringBuffer();
         switch (controlBean.getCmd()) {
             case CmdString.DEV_ONOFF:

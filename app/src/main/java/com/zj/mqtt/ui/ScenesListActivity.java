@@ -7,7 +7,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
@@ -22,15 +22,12 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
 import com.chad.library.adapter.base.listener.OnItemSwipeListener;
-import com.hwangjr.rxbus.annotation.Subscribe;
-import com.hwangjr.rxbus.thread.EventThread;
 import com.person.commonlib.view.HeaderView;
 import com.zj.mqtt.AppApplication;
 import com.zj.mqtt.R;
 import com.zj.mqtt.adapter.ScenesListAdapter;
 import com.zj.mqtt.bean.ActionBean;
 import com.zj.mqtt.constant.AppString;
-import com.zj.mqtt.constant.RxBusString;
 import com.zj.mqtt.database.ScenesDao;
 
 /**
@@ -38,13 +35,15 @@ import com.zj.mqtt.database.ScenesDao;
  */
 public class ScenesListActivity extends BaseActivity {
 
+    private final int ACTIVITY_EDIT = 11;
+
     @BindView(R.id.headerView) HeaderView mHeaderView;
     @BindView(R.id.recyclerView) RecyclerView mRecyclerView;
     private ScenesListAdapter mAdapter;
     private ItemTouchHelper mItemTouchHelper;
     private ItemDragAndSwipeCallback mItemDragAndSwipeCallback;
 
-    private boolean mRefresh;
+    private boolean mRefresh = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,22 +78,27 @@ public class ScenesListActivity extends BaseActivity {
         }
     }
 
+    @OnClick(R.id.btn_add)
+    public void onAddClick() {
+        Intent intent = new Intent(ScenesListActivity.this, ScenesDetailActivity.class);
+        startActivityForResult(intent, ACTIVITY_EDIT);
+    }
+
     /**
      * Rxbus， post只有TAG ，没有传递value时， 不能使用注释段tags 过滤
      * 使用注意， 这里接收，不能使用boolean 接收， 要使用Boolean
      * 类似， int类型，接收要用Integer，
      * 所以要做null判断
      */
-    @Subscribe(thread = EventThread.MAIN_THREAD
-            //, tags = @Tag(AppConstants.RXBUS_KID_SELECT)
-    )
-    public void onKidChange(String action) {
-        if (action.equals(RxBusString.RXBUS_SCENES)) {
-            mRefresh = true;
-            setResult(RESULT_OK);
-        }
-    }
-
+    //@Subscribe(thread = EventThread.MAIN_THREAD
+    //        //, tags = @Tag(AppConstants.RXBUS_KID_SELECT)
+    //)
+    //public void onKidChange(String action) {
+    //    if (action.equals(RxBusString.RXBUS_SCENES)) {
+    //        mRefresh = true;
+    //        setResult(RESULT_OK);
+    //    }
+    //}
     @Override
     protected void onStart() {
         if (mRefresh) {
@@ -140,14 +144,14 @@ public class ScenesListActivity extends BaseActivity {
             @Override
             public void onItemSwipeStart(RecyclerView.ViewHolder viewHolder, int pos) {
                 Log.d(TAG, "view swiped start: " + pos);
-                BaseViewHolder holder = ((BaseViewHolder) viewHolder);
+                //BaseViewHolder holder = ((BaseViewHolder) viewHolder);
                 //                holder.setTextColor(R.id.tv, Color.WHITE);
             }
 
             @Override
             public void clearView(RecyclerView.ViewHolder viewHolder, int pos) {
                 Log.d(TAG, "View reset: " + pos);
-                BaseViewHolder holder = ((BaseViewHolder) viewHolder);
+                //BaseViewHolder holder = ((BaseViewHolder) viewHolder);
                 //                holder.setTextColor(R.id.tv, Color.BLACK);
             }
 
@@ -159,13 +163,14 @@ public class ScenesListActivity extends BaseActivity {
             @Override
             public void onItemSwipeMoving(Canvas canvas, RecyclerView.ViewHolder viewHolder,
                     float dX, float dY, boolean isCurrentlyActive) {
-                canvas.drawColor(
-                        ContextCompat.getColor(ScenesListActivity.this, R.color.red));
-                canvas.drawText("滑动删除", 40, 40, paint);
+                //canvas.drawColor(ContextCompat.getColor(ScenesListActivity.this, R.color.red));
+                //canvas.drawText("滑动删除", 40, 40, paint);
             }
         };
 
         mAdapter = new ScenesListAdapter(((AppApplication) getApplication()).getScenesList());
+        mRecyclerView.addItemDecoration(
+                new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         mItemDragAndSwipeCallback = new ItemDragAndSwipeCallback(mAdapter);
         mItemTouchHelper = new ItemTouchHelper(mItemDragAndSwipeCallback);
         mItemTouchHelper.attachToRecyclerView(mRecyclerView);
@@ -187,7 +192,7 @@ public class ScenesListActivity extends BaseActivity {
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent(ScenesListActivity.this, ScenesDetailActivity.class);
                 intent.putExtra(AppString.KEY_BEAN, mAdapter.getData().get(position));
-                startActivity(intent);
+                startActivityForResult(intent, ACTIVITY_EDIT);
             }
         });
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
@@ -206,5 +211,15 @@ public class ScenesListActivity extends BaseActivity {
     protected void onDestroy() {
         unRegisterRxBus();
         super.onDestroy();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+        mRefresh = true;
+        setResult(RESULT_OK);
     }
 }

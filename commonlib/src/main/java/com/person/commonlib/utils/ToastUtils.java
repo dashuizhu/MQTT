@@ -19,7 +19,7 @@ public class ToastUtils extends Toast {
     private static Toast getToast(Context context) {
         if (mToast == null) {
             synchronized (ToastUtils.class) {
-                mToast = new Toast(context);
+                mToast = ToastUtils.makeText(context, "", Toast.LENGTH_LONG);
             }
         }
         return mToast;

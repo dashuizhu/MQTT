@@ -32,6 +32,15 @@ public class ScenesDao extends RealmObject {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+                if (bean.getSeq() == 0) {
+                    Number number = realm.where(ScenesDao.class).max(COLUMN_SEQ);
+                    int seq = 0;
+                    if (number != null) {
+                        seq = number.intValue();
+                        seq++;
+                    }
+                    bean.setSeq(seq);
+                }
                 realm.copyToRealmOrUpdate(castDao(bean));
             }
         });
@@ -48,7 +57,8 @@ public class ScenesDao extends RealmObject {
                 ScenesBean bean;
                 for (int i = 0; i < size; i++) {
                     bean = list.get(i);
-                    bean.setSeq(i);
+                    //从1开始
+                    bean.setSeq(i+1);
                     realm.copyToRealmOrUpdate(castDao(bean));
                 }
             }
@@ -56,6 +66,10 @@ public class ScenesDao extends RealmObject {
     }
 
     public static List<ScenesBean> queryList() {
+        return queryList(99999);
+    }
+
+    public static List<ScenesBean> queryList(int querySize) {
         Realm realm = Realm.getDefaultInstance();
         List<ScenesDao> results;
         realm.beginTransaction();
@@ -63,8 +77,13 @@ public class ScenesDao extends RealmObject {
         realm.commitTransaction();
 
         List<ScenesBean> beanList = new ArrayList<>();
+        int count = 0;
         for (ScenesDao dao : results) {
             beanList.add(dao.castBean());
+            count++;
+            if (count >= querySize) {
+                break;
+            }
         }
 
         return beanList;
@@ -72,7 +91,6 @@ public class ScenesDao extends RealmObject {
 
     /**
      * 数据库个数
-     * @return
      */
     public static int queryMaxSeq() {
         Realm realm = Realm.getDefaultInstance();
@@ -114,7 +132,8 @@ public class ScenesDao extends RealmObject {
         if (actionList != null) {
             for (ActionDao actDao : actionList) {
                 ActionBean actBean = new ActionBean();
-                CmdControlBean controlBean = JSON.parseObject(actDao.getCmdJson(), CmdControlBean.class);
+                CmdControlBean controlBean =
+                        JSON.parseObject(actDao.getCmdJson(), CmdControlBean.class);
                 actBean.setControlBean(controlBean);
                 actBean.setDeviceMac(actDao.getDeviceMac());
                 actBean.setDeviceName(actDao.getDeviceName());

@@ -1,5 +1,6 @@
-package com.zj.mqtt.ui;
+package com.zj.mqtt.ui.device;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -7,23 +8,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.hwangjr.rxbus.annotation.Subscribe;
-import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.person.commonlib.view.HeaderView;
 import com.zj.mqtt.R;
 import com.zj.mqtt.bean.device.DeviceBean;
-import com.zj.mqtt.bean.toapp.CmdResult;
-import com.zj.mqtt.bean.todev.CmdControlBean;
-import com.zj.mqtt.bean.todev.HuaSetBean;
-import com.zj.mqtt.bean.todev.LevelBean;
-import com.zj.mqtt.bean.todev.ReportParaBean;
 import com.zj.mqtt.constant.AppString;
 import com.zj.mqtt.constant.CmdString;
-import com.zj.mqtt.constant.RxBusString;
-import com.zj.mqtt.protocol.CmdPackage;
 import com.zj.mqtt.protocol.CmdTest;
-import java.util.ArrayList;
-import java.util.List;
+import com.zj.mqtt.ui.BaseActivity;
 
 /**
  * 设备控制详情
@@ -50,7 +42,7 @@ public class DeviceDetailActivity extends BaseActivity {
         String mac = getIntent().getStringExtra("mac");
         mDeviceBean = getApp().getDevice(mac);
         mHeaderView.setTitle(mDeviceBean.getName());
-        mTvName.setText(mDeviceBean.getDeviceEndpoint().getMac());
+        mTvName.setText(mDeviceBean.getDeviceMac());
 
         mIvSwitch.setSelected(mDeviceBean.isControlOnOff());
     }
@@ -58,6 +50,13 @@ public class DeviceDetailActivity extends BaseActivity {
     @OnClick(R.id.layout_header_back)
     public void onBack() {
         finish();
+    }
+
+    @OnClick(R.id.layout_header_right)
+    public void onRightClick() {
+        Intent intent = new Intent(this, DeviceSettingActivity.class);
+        intent.putExtra(AppString.KEY_BEAN, mDeviceBean);
+        startActivityForResult(intent, 11);
     }
 
     @OnClick(R.id.iv_switch)
@@ -68,7 +67,8 @@ public class DeviceDetailActivity extends BaseActivity {
         //
         //getApp().publishMsgToServer(control);
 
-        CmdTest.testSendCmd(mDeviceBean.getDeviceEndpoint().getMac(), mDeviceBean.getDeviceEndpoint().getEndpoint());
+        CmdTest.testSendCmd(mDeviceBean.getDeviceMac(),
+                mDeviceBean.getDeviceEndpoint().getEndpoint());
         CmdTest.testParse();
     }
 
@@ -80,9 +80,21 @@ public class DeviceDetailActivity extends BaseActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+        if (data != null && data.hasExtra(AppString.KEY_DELETE)) {
+            finish();
+        } else {
+            mHeaderView.setTitle(mDeviceBean.getName());
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         unRegisterRxBus();
     }
-
 }

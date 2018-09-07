@@ -16,7 +16,7 @@ public class DeviceAdapter extends BaseQuickAdapter<DeviceBean, BaseViewHolder> 
 
     @Override
     protected void convert(BaseViewHolder helper, DeviceBean item) {
-        helper.setText(R.id.tv_name, item.getName());
+        helper.setText(R.id.tv_name, item.getName() + "\n" + item.getDeviceMac());
         helper.setVisible(R.id.tv_status, !item.isMoreDevice());
     }
 }

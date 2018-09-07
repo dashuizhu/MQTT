@@ -1,6 +1,7 @@
 package com.zj.mqtt.ui.device;
 
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -13,8 +14,8 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.zj.mqtt.R;
 import com.zj.mqtt.adapter.DevicePlaceAdapter;
 import com.zj.mqtt.bean.device.DeviceBean;
-import com.zj.mqtt.bean.device.DeviceEndpointBean;
 import com.zj.mqtt.constant.AppConstants;
+import com.zj.mqtt.database.DeviceDao;
 import com.zj.mqtt.ui.BaseActivity;
 
 public class DeviceNameActivity extends BaseActivity {
@@ -38,6 +39,8 @@ public class DeviceNameActivity extends BaseActivity {
 
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.addItemDecoration(
+                new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         mAdapter.setNewData(AppConstants.getDevicePlaceList());
 
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -60,12 +63,11 @@ public class DeviceNameActivity extends BaseActivity {
 
         DeviceBean bean = new DeviceBean();
         bean.setName(name);
+        bean.setPlace(place);
+        bean.setDeviceMac("deviceMac" + System.currentTimeMillis() % 100);
 
-        DeviceEndpointBean endpointBean = new DeviceEndpointBean();
-        endpointBean.setMac(place + "devicemac");
-
-        bean.setDeviceEndpoint(endpointBean);
         getApp().addDevice(bean);
+        DeviceDao.saveOrUpdate(bean);
         finish();
     }
 }

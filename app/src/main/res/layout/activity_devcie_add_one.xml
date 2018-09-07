@@ -3,11 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.device.DeviceAddOneActivity">
 
     <com.person.commonlib.view.HeaderView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:titleText="设备添加流程过度界面"/>
 
     <Button
         android:id="@+id/btn_next"
@@ -15,6 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/activity_horizontal_margin"
+        style="@style/btnCommon"
         android:text="@string/label_next" />
 
 </RelativeLayout>

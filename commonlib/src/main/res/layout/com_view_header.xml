@@ -30,7 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:background="@mipmap/com_arrow_left_dark_img" />
+                android:background="@mipmap/com_arrow_left_white_img" />
 
             <TextView
                 android:id="@+id/text_header_back"

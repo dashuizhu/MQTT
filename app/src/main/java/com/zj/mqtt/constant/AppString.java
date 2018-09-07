@@ -9,4 +9,5 @@ public class AppString {
 
     public static final String KEY_MAC = "mac";
     public static final String KEY_NAME = "name";
+    public static final String KEY_DELETE = "delete";
 }

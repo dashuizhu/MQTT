@@ -17,6 +17,7 @@ import com.zj.mqtt.R;
 import com.zj.mqtt.bean.device.DeviceBean;
 import com.zj.mqtt.bean.todev.CmdControlBean;
 import com.zj.mqtt.bean.todev.HuaSetBean;
+import com.zj.mqtt.bean.todev.LevelBean;
 import com.zj.mqtt.constant.AppString;
 import com.zj.mqtt.constant.CmdString;
 import com.zj.mqtt.protocol.CmdPackage;
@@ -90,6 +91,11 @@ public class DeviceControlActivity extends BaseActivity {
                 mSbColorHua.setProgress(mControlBean.getMovetohueandsat().getHua());
                 mSbColorTime.setProgress(mControlBean.getMovetohueandsat().getTime());
                 break;
+            case CmdString.DEV_LEVEL_CONTROL:
+                mRbLevel.setChecked(true);
+                mSbLevelTime.setProgress(mControlBean.getMv_to_level().getTime());
+                mSbLevelValue.setProgress(mControlBean.getMv_to_level().getLevel());
+                break;
             default:
         }
     }
@@ -145,6 +151,40 @@ public class DeviceControlActivity extends BaseActivity {
 
             }
         });
+
+        mSbLevelValue.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                mTvLevelValue.setText(String.valueOf(progress));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        mSbLevelTime.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                mTvLevelTime.setText(String.valueOf(progress));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
 
     @OnClick(R.id.layout_header_back)
@@ -157,7 +197,7 @@ public class DeviceControlActivity extends BaseActivity {
         switch (mRbGroup.getCheckedRadioButtonId()) {
             case R.id.rb_switch:
                 mControlBean = CmdPackage.setOnOff(mCbSwitch.isChecked(),
-                        mDeviceBean.getDeviceEndpoint().getMac(),
+                        mDeviceBean.getDeviceMac(),
                         mDeviceBean.getDeviceEndpoint().getEndpoint());
                 break;
             case R.id.rb_color:
@@ -166,14 +206,18 @@ public class DeviceControlActivity extends BaseActivity {
                 huaSetBean.setSat(mSbColorSet.getProgress());
                 huaSetBean.setHua(mSbColorTime.getProgress());
 
-                mControlBean = CmdPackage.setColorControl(mDeviceBean.getDeviceEndpoint().getMac(),
+                mControlBean = CmdPackage.setColorControl(mDeviceBean.getDeviceMac(),
                         mDeviceBean.getDeviceEndpoint().getEndpoint(), huaSetBean);
                 break;
             case R.id.rb_level:
+                LevelBean levelBean = new LevelBean();
+                levelBean.setLevel(mSbLevelValue.getProgress());
+                levelBean.setTime(mSbLevelTime.getProgress());
+                mControlBean = CmdPackage.setLevelControl(mDeviceBean.getDeviceMac(), mDeviceBean.getDeviceEndpoint().getEndpoint(), levelBean);
                 break;
             default:
         }
-        mControlBean.setDeviceMac(mDeviceBean.getDeviceEndpoint().getMac());
+        mControlBean.setDeviceMac(mDeviceBean.getDeviceMac());
         getIntent().putExtra(AppString.KEY_BEAN, mControlBean);
         setResult(RESULT_OK, getIntent());
         finish();

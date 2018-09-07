@@ -69,7 +69,11 @@ public class ConnectService extends Service {
             //连接时使用的clientId
             mMqttClient = new MqttAndroidClient(this, serverUrl, CLIENT_ID);
         }
-        if (isLinking || mMqttClient.isConnected()) {
+        if (isLinking) {
+            return;
+        }
+        if (mMqttClient.isConnected()) {
+            RxBus.get().post(RxBusString.LINK_SUCCESS);
             return;
         }
         //设置连接参数

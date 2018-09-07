@@ -11,12 +11,11 @@ import com.person.commonlib.utils.ToastUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.commonsdk.UMConfigure;
 import com.zj.mqtt.bean.ScenesBean;
+import com.zj.mqtt.bean.device.DeviceBean;
 import com.zj.mqtt.bean.toapp.CmdNodeLeftResult;
 import com.zj.mqtt.bean.toapp.CmdStateChagneResult;
-import com.zj.mqtt.bean.device.DeviceBean;
-import com.zj.mqtt.bean.device.DeviceEndpointBean;
 import com.zj.mqtt.bean.todev.CmdControlBean;
-import com.zj.mqtt.constant.AppConstants;
+import com.zj.mqtt.database.DeviceDao;
 import com.zj.mqtt.database.MqttRealm;
 import com.zj.mqtt.database.ScenesDao;
 import com.zj.mqtt.services.ConnectService;
@@ -56,7 +55,6 @@ public class AppApplication extends Application {
         UMConfigure.init(this, UMConfigure.DEVICE_TYPE_PHONE, null);
 
         MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
-
     }
 
     public List<ScenesBean> getScenesList() {
@@ -86,32 +84,20 @@ public class AppApplication extends Application {
 
     public List<ScenesBean> getScenesListShow() {
         List<ScenesBean> array = getScenesList();
-        int subSize= Math.min(4, array.size());
+        int subSize = Math.min(4, array.size());
         return array.subList(0, subSize);
     }
 
     public List<DeviceBean> getDevcieList() {
-        if (mDeviceList == null) {
-            mDeviceList = new ArrayList<>();
-            DeviceBean bean;
-            for (int i = 0; i < 5; i++) {
-                bean = new DeviceBean();
-                bean.setName("device" + i);
-
-                DeviceEndpointBean endpointBean = new DeviceEndpointBean();
-                endpointBean.setMac("mac" + i);
-
-                bean.setDeviceEndpoint(endpointBean);
-                mDeviceList.add(bean);
-            }
-        }
+        mDeviceList = DeviceDao.queryList();
         return mDeviceList;
     }
 
     public List<DeviceBean> getDeviceListShow() {
-        List<DeviceBean> array = getDevcieList();
-        int subSize= Math.min(7, array.size());
-        array.subList(0, subSize);
+        mDeviceList = getDevcieList();
+
+        int subSize = Math.min(8, mDeviceList.size());
+        List<DeviceBean> array = mDeviceList.subList(0, subSize);
 
         DeviceBean moreDevice = new DeviceBean();
         moreDevice.setMoreDevice(true);
@@ -125,13 +111,31 @@ public class AppApplication extends Application {
     }
 
     public void updateDevice(CmdNodeLeftResult.DeviceLeftBean leftBean) {
+        removeDevice(leftBean.getMac());
+    }
+
+    public void removeDevice(String deviceMac) {
         if (mDeviceList == null || mDeviceList.size() == 0) {
             return;
         }
         int listSize = mDeviceList.size();
         for (int i = 0; i < listSize; i++) {
-            if (mDeviceList.get(i).getDeviceEndpoint().getMac().equals(leftBean.getMac())) {
+            if (mDeviceList.get(i).getDeviceMac().equals(deviceMac)) {
                 mDeviceList.remove(i);
+                break;
+            }
+        }
+    }
+
+    public void updateDevice(String mac, String name, String place) {
+        if (mDeviceList == null || mDeviceList.size() == 0) {
+            return;
+        }
+        int listSize = mDeviceList.size();
+        for (int i = 0; i < listSize; i++) {
+            if (mDeviceList.get(i).getDeviceMac().equals(mac)) {
+                mDeviceList.get(i).setName(name);
+                mDeviceList.get(i).setPlace(place);
                 break;
             }
         }
@@ -143,7 +147,7 @@ public class AppApplication extends Application {
         }
         int listSize = mDeviceList.size();
         for (int i = 0; i < listSize; i++) {
-            if (mDeviceList.get(i).getDeviceEndpoint().getMac().equals(stateBean.getMac())) {
+            if (mDeviceList.get(i).getDeviceMac().equals(stateBean.getMac())) {
                 mDeviceList.get(i).setDeviceState(stateBean.getDeviceState());
                 break;
             }
@@ -163,7 +167,7 @@ public class AppApplication extends Application {
         }
         int listSize = mDeviceList.size();
         for (int i = 0; i < listSize; i++) {
-            if (mac.equals(mDeviceList.get(i).getDeviceEndpoint().getMac())) {
+            if (mac.equals(mDeviceList.get(i).getDeviceMac())) {
                 return mDeviceList.get(i);
             }
         }
@@ -176,7 +180,6 @@ public class AppApplication extends Application {
 
     /**
      * 发送数据
-     * @param controlBean
      */
     public void publishMsgToServer(CmdControlBean controlBean) {
         if (mConnectService == null || !mConnectService.isConnect()) {
@@ -210,7 +213,6 @@ public class AppApplication extends Application {
 
     /**
      * 发送数据
-     * @param msg
      */
     public void publishMsgToServer(String msg) {
         if (mConnectService == null || !mConnectService.isConnect()) {
@@ -222,8 +224,6 @@ public class AppApplication extends Application {
 
     /**
      * 获取缓存的控制数据
-     * @param seq
-     * @return
      */
     public CmdControlBean getControlCacheBean(int seq) {
         int listSize = mControlCacheList.size();
@@ -260,7 +260,6 @@ public class AppApplication extends Application {
 
     /**
      * 是否连接
-     * @return
      */
     public boolean isConnect() {
         if (mConnectService == null) {

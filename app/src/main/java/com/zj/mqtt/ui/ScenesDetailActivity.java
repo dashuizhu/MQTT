@@ -6,6 +6,8 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,7 +15,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.hwangjr.rxbus.RxBus;
 import com.person.commonlib.view.HeaderView;
 import com.zj.mqtt.R;
 import com.zj.mqtt.adapter.ActionAdapter;
@@ -21,8 +22,8 @@ import com.zj.mqtt.bean.ActionBean;
 import com.zj.mqtt.bean.ScenesBean;
 import com.zj.mqtt.bean.todev.CmdControlBean;
 import com.zj.mqtt.constant.AppString;
-import com.zj.mqtt.constant.RxBusString;
 import com.zj.mqtt.database.ScenesDao;
+import com.zj.mqtt.utils.AppUtils;
 
 /**
  * 场景详情界面， 动作列表
@@ -43,12 +44,15 @@ public class ScenesDetailActivity extends BaseActivity {
 
     private ScenesBean mScenesBean;
 
+    private boolean mAddScenes;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scenes_detail);
         ButterKnife.bind(this);
         initViews();
+        initData();
     }
 
     @OnClick(R.id.layout_header_back)
@@ -64,26 +68,40 @@ public class ScenesDetailActivity extends BaseActivity {
 
     @OnClick(R.id.layout_header_right)
     public void onEdit() {
-        boolean edit = !mAdapter.isEdit();
-        //编辑界面，再次点击就是保存
-        if (!edit) {
-            String name = mEtName.getText().toString();
-            mScenesBean.setName(name);
-            // TODO: 2018/8/28 数据库保存
-            RxBus.get().post(RxBusString.RXBUS_SCENES);
-            ScenesDao.saveOrUpdate(mScenesBean);
+        //boolean edit = !mAdapter.isEdit();
+        //
+        //mEtName.setEnabled(edit);
+        //mAdapter.setEdit(edit);
+        //mHeaderView.getTextHeaderRight().setText(edit ? R.string.label_save : R.string.label_edit);
+        //
+        ////编辑界面，再次点击就是保存
+        //if (!edit) {
+        String name = mEtName.getText().toString();
+        if (TextUtils.isEmpty(name)) {
+            showToast(R.string.toast_input_empty);
+            return;
         }
-        mEtName.setEnabled(edit);
-        mAdapter.setEdit(edit);
-        mHeaderView.getTextHeaderRight().setText(edit ? R.string.label_save : R.string.label_edit);
+        mScenesBean.setName(name);
+        // TODO: 2018/8/28 数据库保存
+
+        ScenesDao.saveOrUpdate(mScenesBean);
+        setResult(RESULT_OK);
+        showToast(R.string.toast_save_success);
+        finish();
+        //}
     }
 
     private void initViews() {
-
-        mScenesBean = getIntent().getParcelableExtra(AppString.KEY_BEAN);
-        mEtName.setText(mScenesBean.getName());
-        mEtName.setEnabled(false);
-
+        if (getIntent().hasExtra(AppString.KEY_BEAN)) {
+            mScenesBean = getIntent().getParcelableExtra(AppString.KEY_BEAN);
+            mEtName.setText(mScenesBean.getName());
+            mEtName.setEnabled(false);
+            AppUtils.initSelecton(mEtName);
+        } else {
+            mHeaderView.setTitle(R.string.title_scenes_add);
+            mScenesBean = new ScenesBean();
+            mAddScenes = true;
+        }
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         mAdapter = new ActionAdapter();
@@ -104,6 +122,14 @@ public class ScenesDetailActivity extends BaseActivity {
         });
     }
 
+    private void initData() {
+        if (mAddScenes) {
+            mAdapter.setEdit(true);
+            mHeaderView.getTextHeaderRight()
+                    .setText(mAdapter.isEdit() ? R.string.label_save : R.string.label_edit);
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -115,6 +141,7 @@ public class ScenesDetailActivity extends BaseActivity {
         switch (requestCode) {
             case ACTIVITY_DEVICE_LIST:
                 bean = data.getParcelableExtra(AppString.KEY_BEAN);
+                Log.d(TAG, "deviceList: " + bean.toString());
                 //deviceMac = data.getStringExtra(AppString.KEY_MAC);
                 String deviceName = getApp().getDevice(bean.getDeviceMac()).getName();
 
@@ -128,6 +155,7 @@ public class ScenesDetailActivity extends BaseActivity {
                 break;
             case ACTIVITY_DEVICE:
                 bean = data.getParcelableExtra(AppString.KEY_BEAN);
+                Log.d(TAG, "device: " + bean.toString());
                 //deviceMac = data.getStringExtra(AppString.KEY_MAC);
                 //cmdJson = JSON.toJSONString(CmdPackage.getCmdByDevice(bean));
 

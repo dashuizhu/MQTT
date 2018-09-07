@@ -9,6 +9,7 @@ import java.util.List;
 public class AppConstants {
 
     public final static String UMENG_APPID = "5b85fb2fb27b0a4a9200004d";
+
     public final static String OTA_URL = "http://www.xxx.com";
 
     public static List<String> getDevicePlaceList() {

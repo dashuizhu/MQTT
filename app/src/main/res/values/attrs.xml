@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    //我的页面itemView属性
+    <declare-styleable name="MyItemView">
+        <attr format="reference" name="item_icon"/>
+        <attr format="reference" name="item_arrows"/>
+        <attr format="string" name="item_title"/>
+        <attr format="string" name="item_content"/>
+        <attr format="boolean" name="item_enable"/>
+        <attr format="boolean" name="item_divide"/>
+        <attr format="boolean" name="item_checked"/>
+        <attr format="boolean" name="item_arrows_show"/>
+        <attr format="string" name="item_content_hint" />
+        <attr format="dimension" name="item_content_size" />
+        <attr format="color" name="item_content_color" />
+        <attr format="reference" name="item_content_drawright"/>
+    </declare-styleable>
+
+
+    <declare-styleable name="PagerSlidingTabStrip">
+        <attr name="pstsIndicatorColor" format="color" />
+        <attr name="pstsUnderlineColor" format="color" />
+        <attr name="pstsDividerColor" format="color" />
+        <attr name="pstsIndicatorHeight" format="dimension" />
+        <attr name="pstsUnderlineHeight" format="dimension" />
+        <attr name="pstsDividerPadding" format="dimension" />
+        <attr name="pstsTabPaddingLeftRight" format="dimension" />
+        <attr name="pstsScrollOffset" format="dimension" />
+        <attr name="pstsTabBackground" format="reference" />
+        <attr name="pstsShouldExpand" format="boolean" />
+        <attr name="pstsTextAllCaps" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="RuleView">
+        <attr format="string" name="contentText"/>
+    </declare-styleable>
+</resources>

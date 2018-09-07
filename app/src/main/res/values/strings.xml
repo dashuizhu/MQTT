@@ -24,4 +24,19 @@
     <string name="label_next">下一步</string>
     <string name="title_device_name7place">设置设备名称及位置</string>
     <string name="toast_input_empty">输入不能为空</string>
+    <string name="label_device_info">设备信息</string>
+    <string name="label_setting">设置</string>
+    <string name="label_cancel">取消</string>
+    <string name="label_confirm">确认</string>
+    <string name="label_name_input">输入设备名称</string>
+    <string name="title_scenes">场景</string>
+    <string name="title_scenes_edit">编辑场景</string>
+    <string name="label_scenes_info">触发场景是执行以下动作</string>
+    <string name="label_action_add">添加动作</string>
+    <string name="title_scenes_add">添加场景</string>
+    <string name="toast_save_success">保存成功</string>
+    <string name="toast_add_device_first">请先添加设备</string>
+    <string name="label_device_list_hint">前8个设备将会显示在首页，长按可以推动排序，操作完毕后记得保存！</string>
+    <string name="label_scenes_list_hint">前4个场景将会显示在首页，点击编辑，长按可以推动排序，侧滑可以删除设备，操作完毕后记得保存！</string>
+    <string name="toast_service_unlink">未连接到服务端</string>
 </resources>

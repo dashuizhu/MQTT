@@ -11,29 +11,41 @@
         android:id="@+id/headerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:rightText="@string/label_save"
         app:showRight="true"
-        app:rightText="@string/label_edit"/>
+        app:titleText="@string/title_scenes_edit" />
 
 
-    <EditText
+    <com.zj.mqtt.view.ClearEditText
         android:id="@+id/et_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_horizontal_margin"
-        android:hint="@string/label_scenes_name"/>
+        android:hint="@string/label_scenes_name" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/divide_line"
+        android:paddingBottom="@dimen/view_padding"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/view_padding"
+        android:text="@string/label_scenes_info"
+        android:textColor="@color/text_light_gray" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
 
     <Button
         android:id="@+id/btn_add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_horizontal_margin"
-        android:text="@string/label_add"/>
+        android:text="@string/label_action_add"
+        style="@style/btnCommon" />
 
 
 </LinearLayout>

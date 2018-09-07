@@ -27,6 +27,7 @@ import com.zj.mqtt.bean.todev.CmdControlBean;
 import com.zj.mqtt.constant.AppString;
 import com.zj.mqtt.constant.CmdString;
 import com.zj.mqtt.constant.RxBusString;
+import com.zj.mqtt.ui.device.DeviceAddOneActivity;
 
 /**
  * 设备列表
@@ -63,7 +64,6 @@ public class ActionDeviceListActivity extends BaseActivity {
     private void initViews() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-        //mRecyclerView.addItemDecoration(new RecyclerViewDivider(this, LinearLayoutManager.VERTICAL));
         mRecyclerView.addItemDecoration(
                 new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
@@ -85,8 +85,7 @@ public class ActionDeviceListActivity extends BaseActivity {
 
                 // TODO: 2018/8/31 这里默认值，一定要注意 设备类型， 和 默认控制数据
                 CmdControlBean controlBean = new CmdControlBean(CmdString.DEV_ONOFF);
-                controlBean.setDeviceMac(
-                        mAdapter.getData().get(position).getDeviceEndpoint().getMac());
+                controlBean.setDeviceMac(mAdapter.getData().get(position).getDeviceMac());
                 intent.putExtra(AppString.KEY_BEAN, controlBean);
                 startActivityForResult(intent, ACTIVITY_CONTROL);
             }
@@ -100,6 +99,13 @@ public class ActionDeviceListActivity extends BaseActivity {
                 mAdapter.notifyItemChanged(position);
             }
         });
+
+        if (mAdapter.getData().size() == 0) {
+            Intent intent = new Intent(this, DeviceAddOneActivity.class);
+            startActivity(intent);
+            showToast(R.string.toast_add_device_first);
+            finish();
+        }
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = @Tag(RxBusString.RXBUS_PARSE))
