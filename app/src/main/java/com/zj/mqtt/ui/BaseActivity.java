@@ -4,10 +4,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
 import com.hwangjr.rxbus.RxBus;
 import com.person.commonlib.utils.DensityHelp;
 import com.person.commonlib.utils.ToastUtils;
+import com.umeng.analytics.MobclickAgent;
 import com.zj.mqtt.AppApplication;
 
 /**
@@ -59,4 +59,15 @@ public class BaseActivity extends AppCompatActivity {
         return (AppApplication) getApplication();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 }

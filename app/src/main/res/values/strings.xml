@@ -39,4 +39,5 @@
     <string name="label_device_list_hint">前8个设备将会显示在首页，长按可以推动排序，操作完毕后记得保存！</string>
     <string name="label_scenes_list_hint">前4个场景将会显示在首页，点击编辑，长按可以推动排序，侧滑可以删除设备，操作完毕后记得保存！</string>
     <string name="toast_service_unlink">未连接到服务端</string>
+    <string name="toast_device_notfound">未找到设备</string>
 </resources>

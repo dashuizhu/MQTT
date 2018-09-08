@@ -12,8 +12,10 @@ import com.hwangjr.rxbus.thread.EventThread;
 import com.person.commonlib.view.HeaderView;
 import com.zj.mqtt.R;
 import com.zj.mqtt.bean.device.DeviceBean;
+import com.zj.mqtt.bean.todev.CmdControlBean;
 import com.zj.mqtt.constant.AppString;
 import com.zj.mqtt.constant.CmdString;
+import com.zj.mqtt.protocol.CmdPackage;
 import com.zj.mqtt.protocol.CmdTest;
 import com.zj.mqtt.ui.BaseActivity;
 
@@ -41,6 +43,11 @@ public class DeviceDetailActivity extends BaseActivity {
     private void initViews() {
         String mac = getIntent().getStringExtra("mac");
         mDeviceBean = getApp().getDevice(mac);
+        if (mDeviceBean == null) {
+            showToast(R.string.toast_device_notfound);
+            finish();
+            return;
+        }
         mHeaderView.setTitle(mDeviceBean.getName());
         mTvName.setText(mDeviceBean.getDeviceMac());
 
@@ -61,15 +68,16 @@ public class DeviceDetailActivity extends BaseActivity {
 
     @OnClick(R.id.iv_switch)
     public void onClickSwitch() {
-        //CmdControlBean control = CmdPackage.setOnOff( !mDeviceBean.isControlOnOff(),
-        //        mDeviceBean.getDeviceEndpoint().getMac(),
-        //        mDeviceBean.getDeviceEndpoint().getEndpoint());
-        //
-        //getApp().publishMsgToServer(control);
-
-        CmdTest.testSendCmd(mDeviceBean.getDeviceMac(),
+        CmdControlBean control = CmdPackage.setOnOff( !mDeviceBean.isControlOnOff(),
+                mDeviceBean.getDeviceMac(),
                 mDeviceBean.getDeviceEndpoint().getEndpoint());
-        CmdTest.testParse();
+
+        getApp().publishMsgToServer(control);
+
+        // TODO: 2018/9/8 测试所有的、 解析所有的协议
+        //CmdTest.testSendCmd(mDeviceBean.getDeviceMac(),
+        //        mDeviceBean.getDeviceEndpoint().getEndpoint());
+        //CmdTest.testParse();
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD)

@@ -84,6 +84,20 @@ public class DeviceDao extends RealmObject {
         return beanList;
     }
 
+    public static DeviceBean getDeviceByMac(String mac) {
+        Realm realm = Realm.getDefaultInstance();
+        DeviceDao results;
+        realm.beginTransaction();
+        results = realm.where(DeviceDao.class).equalTo(COLUMN_MAC, mac).findFirst();
+        realm.commitTransaction();
+
+        if (results!=null) {
+            return results.castBean();
+        } else {
+            return null;
+        }
+    }
+
     /**
      * 数据库个数
      */

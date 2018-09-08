@@ -76,7 +76,7 @@ public class ScenesDetailActivity extends BaseActivity {
         //
         ////编辑界面，再次点击就是保存
         //if (!edit) {
-        String name = mEtName.getText().toString();
+        String name = mEtName.getText().toString().trim();
         if (TextUtils.isEmpty(name)) {
             showToast(R.string.toast_input_empty);
             return;
@@ -95,7 +95,7 @@ public class ScenesDetailActivity extends BaseActivity {
         if (getIntent().hasExtra(AppString.KEY_BEAN)) {
             mScenesBean = getIntent().getParcelableExtra(AppString.KEY_BEAN);
             mEtName.setText(mScenesBean.getName());
-            mEtName.setEnabled(false);
+            //mEtName.setEnabled(false);
             AppUtils.initSelecton(mEtName);
         } else {
             mHeaderView.setTitle(R.string.title_scenes_add);

@@ -87,7 +87,7 @@ public class DeviceSettingActivity extends BaseActivity {
 
                 @Override
                 public void clickConfirm(String str) {
-                    if (TextUtils.isEmpty(str)) {
+                    if (TextUtils.isEmpty(str.trim())) {
                         showToast(R.string.toast_input_empty);
                         return;
                     }

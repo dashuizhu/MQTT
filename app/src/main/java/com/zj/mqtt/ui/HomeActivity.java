@@ -15,6 +15,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
+import com.umeng.analytics.MobclickAgent;
 import com.zj.mqtt.R;
 import com.zj.mqtt.adapter.DeviceAdapter;
 import com.zj.mqtt.adapter.ScenesAdapter;
@@ -52,6 +53,7 @@ public class HomeActivity extends BaseActivity {
         if (getApp().isConnect()) {
             mTvStatus.setVisibility(View.GONE);
         }
+        MobclickAgent.onEvent(this, "openMain");
     }
 
     private void initViews() {

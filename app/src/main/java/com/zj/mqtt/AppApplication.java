@@ -171,7 +171,11 @@ public class AppApplication extends Application {
                 return mDeviceList.get(i);
             }
         }
-        return null;
+        DeviceBean db = DeviceDao.getDeviceByMac(mac);
+        if (db != null) {
+            mDeviceList.add(db);
+        }
+        return db;
     }
 
     public static AppApplication getApp() {
