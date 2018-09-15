@@ -166,37 +166,4 @@ public class CmdPackage {
     }
 
 
-
-    public static CmdControlBean getCmdByDevice(DeviceBean deviceBean) {
-        CmdControlBean bean = null;
-        switch (deviceBean.getCmd()) {
-            case CmdString.DEV_ONOFF:
-                bean = CmdPackage.setOnOff(deviceBean.isControlOnOff(),
-                        deviceBean.getDeviceMac(),
-                        deviceBean.getDeviceEndpoint().getEndpoint());
-                break;
-            case CmdString.DEV_COLOR_CONTROL:
-                HuaSetBean huaSetBean = new HuaSetBean();
-                huaSetBean.setTime(deviceBean.getControlTime());
-                huaSetBean.setSat(deviceBean.getControlSet());
-                huaSetBean.setHua(deviceBean.getControlHua());
-
-                bean = CmdPackage.setColorControl(deviceBean.getDeviceMac(),
-                        deviceBean.getDeviceEndpoint().getEndpoint(),
-                        huaSetBean);
-                break;
-            case CmdString.DEV_LEVEL_CONTROL:
-                LevelBean levelBean = new LevelBean();
-                levelBean.setTime(deviceBean.getControlTime());
-                levelBean.setLevel(deviceBean.getControlLevel());
-
-                bean = CmdPackage.setLevelControl(deviceBean.getDeviceMac(),
-                        deviceBean.getDeviceEndpoint().getEndpoint(),
-                        levelBean);
-                break;
-            default:
-        }
-        return bean;
-    }
-
 }

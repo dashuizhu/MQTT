@@ -33,10 +33,15 @@
 
     <style name="btnCommon">
         <item name="android:textSize">@dimen/text_big</item>
-        <item name="android:textColor">@drawable/text_primary2light</item>
+        <item name="android:textColor">@color/blue</item>
         <item name="android:background">@drawable/btn_common</item>
         <item name="android:layout_marginLeft">@dimen/activity_horizontal_margin</item>
         <item name="android:layout_marginRight">@dimen/activity_horizontal_margin</item>
+    </style>
+
+    <style name="btnAdd" parent="btnCommon">
+        <item name="android:drawableTop">@mipmap/add_img</item>
+        <item name="android:paddingTop">@dimen/view_padding</item>
     </style>
 
 </resources>

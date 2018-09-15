@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -11,9 +10,9 @@
         android:id="@+id/headerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:titleText="设备操作界面"
+        app:rightText="@string/label_setting"
         app:showRight="true"
-        app:rightText="编辑"/>
+        app:titleText="设备操作界面" />
 
     <TextView
         android:id="@+id/tv_name"
@@ -25,9 +24,19 @@
         android:id="@+id/iv_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:background="@drawable/cb_status"
-        />
+        android:layout_gravity="center_horizontal"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/btn_switch_single" />
+
+    <ImageView
+        android:id="@+id/iv_switch2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@mipmap/btn_switch_single_press" />
 
 
 </LinearLayout>

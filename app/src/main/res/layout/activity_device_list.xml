@@ -12,7 +12,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:showRight="true"
-        app:rightText="@string/label_edit"/>
+        app:rightText="@string/label_save"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:background="@color/divide_line"
+        android:text="@string/label_device_list_hint"/>
 
 
     <android.support.v7.widget.RecyclerView
@@ -23,11 +30,12 @@
 
     <Button
         android:id="@+id/btn_add"
-        android:layout_width="match_parent"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:layout_margin="@dimen/activity_horizontal_margin"
-        style="@style/btnCommon"
-        android:text="@string/label_add"/>
+        style="@style/btnAdd"
+        android:text="@string/label_add_device"/>
 
 
 </LinearLayout>

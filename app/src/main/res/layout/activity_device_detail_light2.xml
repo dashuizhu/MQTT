@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blue"
+    android:orientation="vertical">
+
+
+    <com.person.commonlib.view.HeaderView
+        android:id="@+id/headerView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:bgColor="@color/transparent"
+        app:leftIcon="@mipmap/com_arrow_left_white_img"
+        app:my_textColor="@color/white"
+        app:rightIcon="@mipmap/setting_white_img"
+        app:showDivide="true"
+        app:showRight="true"
+        app:rightText="@string/label_setting"
+        app:titleText="设备操作界面" />
+
+    <TextView
+        android:id="@+id/tv_light1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:drawablePadding="@dimen/activity_horizontal_margin"
+        android:drawableTop="@drawable/btn_light"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_normal"
+        app:layout_constraintBottom_toTopOf="@id/view_bottom"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/iv_line"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/line_vertical"
+        app:layout_constraintBottom_toTopOf="@id/view_bottom"
+        app:layout_constraintLeft_toRightOf="@id/tv_light1"
+        app:layout_constraintRight_toLeftOf="@id/tv_light2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_light2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:drawablePadding="@dimen/activity_horizontal_margin"
+        android:drawableTop="@drawable/btn_light"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_normal"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="@id/tv_light1"
+        app:layout_constraintLeft_toRightOf="@id/iv_line"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_light1" />
+
+
+    <View
+        android:id="@+id/view_bottom"
+        android:layout_width="0dp"
+        android:layout_height="180dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+
+    <TextView
+        android:id="@+id/tv_onoff1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/btn_onoff"
+        android:gravity="center"
+        android:textColor="@color/text_normal"
+        android:textSize="@dimen/text_normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/tv_light1"
+        app:layout_constraintRight_toRightOf="@id/tv_light1"
+        app:layout_constraintTop_toTopOf="@id/view_bottom" />
+
+    <TextView
+        android:id="@+id/tv_onoff2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/btn_onoff"
+        android:gravity="center"
+        android:textColor="@color/text_normal"
+        android:textSize="@dimen/text_normal"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/tv_light2"
+        app:layout_constraintRight_toRightOf="@id/tv_light2"
+        app:layout_constraintTop_toTopOf="@id/view_bottom" />
+
+
+</android.support.constraint.ConstraintLayout>

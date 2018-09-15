@@ -7,13 +7,13 @@
     android:gravity="center"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_horizontal_margin">
+    android:paddingTop="@dimen/view_padding">
 
     <ImageView
         android:id="@+id/iv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@mipmap/ic_launcher"
+        android:background="@mipmap/btn_scenes_add"
         android:focusable="false" />
 
     <TextView

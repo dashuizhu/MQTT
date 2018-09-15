@@ -2,7 +2,8 @@ package com.zj.mqtt.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -17,43 +18,58 @@ import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.umeng.analytics.MobclickAgent;
 import com.zj.mqtt.R;
-import com.zj.mqtt.adapter.DeviceAdapter;
+import com.zj.mqtt.adapter.DeviceFragmentPagerAdapter;
 import com.zj.mqtt.adapter.ScenesAdapter;
 import com.zj.mqtt.bean.ActionBean;
 import com.zj.mqtt.bean.ScenesBean;
-import com.zj.mqtt.bean.device.DeviceBean;
-import com.zj.mqtt.constant.AppString;
+import com.zj.mqtt.bean.toapp.CmdResult;
 import com.zj.mqtt.constant.RxBusString;
+import com.zj.mqtt.database.DeviceDao;
+import com.zj.mqtt.protocol.CmdPackage;
+import com.zj.mqtt.protocol.CmdParse;
 import com.zj.mqtt.ui.device.DeviceAddOneActivity;
-import com.zj.mqtt.ui.device.DeviceDetailActivity;
-import com.zj.mqtt.ui.device.DeviceListActivity;
+import com.zj.mqtt.ui.device.DeviceFragment;
+import com.zj.mqtt.utils.StatusBarUtil;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
+/**
+ * 首页
+ *
+ * @author zhuj 2018/9/13 下午5:45
+ */
 public class HomeActivity extends BaseActivity {
 
     private final int ACTIVITY_SCENES = 11;
 
     @BindView(R.id.recyclerViewScenes) RecyclerView mRecyclerViewScenes;
-    @BindView(R.id.recyclerViewDevice) RecyclerView mRecyclerViewDevice;
     @BindView(R.id.tv_status) TextView mTvStatus;
-    private ScenesAdapter mScenesAdapter;
-    private DeviceAdapter mDeviceAdapter;
+    @BindView(R.id.tabLayout) TabLayout mTabLayout;
+    @BindView(R.id.viewPager) ViewPager mViewPager;
 
+    private ScenesAdapter mScenesAdapter;
+    private DeviceFragmentPagerAdapter mFragmentPagerAdapter;
     private Unbinder mUnbinder;
+    private List<String> mPlaceList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         mUnbinder = ButterKnife.bind(this);
+        StatusBarUtil.darkMode(this);
+        StatusBarUtil.setPaddingSmart(this, mTvStatus);
         initViews();
         registerRxBus();
 
-        getApp().connectService();
-
-        if (getApp().isConnect()) {
-            mTvStatus.setVisibility(View.GONE);
-        }
         MobclickAgent.onEvent(this, "openMain");
+
+        getApp().connectService();
     }
 
     private void initViews() {
@@ -63,26 +79,10 @@ public class HomeActivity extends BaseActivity {
         mRecyclerViewScenes.setAdapter(mScenesAdapter);
         mScenesAdapter.setNewData(getApp().getScenesListShow());
 
-        mDeviceAdapter = new DeviceAdapter();
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
-        mRecyclerViewDevice.setLayoutManager(gridLayoutManager);
-        mRecyclerViewDevice.setAdapter(mDeviceAdapter);
-
-        mDeviceAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                DeviceBean bean = mDeviceAdapter.getData().get(position);
-                if (bean.isMoreDevice()) {
-                    Intent intent = new Intent(HomeActivity.this, DeviceListActivity.class);
-                    startActivity(intent);
-                } else {
-                    Intent intent = new Intent(HomeActivity.this, DeviceDetailActivity.class);
-                    intent.putExtra(AppString.KEY_MAC,
-                            mDeviceAdapter.getData().get(position).getDeviceMac());
-                    startActivity(intent);
-                }
-            }
-        });
+        //initTabLayout();
+        mFragmentPagerAdapter = new DeviceFragmentPagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mFragmentPagerAdapter);
+        mTabLayout.setupWithViewPager(mViewPager);
 
         mScenesAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -133,9 +133,49 @@ public class HomeActivity extends BaseActivity {
     }
 
     @Override
+    protected void onStop() {
+        //避免进入，显示了状态栏红色，导致状态栏色调更改，所以隐藏顶部红色
+        mTvStatus.setVisibility(View.GONE);
+        super.onStop();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Observable.timer(100, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Long>() {
+                    @Override
+                    public void call(Long aLong) {
+                        if (getApp().isConnect()) {
+                            mTvStatus.setVisibility(View.GONE);
+                        } else {
+                            mTvStatus.setVisibility(View.VISIBLE);
+                            if (getApp().isConnecting()) {
+
+                            }
+                            boolean isLing = getApp().isConnecting();
+                            mTvStatus.setText(
+                                    isLing ? R.string.label_linking : R.string.label_link_fail);
+                        }
+                    }
+                });
+    }
+
+    @Override
     protected void onResume() {
-        mDeviceAdapter.setNewData(getApp().getDeviceListShow());
         super.onResume();
+
+        Set<String> set = DeviceDao.getPlaceSet();
+        List<String> list = new ArrayList<>(set);
+        list.add(0, getString(R.string.label_all));
+
+        if (mPlaceList != null) {
+            mTabLayout.removeAllTabs();
+        }
+        mPlaceList = list;
+        mFragmentPagerAdapter.setData(mPlaceList);
+        mFragmentPagerAdapter.notifyDataSetChanged();
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {
@@ -147,6 +187,9 @@ public class HomeActivity extends BaseActivity {
             case RxBusString.LINK_SUCCESS:
                 mTvStatus.setEnabled(false);
                 mTvStatus.setVisibility(View.GONE);
+
+                getApp().publishMsgToServer(CmdPackage.getNodeList());
+
                 break;
             case RxBusString.LINKING:
                 mTvStatus.setVisibility(View.VISIBLE);
@@ -162,8 +205,30 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {
+            @Tag, @Tag(RxBusString.RXBUS_PARSE)
+    })
+    public void onReceiveAction(CmdResult result) {
+        switch (result.getCmd()) {
+            case CmdParse.CMD_NODE_LIST:
+                DeviceFragment deviceFragment =
+                        (DeviceFragment) mFragmentPagerAdapter.getItem(mViewPager.getCurrentItem());
+                if (deviceFragment.isAdded()) {
+                    deviceFragment.refresh();
+                }
+                break;
+            default:
+        }
+    }
+
     @OnClick(R.id.tv_status)
     public void onStatusClick() {
         getApp().connectService();
+    }
+
+    private void initTabLayout() {
+        Set<String> set = DeviceDao.getPlaceSet();
+        mPlaceList = new ArrayList<>(set);
+        mPlaceList.add(0, getString(R.string.label_all));
     }
 }

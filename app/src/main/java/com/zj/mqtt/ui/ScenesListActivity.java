@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -56,26 +55,14 @@ public class ScenesListActivity extends BaseActivity {
 
     @OnClick(R.id.layout_header_back)
     public void onClickBack() {
-        finish();
+        onBackPressed();
     }
 
     @OnClick(R.id.layout_header_right)
     public void onClickEdit() {
-        boolean isEdit = !mAdapter.isEdit();
-        mAdapter.setEdit(isEdit);
-
-        if (isEdit) {
-            mHeaderView.setRightText(R.string.label_save);
-            mAdapter.enableSwipeItem();
-            mAdapter.enableDragItem(mItemTouchHelper);
-        } else {
-            mHeaderView.setRightText(R.string.label_edit);
-            //保存
-            ScenesDao.saveOrUpdate(mAdapter.getData());
-            mAdapter.disableDragItem();
-            mAdapter.disableSwipeItem();
-            setResult(RESULT_OK);
-        }
+        //保存
+        ScenesDao.saveOrUpdate(mAdapter.getData());
+        setResult(RESULT_OK);
     }
 
     @OnClick(R.id.btn_add)

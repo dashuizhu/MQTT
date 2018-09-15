@@ -16,7 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.HomeActivity">
+        <activity android:name=".ui.LogoActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -35,6 +35,10 @@
             android:name="UMENG_CHANNEL"
             android:value="develop" />
 
+        <activity
+            android:name=".ui.HomeActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.ScenesListActivity"
             android:screenOrientation="portrait"
@@ -66,6 +70,18 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.device.DeviceSettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.device.DeviceDetailSwitchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.device.DeviceDetailLight1Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.device.DeviceDetailLight2Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.device.DeviceDetailLight3Activity"
             android:screenOrientation="portrait" />
     </application>
 

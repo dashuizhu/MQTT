@@ -11,18 +11,16 @@
         android:id="@+id/headerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:rightText="@string/label_edit"
+        app:rightText="@string/label_save"
         app:showRight="true"
         app:titleText="@string/title_scenes" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/view_padding"
-        android:paddingBottom="@dimen/view_padding"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:text="@string/label_device_list_hint"/>
+        android:padding="@dimen/activity_horizontal_margin"
+        android:background="@color/divide_line"
+        android:text="@string/label_scenes_list_hint"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -32,11 +30,12 @@
 
     <Button
         android:id="@+id/btn_add"
-        android:layout_width="match_parent"
+        android:layout_width="180dp"
+        android:layout_gravity="center_horizontal"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_horizontal_margin"
-        android:text="@string/label_add"
-        style="@style/btnCommon" />
+        android:text="@string/label_add_scenes"
+        style="@style/btnAdd" />
 
 
 </LinearLayout>

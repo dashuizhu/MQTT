@@ -19,7 +19,7 @@
     <string name="label_set">set</string>
     <string name="label_execute">执行</string>
     <string name="label_device_add">添加设备</string>
-    <string name="label_device_name">输入设备名字</string>
+    <string name="label_device_name">输入设备名称</string>
     <string name="label_device_place">摆放位置</string>
     <string name="label_next">下一步</string>
     <string name="title_device_name7place">设置设备名称及位置</string>
@@ -40,4 +40,12 @@
     <string name="label_scenes_list_hint">前4个场景将会显示在首页，点击编辑，长按可以推动排序，侧滑可以删除设备，操作完毕后记得保存！</string>
     <string name="toast_service_unlink">未连接到服务端</string>
     <string name="toast_device_notfound">未找到设备</string>
+    <string name="label_all">全部</string>
+    <string name="label_light_on">已开启</string>
+    <string name="label_device_add_fail">设备连接超时，是否重新连接</string>
+    <string name="label_add_again">重新添加</string>
+    <string name="label_device_adding">设备正在添加中,请耐心等待</string>
+    <string name="label_add_scenes">新建场景</string>
+    <string name="label_add_device">添加设备</string>
+    <string name="label_light_off">已关闭</string>
 </resources>

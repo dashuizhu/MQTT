@@ -17,6 +17,7 @@ import com.zj.mqtt.bean.toapp.HeartBeatResult;
 import com.zj.mqtt.bean.todev.CmdControlBean;
 import com.zj.mqtt.constant.CmdString;
 import com.zj.mqtt.constant.RxBusString;
+import com.zj.mqtt.database.DeviceDao;
 
 /**
  * @author zhuj 2018/8/29 上午11:43.
@@ -28,35 +29,35 @@ public class CmdParse {
     /**
      * 读取属性
      */
-    private final static String CMD_READ_NODE = "read-node";
+    public final static String CMD_READ_NODE = "read-node";
     /**
      * 节点列表
      */
-    private final static String CMD_NODE_LIST = "node_update";
+    public final static String CMD_NODE_LIST = "node_update";
     /**
      * 设备加入
      */
-    private final static String CMD_DEVICE_JOIN = "devicejoined";
+    public final static String CMD_DEVICE_JOIN = "devicejoined";
     /**
      * 节点状态改变
      */
-    private final static String CMD_NODE_STATE = "node_state";
+    public final static String CMD_NODE_STATE = "node_state";
     /**
      * 节点设备离开
      */
-    private final static String CMD_DEVICE_LEFT = "deviceleft";
+    public final static String CMD_DEVICE_LEFT = "deviceleft";
     /**
      * ZCL数据上报，COMMAND
      */
-    private final static String CMD_ZCL_CMD = "zcl-command";
+    public final static String CMD_ZCL_CMD = "zcl-command";
     /**
      * ZCL数据，属性
      */
-    private final static String CMD_ZCL_ATTRIBUTE = "zcl-attribute";
+    public final static String CMD_ZCL_ATTRIBUTE = "zcl-attribute";
     /**
      * 心跳包
      */
-    private final static String CMD_HEART_BEAT = "heartbeat";
+    public final static String CMD_HEART_BEAT = "heartbeat";
 
     public static CmdResult parseMsg(String msg) {
         Log.w(TAG, "解析 " + msg);
@@ -73,11 +74,16 @@ public class CmdParse {
                     break;
                 case CMD_NODE_LIST:
                     result = JSONObject.parseObject(msg, CmdNodeListResult.class);
-                    AppApplication.getApp().setDeviceList(((CmdNodeListResult) result).getDevice());
+                    AppApplication.getApp().setDeviceList(((CmdNodeListResult) result).getDevices());
+                    DeviceDao.saveOrUpdate(((CmdNodeListResult) result).getDevices());
+
                     break;
                 case CMD_DEVICE_JOIN:
                     result = JSONObject.parseObject(msg, CmdNodeResult.class);
                     DeviceBean deviceBean = ((CmdNodeResult) result).getDevice();
+
+                    DeviceDao.saveOrUpdate(deviceBean);
+
                     AppApplication.getApp().addDevice(deviceBean);
                     break;
                 case CMD_NODE_STATE:

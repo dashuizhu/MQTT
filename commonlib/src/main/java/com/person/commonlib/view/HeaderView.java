@@ -34,6 +34,8 @@ public class HeaderView extends LinearLayout {
     private int mTitleResId;
     private int mRightResId;
     private int mLeftResId;
+    private int mBgColorResId;
+    private int mTextColorResId;
     private String mActivityTitleString;//标题文字
     private String mRightString;//右边文字
     private String mLeftString;//左边文字
@@ -84,6 +86,14 @@ public class HeaderView extends LinearLayout {
         }
         mTextHeaderRight.setText(mRightString);
 
+        if (mTextColorResId != 0) {
+            mTextHeaderTitle.setTextColor(mTextColorResId);
+            mTextHeaderRight.setTextColor(mTextColorResId);
+            mTextHeaderBack.setTextColor(mTextColorResId);
+        }
+
+        mLayout.setBackgroundResource(mBgColorResId);
+
         mTvDivide.setVisibility(mShowDivide ? View.VISIBLE : View.GONE);
     }
 
@@ -101,6 +111,8 @@ public class HeaderView extends LinearLayout {
         mTitleResId = ta.getResourceId(R.styleable.HeaderView_titleIcon, 0);
         mLeftResId = ta.getResourceId(R.styleable.HeaderView_leftIcon, 0);
         mRightResId = ta.getResourceId(R.styleable.HeaderView_rightIcon, 0);
+        mBgColorResId = ta.getResourceId(R.styleable.HeaderView_bgColor, R.color.colorPrimary);
+        mTextColorResId = ta.getColor(R.styleable.HeaderView_my_textColor, 0);
         ta.recycle();
     }
 

@@ -1,23 +1,15 @@
 package com.zj.mqtt.ui.device;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.widget.ImageView;
-import android.widget.TextView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import com.hwangjr.rxbus.annotation.Subscribe;
-import com.hwangjr.rxbus.thread.EventThread;
+import android.view.View;
 import com.person.commonlib.view.HeaderView;
 import com.zj.mqtt.R;
+import com.zj.mqtt.bean.device.ClusterInfoBean;
 import com.zj.mqtt.bean.device.DeviceBean;
-import com.zj.mqtt.bean.todev.CmdControlBean;
 import com.zj.mqtt.constant.AppString;
-import com.zj.mqtt.constant.CmdString;
 import com.zj.mqtt.protocol.CmdPackage;
-import com.zj.mqtt.protocol.CmdTest;
 import com.zj.mqtt.ui.BaseActivity;
+import java.util.List;
 
 /**
  * 设备控制详情
@@ -26,16 +18,13 @@ import com.zj.mqtt.ui.BaseActivity;
  */
 public class DeviceDetailActivity extends BaseActivity {
 
-    @BindView(R.id.headerView) HeaderView mHeaderView;
-    @BindView(R.id.tv_name) TextView mTvName;
-    @BindView(R.id.iv_switch) ImageView mIvSwitch;
-    private DeviceBean mDeviceBean;
+    HeaderView mHeaderView;
+    DeviceBean mDeviceBean;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_device_detail);
-        ButterKnife.bind(this);
+    public void setContentView(int layoutResID) {
+        super.setContentView(layoutResID);
+        mHeaderView = findViewById(R.id.headerView);
         initViews();
         registerRxBus();
     }
@@ -49,42 +38,22 @@ public class DeviceDetailActivity extends BaseActivity {
             return;
         }
         mHeaderView.setTitle(mDeviceBean.getName());
-        mTvName.setText(mDeviceBean.getDeviceMac());
 
-        mIvSwitch.setSelected(mDeviceBean.isControlOnOff());
-    }
+        findViewById(R.id.layout_header_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
-    @OnClick(R.id.layout_header_back)
-    public void onBack() {
-        finish();
-    }
-
-    @OnClick(R.id.layout_header_right)
-    public void onRightClick() {
-        Intent intent = new Intent(this, DeviceSettingActivity.class);
-        intent.putExtra(AppString.KEY_BEAN, mDeviceBean);
-        startActivityForResult(intent, 11);
-    }
-
-    @OnClick(R.id.iv_switch)
-    public void onClickSwitch() {
-        CmdControlBean control = CmdPackage.setOnOff( !mDeviceBean.isControlOnOff(),
-                mDeviceBean.getDeviceMac(),
-                mDeviceBean.getDeviceEndpoint().getEndpoint());
-
-        getApp().publishMsgToServer(control);
-
-        // TODO: 2018/9/8 测试所有的、 解析所有的协议
-        //CmdTest.testSendCmd(mDeviceBean.getDeviceMac(),
-        //        mDeviceBean.getDeviceEndpoint().getEndpoint());
-        //CmdTest.testParse();
-    }
-
-    @Subscribe(thread = EventThread.MAIN_THREAD)
-    public void onKidChange(String action) {
-        if (action.equals(CmdString.DEV_ONOFF)) {
-            mIvSwitch.setSelected(mDeviceBean.isControlOnOff());
-        }
+        findViewById(R.id.layout_header_right).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DeviceDetailActivity.this, DeviceSettingActivity.class);
+                intent.putExtra(AppString.KEY_BEAN, mDeviceBean);
+                startActivityForResult(intent, 11);
+            }
+        });
     }
 
     @Override

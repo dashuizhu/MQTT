@@ -15,6 +15,7 @@ import com.zj.mqtt.R;
 import com.zj.mqtt.adapter.DevicePlaceAdapter;
 import com.zj.mqtt.bean.device.DeviceBean;
 import com.zj.mqtt.constant.AppConstants;
+import com.zj.mqtt.constant.AppString;
 import com.zj.mqtt.database.DeviceDao;
 import com.zj.mqtt.ui.BaseActivity;
 
@@ -61,12 +62,13 @@ public class DeviceNameActivity extends BaseActivity {
         int postion = mAdapter.getSelectPosition();
         String place = mAdapter.getData().get(postion);
 
-        DeviceBean bean = new DeviceBean();
+        String mac = getIntent().getStringExtra(AppString.KEY_MAC);
+        DeviceBean bean = getApp().getDevice(mac);
+
         bean.setName(name);
         bean.setPlace(place);
-        bean.setDeviceMac("deviceMac" + System.currentTimeMillis() % 100);
+        bean.setDeviceMac(mac);
 
-        getApp().addDevice(bean);
         DeviceDao.saveOrUpdate(bean);
         finish();
     }

@@ -70,7 +70,7 @@ public class DeviceSettingActivity extends BaseActivity {
         getApp().removeDevice(mDeviceBean.getDeviceMac());
         Intent intent = new Intent();
         intent.putExtra(AppString.KEY_DELETE, true);
-        setResult(RESULT_OK);
+        setResult(RESULT_OK, intent);
         finish();
     }
 

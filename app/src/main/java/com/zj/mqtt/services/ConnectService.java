@@ -9,6 +9,10 @@ import android.util.Log;
 import com.hwangjr.rxbus.RxBus;
 import com.zj.mqtt.constant.RxBusString;
 import com.zj.mqtt.protocol.CmdParse;
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import java.util.concurrent.TimeUnit;
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -25,16 +29,18 @@ public class ConnectService extends Service {
 
     private final static String TAG = "MQTT_service";
 
-    private final static String TOPIC_PUBLISH = "Z3Gateway/mac/todev";
-    private final static String TOPIC_SUBSCRIBE = "Z3Gateway/mac/toapp";
+    private final static String TOPIC_PUBLISH = "gw/90FD9FFFFE0130BD/todev";
+    private final static String TOPIC_SUBSCRIBE = "gw/90FD9FFFFE0130BD/toapp";
     private final static String CLIENT_ID = "MQTT_FX_Client";
-    private String serverUrl = "tcp://192.168.0.108:1883";
+    private String serverUrl = "tcp://39.106.24.176:1883";
 
     private final IBinder mBinder = new LocalBinder();
 
     private MqttAndroidClient mMqttClient;
 
     private boolean isLinking = false;
+
+    Disposable mLinkingDisposable;
 
     @Override
     public void onCreate() {
@@ -54,6 +60,13 @@ public class ConnectService extends Service {
         return mMqttClient.isConnected();
     }
 
+    public boolean isConnecting() {
+        if (mMqttClient == null) {
+            return false;
+        }
+        return isLinking;
+    }
+
     public class LocalBinder extends Binder {
 
         public ConnectService getService() {
@@ -70,6 +83,7 @@ public class ConnectService extends Service {
             mMqttClient = new MqttAndroidClient(this, serverUrl, CLIENT_ID);
         }
         if (isLinking) {
+            startLinkTimeoutCheck();
             return;
         }
         if (mMqttClient.isConnected()) {
@@ -104,6 +118,7 @@ public class ConnectService extends Service {
             public void onSuccess(IMqttToken asyncActionToken) {
                 Log.w(TAG, " 连接成功  ");
                 RxBus.get().post(RxBusString.LINK_SUCCESS);
+                disLinkTimeoutCheck();
                 isLinking = false;
                 try {
                     //连接成功后订阅主题, qos 质量， 0 只管发送 ， 1 会重复发送知道确认收到 ，2 保证重复消息不会二次接收
@@ -117,6 +132,7 @@ public class ConnectService extends Service {
             public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
                 Log.w(TAG, "onFailure  ");
                 isLinking = false;
+                disLinkTimeoutCheck();
                 RxBus.get().post(RxBusString.LINKFAIL);
                 if (exception != null) {
                     exception.printStackTrace();
@@ -229,4 +245,32 @@ public class ConnectService extends Service {
         stopConnect();
         return super.onUnbind(intent);
     }
+
+    private void startLinkTimeoutCheck() {
+        if (mLinkingDisposable == null || mLinkingDisposable.isDisposed()) {
+            mLinkingDisposable = Observable.timer(15, TimeUnit.SECONDS).subscribe(new Consumer<Long>() {
+                @Override
+                public void accept(Long aLong) throws Exception {
+                    if (isLinking) {
+                        if (mMqttClient.isConnected()) {
+                            RxBus.get().post(RxBusString.LINK_SUCCESS);
+                        } else {
+                            RxBus.get().post(RxBusString.LINKFAIL);
+                        }
+                        isLinking = false;
+                    }
+                }
+            });
+        }
+    }
+
+    private void disLinkTimeoutCheck() {
+        if (mLinkingDisposable != null) {
+            if (!mLinkingDisposable.isDisposed()) {
+                mLinkingDisposable.dispose();
+            }
+            mLinkingDisposable = null;
+        }
+    }
+
 }

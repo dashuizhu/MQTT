@@ -11,7 +11,18 @@ import lombok.Data;
 @Data
 public class DeviceBean implements Parcelable {
 
+    private final int STATE_JOIN = 16;
+    /**
+     * 无应答
+     */
+    private final int STATE_UNRESPONSE = 17;
+    /**
+     * 离开
+     */
+    private final int STATE_LEfT = 30;
+
     private String name;
+    private String id;
 
     /**
      * nodeId : 1
@@ -27,10 +38,15 @@ public class DeviceBean implements Parcelable {
 
     private String place;
     private boolean moreDevice;
-    private String deviceMac;
+    //private String deviceMac;
     private int seq;
+    private String picture;
 
     private String cmd;
+
+    /**
+     * 以下是缓存的控制数据
+     */
     private boolean controlOnOff;
     private int controlLevel;
     private int controlTime;
@@ -38,14 +54,36 @@ public class DeviceBean implements Parcelable {
     private int controlSet;
 
 
+
+
+
+
     public DeviceBean() { }
 
     public DeviceEndpointBean getDeviceEndpoint() {
         if (deviceEndpoint == null) {
             deviceEndpoint = new DeviceEndpointBean();
-            deviceEndpoint.setMac(deviceMac);
+            //deviceEndpoint.setMac(deviceMac);
         }
         return deviceEndpoint;
+    }
+
+    public String getDeviceMac() {
+        if (deviceEndpoint == null) {
+            return null;
+        }
+        return deviceEndpoint.getMac();
+    }
+
+    public void setDeviceMac(String mac) {
+        if (deviceEndpoint == null) {
+            deviceEndpoint = new DeviceEndpointBean();
+        }
+        deviceEndpoint.setMac(mac);
+    }
+
+    public boolean isOnline() {
+         return !(deviceState == STATE_LEfT || deviceState == STATE_UNRESPONSE);
     }
 
     @Override
@@ -62,8 +100,8 @@ public class DeviceBean implements Parcelable {
         dest.writeParcelable(this.deviceEndpoint, flags);
         dest.writeString(this.place);
         dest.writeByte(this.moreDevice ? (byte) 1 : (byte) 0);
-        dest.writeString(this.deviceMac);
         dest.writeInt(this.seq);
+        dest.writeString(this.picture);
         dest.writeString(this.cmd);
         dest.writeByte(this.controlOnOff ? (byte) 1 : (byte) 0);
         dest.writeInt(this.controlLevel);
@@ -80,8 +118,8 @@ public class DeviceBean implements Parcelable {
         this.deviceEndpoint = in.readParcelable(DeviceEndpointBean.class.getClassLoader());
         this.place = in.readString();
         this.moreDevice = in.readByte() != 0;
-        this.deviceMac = in.readString();
         this.seq = in.readInt();
+        this.picture = in.readString();
         this.cmd = in.readString();
         this.controlOnOff = in.readByte() != 0;
         this.controlLevel = in.readInt();

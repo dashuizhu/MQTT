@@ -7,57 +7,86 @@
     android:orientation="vertical"
     tools:context=".ui.HomeActivity">
 
-    <FrameLayout
+
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
-        <com.person.commonlib.view.HeaderView
+        <ImageView
+            android:id="@+id/iv_bg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:showBack="false"
-            app:showDivide="false"
-            app:titleText="@string/app_name" />
+            android:background="@mipmap/home_top_bg" />
 
         <TextView
             android:id="@+id/tv_status"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="48dp"
             android:background="@color/red"
             android:gravity="center"
             android:text="连接中......"
-            android:textColor="@color/white" />
+            android:visibility="gone"
+            android:textColor="@color/white"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@id/iv_bg"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerViewScenes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <include layout="@layout/recycler_item_scenes" />
+
+        </LinearLayout>
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        app:tabIndicatorColor="@color/blue"
+        app:tabMode="scrollable"
+        app:tabSelectedTextColor="@color/blue">
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/item_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_all" />
+
+    </android.support.design.widget.TabLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <Button
+            android:id="@+id/btn_device_add"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
+            android:text="@string/label_device_add"
+            style="@style/btnAdd" />
+
     </FrameLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:orientation="horizontal">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerViewScenes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <include layout="@layout/recycler_item_scenes" />
-
-    </LinearLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerViewDevice"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1" />
-
-    <Button
-        android:id="@+id/btn_device_add"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="@dimen/activity_horizontal_margin"
-        android:text="@string/label_device_add"
-        style="@style/btnCommon" />
 
 </LinearLayout>

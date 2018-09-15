@@ -8,6 +8,13 @@ import java.util.List;
  */
 public class AppConstants {
 
+    public static final boolean DEMO = true;
+
+    /**
+     * 设备允许加网超时时间
+     */
+    public static final int DEVICE_ADD_TIME_OUT = 60;
+
     public final static String UMENG_APPID = "5b85fb2fb27b0a4a9200004d";
 
     public final static String OTA_URL = "http://www.xxx.com";

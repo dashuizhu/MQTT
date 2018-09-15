@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 public class ClusterInfoBean implements Parcelable {
+
     /**
      * clusterId : 1
      * clusterType : 1

@@ -2,6 +2,8 @@ package com.zj.mqtt.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.DrawableRes;
+import com.zj.mqtt.R;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -16,9 +18,16 @@ import lombok.Data;
 @Data
 public class ScenesBean implements Parcelable {
 
+    public static final int SCENES_HOME = 1;
+    public static final int SCENES_READ = 2;
+    public static final int SCENES_SLEEP = 3;
+    public static final int SCENES_OUT = 4;
+
+
     private String id;
     private String name;
     private int seq;
+    private int picture;
 
     private List<ActionBean> actionList;
 
@@ -33,6 +42,27 @@ public class ScenesBean implements Parcelable {
         this.id = UUID.randomUUID().toString();
     }
 
+    public int getPictureRes() {
+        @DrawableRes int resId;
+        switch (picture) {
+            case SCENES_HOME:
+                resId = R.mipmap.btn_scenes_home_normal;
+                break;
+            case SCENES_READ:
+                resId = R.mipmap.btn_scenes_read_normal;
+                break;
+            case SCENES_SLEEP:
+                resId = R.mipmap.btn_scenes_sleep_normal;
+                break;
+            case SCENES_OUT:
+                resId = R.mipmap.btn_scenes_out_normal;
+                break;
+            default:
+                resId = R.mipmap.ic_launcher;
+        }
+        return resId;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -43,6 +73,7 @@ public class ScenesBean implements Parcelable {
         dest.writeString(this.id);
         dest.writeString(this.name);
         dest.writeInt(this.seq);
+        dest.writeInt(this.picture);
         dest.writeTypedList(this.actionList);
     }
 
@@ -50,6 +81,7 @@ public class ScenesBean implements Parcelable {
         this.id = in.readString();
         this.name = in.readString();
         this.seq = in.readInt();
+        this.picture = in.readInt();
         this.actionList = in.createTypedArrayList(ActionBean.CREATOR);
     }
 

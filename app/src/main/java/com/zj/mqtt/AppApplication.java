@@ -54,6 +54,7 @@ public class AppApplication extends Application {
         //MobclickAgent.setDebugMode(true);
         UMConfigure.init(this, UMConfigure.DEVICE_TYPE_PHONE, null);
 
+        getDevcieList();
         MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
     }
 
@@ -62,15 +63,20 @@ public class AppApplication extends Application {
         if (list == null || list.size() == 0) {
             ScenesBean bean1 = new ScenesBean();
             bean1.setName("回家");
-
-            ScenesBean bean2 = new ScenesBean();
-            bean2.setName("睡眠");
-
-            ScenesBean bean3 = new ScenesBean();
-            bean3.setName("离家");
+            bean1.setPicture(ScenesBean.SCENES_HOME);
 
             ScenesBean bean4 = new ScenesBean();
             bean4.setName("阅读");
+            bean4.setPicture(ScenesBean.SCENES_READ);
+
+            ScenesBean bean2 = new ScenesBean();
+            bean2.setName("睡眠");
+            bean2.setPicture(ScenesBean.SCENES_SLEEP);
+
+
+            ScenesBean bean3 = new ScenesBean();
+            bean3.setName("离家");
+            bean3.setPicture(ScenesBean.SCENES_OUT);
 
             list.add(bean1);
             list.add(bean2);
@@ -178,6 +184,23 @@ public class AppApplication extends Application {
         return db;
     }
 
+    public DeviceBean getDevice(String mac, int endPoint) {
+        if (mDeviceList == null || mDeviceList.size() == 0) {
+            return null;
+        }
+        int listSize = mDeviceList.size();
+        for (int i = 0; i < listSize; i++) {
+            if (mac.equals(mDeviceList.get(i).getDeviceMac()) && endPoint == mDeviceList.get(i).getDeviceEndpoint().getEndpoint()) {
+                return mDeviceList.get(i);
+            }
+        }
+        DeviceBean db = DeviceDao.getDeviceByMac(mac);
+        if (db != null) {
+            mDeviceList.add(db);
+        }
+        return db;
+    }
+
     public static AppApplication getApp() {
         return mApp;
     }
@@ -270,6 +293,13 @@ public class AppApplication extends Application {
             return false;
         }
         return mConnectService.isConnect();
+    }
+
+    public boolean isConnecting() {
+        if (mConnectService == null) {
+            return false;
+        }
+        return mConnectService.isConnecting();
     }
 
     private void bindService() {

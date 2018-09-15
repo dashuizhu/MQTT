@@ -17,5 +17,6 @@ public class ScenesAdapter extends BaseQuickAdapter<ScenesBean, BaseViewHolder> 
     @Override
     protected void convert(BaseViewHolder helper, ScenesBean item) {
         helper.setText(R.id.tv_name, item.getName());
+        helper.setImageResource(R.id.iv, item.getPictureRes());
     }
 }

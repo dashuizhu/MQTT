@@ -24,6 +24,7 @@ public class ScenesDao extends RealmObject {
     @PrimaryKey private String id;
     private String name;
     private int seq;
+    private int pictureType;
     private RealmList<ActionDao> actionList;
 
     public static void saveOrUpdate(final ScenesBean bean) {
@@ -58,7 +59,7 @@ public class ScenesDao extends RealmObject {
                 for (int i = 0; i < size; i++) {
                     bean = list.get(i);
                     //从1开始
-                    bean.setSeq(i+1);
+                    bean.setSeq(i + 1);
                     realm.copyToRealmOrUpdate(castDao(bean));
                 }
             }
@@ -66,7 +67,7 @@ public class ScenesDao extends RealmObject {
     }
 
     public static List<ScenesBean> queryList() {
-        return queryList(99999);
+        return queryList(9999);
     }
 
     public static List<ScenesBean> queryList(int querySize) {
@@ -106,7 +107,7 @@ public class ScenesDao extends RealmObject {
         dao.id = bean.getId();
         dao.name = bean.getName();
         dao.seq = bean.getSeq();
-
+        dao.pictureType = bean.getPicture();
         RealmList<ActionDao> actionList = new RealmList<>();
         if (bean.getActionList() != null) {
             for (ActionBean actBean : bean.getActionList()) {
@@ -127,7 +128,7 @@ public class ScenesDao extends RealmObject {
         bean.setId(id);
         bean.setName(this.name);
         bean.setSeq(seq);
-
+        bean.setPicture(pictureType);
         List<ActionBean> list = new ArrayList<>();
         if (actionList != null) {
             for (ActionDao actDao : actionList) {

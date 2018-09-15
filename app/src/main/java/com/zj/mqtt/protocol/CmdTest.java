@@ -10,6 +10,7 @@ import java.util.List;
 
 /**
  * 测试用的类
+ *
  * @author zhuj 2018/8/31 上午11:41.
  */
 public class CmdTest {
@@ -31,17 +32,13 @@ public class CmdTest {
         levelBean.setTime(22);
         list.add(CmdPackage.setLevelControl(mac, endPoint, levelBean));
 
-
         HuaSetBean huaSetBean = new HuaSetBean();
         huaSetBean.setHua(11);
         huaSetBean.setSat(12);
         huaSetBean.setTime(13);
-        list.add(CmdPackage.setColorControl(mac, endPoint,
-                huaSetBean));
+        list.add(CmdPackage.setColorControl(mac, endPoint, huaSetBean));
 
-        list.add(CmdPackage.getReadNode(mac, endPoint,
-                11,
-                1111));
+        list.add(CmdPackage.getReadNode(mac, endPoint, 11, 1111));
 
         ReportParaBean reportParaBean = new ReportParaBean();
         reportParaBean.setAttributeId(31);
@@ -54,12 +51,10 @@ public class CmdTest {
 
         list.add(CmdPackage.setUpdate());
 
-        for (int i=0; i<list.size(); i++) {
+        for (int i = 0; i < list.size(); i++) {
             AppApplication.getApp().publishMsgToServer(list.get(i));
         }
-
     }
-
 
     public static void testParse() {
         // TODO: 2018/8/31 测试发送的协议
@@ -107,7 +102,6 @@ public class CmdTest {
                 + "]"
                 + "}");
 
-
         list.add("{"
                 + "\"cmd\": \"node_state\","
                 + "\"seq\": 1,"
@@ -117,26 +111,8 @@ public class CmdTest {
                 + "}"
                 + "}");
 
-        list.add("{"
-                + "    \"cmd\": \"devicejoined\","
-                + "    \"seq\": 1,"
-                + "    \"device\": {"
-                + "        \"nodeId\": 1,"
-                + "        \"deviceState\": 1,"
-                + "        \"deviceType\": \"string\","
-                + "        \"deviceEndpoint\": {"
-                + "            \"mac\": \"string\","
-                + "            \"endpoint\": 1,"
-                + "            \"clusterInfo\": ["
-                + "                {"
-                + "                    \"clusterId\": 1,"
-                + "                    \"clusterType\": \"string\""
-                + "                }"
-                + "            ]"
-                + "        }"
-                + "    }"
-                + "}");
-
+        list.add("\n"
+                + "{\"cmd\":\"devicejoined\",\"seq\":168,\"device\":{\"nodeId\":53994,\"deviceState\":16,\"deviceType\":\"0x0000\",\"deviceEndpoint\":{\"mac\":\"000B57FFFE7BE4D2\",\"endpoint\":1,\"clusterInfo\":[{\"clusterId\":0,\"clusterType\":\"In\"},{\"clusterId\":3,\"clusterType\":\"In\"},{\"clusterId\":3,\"clusterType\":\"Out\"},{\"clusterId\":6,\"clusterType\":\"Out\"}]}}}");
 
         list.add("{"
                 + "    \"cmd\": \"deviceleft\","
@@ -145,7 +121,6 @@ public class CmdTest {
                 + "        \"mac\": \"string\""
                 + "    }"
                 + "}");
-
 
         list.add("{"
                 + "\"cmd\": \"zcl-command\","
@@ -159,7 +134,6 @@ public class CmdTest {
                 + "        \"endpoint\": 1"
                 + "    }"
                 + "}");
-
 
         list.add("{"
                 + "    \"cmd\": \"zcl-attribute\","
@@ -187,9 +161,8 @@ public class CmdTest {
                 + "    \"result\": 1\n"
                 + "}");
 
-        for (String str: list) {
+        for (String str : list) {
             AppApplication.getApp().testPublishToApp(str);
         }
     }
-
 }

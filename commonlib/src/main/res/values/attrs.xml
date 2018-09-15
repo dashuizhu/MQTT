@@ -12,6 +12,8 @@
         <attr format="boolean" name="showRight" />
         <attr format="boolean" name="showBack" />
         <attr format="boolean" name="showDivide" />
+        <attr format="reference" name="bgColor" />
+        <attr format="color" name="my_textColor" />
     </declare-styleable>
 
 

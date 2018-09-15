@@ -10,9 +10,9 @@
         android:id="@+id/headerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:rightText="编辑"
+        app:rightText="@string/label_save"
         app:showRight="true"
-        app:titleText="@string/label_setting" />
+        app:titleText="@string/label_edit" />
 
     <com.zj.mqtt.view.MyItemView
         android:id="@+id/item_name"

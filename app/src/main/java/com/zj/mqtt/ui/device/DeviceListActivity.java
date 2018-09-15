@@ -48,7 +48,7 @@ public class DeviceListActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_scenes_list);
+        setContentView(R.layout.activity_device_list);
         ButterKnife.bind(this);
         initViews();
         //registerRxBus();
