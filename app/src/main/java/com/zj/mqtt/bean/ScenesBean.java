@@ -58,7 +58,28 @@ public class ScenesBean implements Parcelable {
                 resId = R.mipmap.btn_scenes_out_normal;
                 break;
             default:
-                resId = R.mipmap.ic_launcher;
+                resId = R.mipmap.btn_scenes_custom_press;
+        }
+        return resId;
+    }
+
+    public int getPictureResByList() {
+        @DrawableRes int resId;
+        switch (picture) {
+            case SCENES_HOME:
+                resId = R.mipmap.btn_scenes_home_press;
+                break;
+            case SCENES_READ:
+                resId = R.mipmap.btn_scenes_read_press;
+                break;
+            case SCENES_SLEEP:
+                resId = R.mipmap.btn_scenes_sleep_press;
+                break;
+            case SCENES_OUT:
+                resId = R.mipmap.btn_scenes_out_press;
+                break;
+            default:
+                resId = R.mipmap.btn_scenes_custom_press;
         }
         return resId;
     }

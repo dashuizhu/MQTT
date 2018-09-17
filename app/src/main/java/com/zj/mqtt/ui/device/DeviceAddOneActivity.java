@@ -1,7 +1,9 @@
 package com.zj.mqtt.ui.device;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -88,25 +90,29 @@ public class DeviceAddOneActivity extends BaseActivity {
     private void startAdd() {
         mProgressView.setVisibility(View.VISIBLE);
         mTvProgress.setVisibility(View.VISIBLE);
+        mTvDevice.setSelected(false);
         mTvDevice.setText("");
-        mProgressView.setProgress(0);
-        mDisposable = Observable.interval(1, TimeUnit.SECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Long>() {
-                    @Override
-                    public void accept(Long aLong) throws Exception {
-                        mProgressView.setProgress(aLong.intValue());
 
-                        if (aLong >= MAX_PROGRESS) {
-                            mProgressView.setVisibility(View.INVISIBLE);
-                            mTvProgress.setVisibility(View.INVISIBLE);
-                            mTvDevice.setText(R.string.label_device_add_fail);
-                            disposale();
+        if (getApp().publishMsgToServer(CmdPackage.addDevice())) {
+            mProgressView.setProgress(0);
+            mDisposable = Observable.interval(1, TimeUnit.SECONDS)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<Long>() {
+                        @Override
+                        public void accept(Long aLong) throws Exception {
+                            mProgressView.setProgress(aLong.intValue());
+
+                            if (aLong >= MAX_PROGRESS) {
+                                mProgressView.setVisibility(View.INVISIBLE);
+                                mTvProgress.setVisibility(View.INVISIBLE);
+                                mTvDevice.setSelected(true);
+                                mTvDevice.setText(R.string.label_device_add_fail);
+                                disposale();
+                            }
                         }
-                    }
-                });
-        mBtnAdd.setVisibility(View.GONE);
-        getApp().publishMsgToServer(CmdPackage.addDevice());
+                    });
+            mBtnAdd.setVisibility(View.GONE);
+        }
     }
 
     private void disposale() {

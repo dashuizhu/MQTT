@@ -26,12 +26,10 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:clickable="true"
         android:drawablePadding="@dimen/activity_horizontal_margin"
         android:drawableTop="@drawable/btn_switch_single"
         android:gravity="center"
         android:textColor="@color/white"
         android:textSize="@dimen/text_title" />
-
 
 </RelativeLayout>

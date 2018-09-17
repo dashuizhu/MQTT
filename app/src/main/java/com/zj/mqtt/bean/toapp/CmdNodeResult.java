@@ -1,6 +1,7 @@
 package com.zj.mqtt.bean.toapp;
 
 import com.zj.mqtt.bean.device.DeviceBean;
+import com.zj.mqtt.bean.device.NodeDevicesBean;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -11,6 +12,6 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class CmdNodeResult extends CmdResult {
 
-    private DeviceBean device;
+    private NodeDevicesBean device;
 
 }

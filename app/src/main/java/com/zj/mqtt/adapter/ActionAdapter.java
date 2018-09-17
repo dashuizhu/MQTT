@@ -22,10 +22,9 @@ public class ActionAdapter extends BaseQuickAdapter<ActionBean, BaseViewHolder> 
 
     @Override
     protected void convert(BaseViewHolder helper, ActionBean item) {
-        Log.w("test",  helper.getAdapterPosition() + " " + item.toString());
-        helper.setText(R.id.tv_name,
-                item.getDeviceName() + "\n" + item.getDeviceMac() + "\n" + getControlDetail(
-                        item.getControlBean()));
+        Log.w("test", helper.getAdapterPosition() + " " + item.toString());
+        helper.setText(R.id.tv_name, item.getDeviceName()+"\n" + getControlDetail(item.getControlBean()))
+                .setImageResource(R.id.iv, item.getPictureRes());
     }
 
     public void setEdit(boolean edit) {

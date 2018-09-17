@@ -21,14 +21,13 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
 import com.chad.library.adapter.base.listener.OnItemSwipeListener;
-import com.hwangjr.rxbus.annotation.Subscribe;
-import com.hwangjr.rxbus.thread.EventThread;
+import com.person.commonlib.utils.DensityUtil;
 import com.person.commonlib.view.HeaderView;
+import com.person.commonlib.view.RecyclerViewSpaceItemDecoration;
 import com.zj.mqtt.AppApplication;
 import com.zj.mqtt.R;
 import com.zj.mqtt.adapter.DeviceListAdapter;
 import com.zj.mqtt.constant.AppString;
-import com.zj.mqtt.constant.RxBusString;
 import com.zj.mqtt.database.DeviceDao;
 import com.zj.mqtt.ui.BaseActivity;
 
@@ -71,8 +70,8 @@ public class DeviceListActivity extends BaseActivity {
         //} else {
         //    mHeaderView.setRightText(R.string.label_edit);
         //    //保存
-            DeviceDao.saveOrUpdate(mAdapter.getData());
-            showToast(R.string.toast_save_success);
+        DeviceDao.saveOrUpdate(mAdapter.getData());
+        showToast(R.string.toast_save_success);
         //    mAdapter.disableDragItem();
         //    mAdapter.disableSwipeItem();
         //    setResult(RESULT_OK);
@@ -99,18 +98,19 @@ public class DeviceListActivity extends BaseActivity {
     //    //    setResult(RESULT_OK);
     //    //}
     //}
-
     @Override
     protected void onStart() {
         //if (mRefresh) {
-            mAdapter.setNewData(getApp().getDevcieList());
+        mAdapter.setNewData(getApp().getDevcieList());
         //    mRefresh = false;
         //}
         super.onStart();
     }
 
     private void initViews() {
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this,3));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        int padding = DensityUtil.dip2px(this, 16);
+        mRecyclerView.addItemDecoration(new RecyclerViewSpaceItemDecoration(padding, 3, false));
 
         OnItemDragListener listener = new OnItemDragListener() {
             @Override
@@ -206,6 +206,5 @@ public class DeviceListActivity extends BaseActivity {
         if (resultCode != RESULT_OK) {
             return;
         }
-
     }
 }

@@ -16,7 +16,7 @@ import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.person.commonlib.view.HeaderView;
 import com.zj.mqtt.R;
-import com.zj.mqtt.adapter.DeviceAdapter;
+import com.zj.mqtt.adapter.ActionDeviceAdapter;
 import com.zj.mqtt.bean.device.DeviceBean;
 import com.zj.mqtt.bean.toapp.CmdNodeLeftResult;
 import com.zj.mqtt.bean.toapp.CmdNodeListResult;
@@ -39,7 +39,7 @@ public class ActionDeviceListActivity extends BaseActivity {
     @BindView(R.id.headerView) HeaderView mHeaderView;
     @BindView(R.id.recyclerView) RecyclerView mRecyclerView;
 
-    private DeviceAdapter mAdapter;
+    private ActionDeviceAdapter mAdapter;
 
     private final int ACTIVITY_CONTROL = 11;
 
@@ -67,7 +67,7 @@ public class ActionDeviceListActivity extends BaseActivity {
         mRecyclerView.addItemDecoration(
                 new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
-        mAdapter = new DeviceAdapter();
+        mAdapter = new ActionDeviceAdapter();
         mAdapter.setNewData(getApp().getDevcieList());
 
         mRecyclerView.setAdapter(mAdapter);

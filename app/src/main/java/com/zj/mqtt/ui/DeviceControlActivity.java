@@ -2,6 +2,7 @@ package com.zj.mqtt.ui;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -42,12 +43,18 @@ public class DeviceControlActivity extends BaseActivity {
     @BindView(R.id.sb_color_time) SeekBar mSbColorTime;
     @BindView(R.id.layout_color) LinearLayout mLayoutColor;
     @BindView(R.id.rb_level) RadioButton mRbLevel;
-    @BindView(R.id.tv_level_value) TextView mTvLevelValue;
+    //@BindView(R.id.tv_level_value) TextView mTvLevelValue;
     @BindView(R.id.sb_level_value) SeekBar mSbLevelValue;
     @BindView(R.id.tv_level_time) TextView mTvLevelTime;
     @BindView(R.id.sb_level_time) SeekBar mSbLevelTime;
     @BindView(R.id.layout_level) LinearLayout mLayoutLevel;
     @BindView(R.id.rb_group) RadioGroup mRbGroup;
+    @BindView(R.id.rb_switch2) RadioButton mRbSwitch2;
+    @BindView(R.id.cb_switch2) CheckBox mCbSwitch2;
+    @BindView(R.id.layout_switch2) RelativeLayout mLayoutSwitch2;
+    @BindView(R.id.rb_switch3) RadioButton mRbSwitch3;
+    @BindView(R.id.cb_switch3) CheckBox mCbSwitch3;
+    @BindView(R.id.layout_switch3) RelativeLayout mLayoutSwitch3;
     private DeviceBean mDeviceBean;
     private CmdControlBean mControlBean;
 
@@ -70,6 +77,31 @@ public class DeviceControlActivity extends BaseActivity {
         }
         mHeaderView.setTitle(mDeviceBean.getName());
 
+        if (mDeviceBean.isDeviceSwith()) {
+            mRbSwitch.setVisibility(View.VISIBLE);
+            mLayoutSwitch.setVisibility(View.VISIBLE);
+            mRbSwitch.setChecked(true);
+        } else if (mDeviceBean.isDeviceLight1()) {
+            mRbSwitch.setVisibility(View.VISIBLE);
+            mLayoutSwitch.setVisibility(View.VISIBLE);
+            mRbSwitch.setChecked(true);
+        } else if (mDeviceBean.isDeviceLight2()) {
+            mRbSwitch.setVisibility(View.VISIBLE);
+            mRbSwitch2.setVisibility(View.VISIBLE);
+            mLayoutSwitch.setVisibility(View.VISIBLE);
+            mLayoutSwitch2.setVisibility(View.VISIBLE);
+        } else if (mDeviceBean.isDeviceLight3()) {
+            mRbSwitch.setVisibility(View.VISIBLE);
+            mRbSwitch2.setVisibility(View.VISIBLE);
+            mRbSwitch3.setVisibility(View.VISIBLE);
+            mLayoutSwitch.setVisibility(View.VISIBLE);
+            mLayoutSwitch2.setVisibility(View.VISIBLE);
+            mLayoutSwitch3.setVisibility(View.VISIBLE);
+        } else if (mDeviceBean.isDeviceDim()) {
+            mLayoutSwitch.setVisibility(View.VISIBLE);
+            mLayoutColor.setVisibility(View.VISIBLE);
+        }
+
         initSeekBarListener();
         initData();
     }
@@ -80,10 +112,7 @@ public class DeviceControlActivity extends BaseActivity {
         }
         switch (mControlBean.getCmd()) {
             case CmdString.DEV_ONOFF:
-                mRbSwitch.setChecked(true);
-                if (mControlBean.getNode() != null) {
-                    mCbSwitch.setChecked(mControlBean.getNode().getValue() == 1);
-                }
+                initDataSwitch();
                 break;
             case CmdString.DEV_COLOR_CONTROL:
                 mRbColor.setChecked(true);
@@ -97,6 +126,42 @@ public class DeviceControlActivity extends BaseActivity {
                 mSbLevelValue.setProgress(mControlBean.getMv_to_level().getLevel());
                 break;
             default:
+        }
+    }
+
+    private void initDataSwitch() {
+        if (mControlBean.getNode() == null) {
+            return;
+        }
+        int controlEndpoint = mControlBean.getNode().getEndpoint();
+        boolean isOnoff = mControlBean.getNode().getValue() == 1;
+        if (mDeviceBean.isDeviceLight2()) {
+            //是第一个endpoint
+            if (controlEndpoint == mDeviceBean.getEndpointList().get(0).getEndpoint()) {
+                mRbSwitch.setChecked(true);
+                mCbSwitch.setChecked(isOnoff);
+            } else {
+                mRbSwitch2.setChecked(true);
+                mCbSwitch2.setChecked(isOnoff);
+            }
+        } else if (mDeviceBean.isDeviceLight3()) {
+
+            if (controlEndpoint == mDeviceBean.getEndpointList().get(0).getEndpoint()) {
+                //是第一个endpoint
+                mRbSwitch.setChecked(true);
+                mCbSwitch.setChecked(isOnoff);
+            } else if (controlEndpoint == mDeviceBean.getEndpointList().get(1).getEndpoint()) {
+                //是第一个endpoint
+                mRbSwitch2.setChecked(true);
+                mCbSwitch2.setChecked(isOnoff);
+            } else {
+                mRbSwitch3.setChecked(true);
+                mCbSwitch3.setChecked(isOnoff);
+            }
+        } else {
+            //其他情况
+            mRbSwitch.setChecked(true);
+            mCbSwitch.setChecked(isOnoff);
         }
     }
 
@@ -152,22 +217,22 @@ public class DeviceControlActivity extends BaseActivity {
             }
         });
 
-        mSbLevelValue.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                mTvLevelValue.setText(String.valueOf(progress));
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
+        //mSbLevelValue.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        //    @Override
+        //    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        //        mTvLevelValue.setText(String.valueOf(progress));
+        //    }
+        //
+        //    @Override
+        //    public void onStartTrackingTouch(SeekBar seekBar) {
+        //
+        //    }
+        //
+        //    @Override
+        //    public void onStopTrackingTouch(SeekBar seekBar) {
+        //
+        //    }
+        //});
 
         mSbLevelTime.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -196,10 +261,21 @@ public class DeviceControlActivity extends BaseActivity {
     public void onRightClick() {
         switch (mRbGroup.getCheckedRadioButtonId()) {
             case R.id.rb_switch:
-                mControlBean = CmdPackage.setOnOff(mCbSwitch.isChecked(),
-                        mDeviceBean.getDeviceMac(),
-                        mDeviceBean.getDeviceEndpoint().getEndpoint());
+                mControlBean =
+                        CmdPackage.setOnOff(mCbSwitch.isChecked(), mDeviceBean.getDeviceMac(),
+                                mDeviceBean.getEndpointList().get(0).getEndpoint());
                 break;
+            case R.id.rb_switch2:
+                mControlBean =
+                        CmdPackage.setOnOff(mCbSwitch.isChecked(), mDeviceBean.getDeviceMac(),
+                                mDeviceBean.getEndpointList().get(1).getEndpoint());
+                break;
+            case R.id.rb_switch3:
+                mControlBean =
+                        CmdPackage.setOnOff(mCbSwitch.isChecked(), mDeviceBean.getDeviceMac(),
+                                mDeviceBean.getEndpointList().get(2).getEndpoint());
+                break;
+
             case R.id.rb_color:
                 HuaSetBean huaSetBean = new HuaSetBean();
                 huaSetBean.setTime(mSbColorHua.getProgress());
@@ -207,13 +283,14 @@ public class DeviceControlActivity extends BaseActivity {
                 huaSetBean.setHua(mSbColorTime.getProgress());
 
                 mControlBean = CmdPackage.setColorControl(mDeviceBean.getDeviceMac(),
-                        mDeviceBean.getDeviceEndpoint().getEndpoint(), huaSetBean);
+                        mDeviceBean.getEndpointList().get(0).getEndpoint(), huaSetBean);
                 break;
             case R.id.rb_level:
                 LevelBean levelBean = new LevelBean();
                 levelBean.setLevel(mSbLevelValue.getProgress());
                 levelBean.setTime(mSbLevelTime.getProgress());
-                mControlBean = CmdPackage.setLevelControl(mDeviceBean.getDeviceMac(), mDeviceBean.getDeviceEndpoint().getEndpoint(), levelBean);
+                mControlBean = CmdPackage.setLevelControl(mDeviceBean.getDeviceMac(),
+                        mDeviceBean.getEndpointList().get(0).getEndpoint(), levelBean);
                 break;
             default:
         }

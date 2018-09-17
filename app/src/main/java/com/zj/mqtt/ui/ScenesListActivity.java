@@ -63,6 +63,7 @@ public class ScenesListActivity extends BaseActivity {
         //保存
         ScenesDao.saveOrUpdate(mAdapter.getData());
         setResult(RESULT_OK);
+        finish();
     }
 
     @OnClick(R.id.btn_add)
@@ -164,9 +165,9 @@ public class ScenesListActivity extends BaseActivity {
 
         //mItemDragAndSwipeCallback.setDragMoveFlags(ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT | ItemTouchHelper.UP | ItemTouchHelper.DOWN);
         mItemDragAndSwipeCallback.setSwipeMoveFlags(ItemTouchHelper.START | ItemTouchHelper.END);
-        //mAdapter.enableSwipeItem();
+        mAdapter.enableSwipeItem();
         mAdapter.setOnItemSwipeListener(onItemSwipeListener);
-        //mAdapter.enableDragItem(mItemTouchHelper);
+        mAdapter.enableDragItem(mItemTouchHelper);
         mAdapter.setOnItemDragListener(listener);
         //mRecyclerView.addItemDecoration(new GridItemDecoration(this ,R.drawable.list_divider));
 

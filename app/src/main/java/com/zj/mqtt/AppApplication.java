@@ -95,25 +95,43 @@ public class AppApplication extends Application {
     }
 
     public List<DeviceBean> getDevcieList() {
-        mDeviceList = DeviceDao.queryList();
+        if (mDeviceList == null) {
+            mDeviceList = DeviceDao.queryList();
+        }
         return mDeviceList;
     }
 
-    public List<DeviceBean> getDeviceListShow() {
-        mDeviceList = getDevcieList();
+    //public List<DeviceBean> getDeviceListShow() {
+    //    mDeviceList = getDevcieList();
+    //
+    //    int subSize = Math.min(8, mDeviceList.size());
+    //    List<DeviceBean> array = mDeviceList.subList(0, subSize);
+    //
+    //    //DeviceBean moreDevice = new DeviceBean();
+    //    //moreDevice.setMoreDevice(true);
+    //    //moreDevice.setName("更多");
+    //    //array.add(moreDevice);
+    //    return array;
+    //}
 
-        int subSize = Math.min(8, mDeviceList.size());
-        List<DeviceBean> array = mDeviceList.subList(0, subSize);
+    public void updateDeviceList(List<DeviceBean> list) {
+        if (mDeviceList == null || mDeviceList.size() == 0) {
+            mDeviceList = list;
+            return;
+        }
+        for (DeviceBean bean : list) {
 
-        DeviceBean moreDevice = new DeviceBean();
-        moreDevice.setMoreDevice(true);
-        moreDevice.setName("更多");
-        array.add(moreDevice);
-        return array;
-    }
+            DeviceBean nowBean = getDevice(bean.getDeviceMac());
+            if (nowBean != null) {
+                nowBean.setEndpointList(bean.getEndpointList());
+                nowBean.setDeviceState(bean.getDeviceState());
+            }  else {
+                mDeviceList.add(bean);
+            }
 
-    public void setDeviceList(List<DeviceBean> list) {
-        mDeviceList = list;
+        }
+
+
     }
 
     public void updateDevice(CmdNodeLeftResult.DeviceLeftBean leftBean) {
@@ -184,22 +202,22 @@ public class AppApplication extends Application {
         return db;
     }
 
-    public DeviceBean getDevice(String mac, int endPoint) {
-        if (mDeviceList == null || mDeviceList.size() == 0) {
-            return null;
-        }
-        int listSize = mDeviceList.size();
-        for (int i = 0; i < listSize; i++) {
-            if (mac.equals(mDeviceList.get(i).getDeviceMac()) && endPoint == mDeviceList.get(i).getDeviceEndpoint().getEndpoint()) {
-                return mDeviceList.get(i);
-            }
-        }
-        DeviceBean db = DeviceDao.getDeviceByMac(mac);
-        if (db != null) {
-            mDeviceList.add(db);
-        }
-        return db;
-    }
+    //public DeviceBean getDevice(String mac, int endPoint) {
+    //    if (mDeviceList == null || mDeviceList.size() == 0) {
+    //        return null;
+    //    }
+    //    int listSize = mDeviceList.size();
+    //    for (int i = 0; i < listSize; i++) {
+    //        if (mac.equals(mDeviceList.get(i).getDeviceMac()) && endPoint == mDeviceList.get(i).getDeviceEndpoint().getEndpoint()) {
+    //            return mDeviceList.get(i);
+    //        }
+    //    }
+    //    DeviceBean db = DeviceDao.getDeviceByMac(mac);
+    //    if (db != null) {
+    //        mDeviceList.add(db);
+    //    }
+    //    return db;
+    //}
 
     public static AppApplication getApp() {
         return mApp;
@@ -208,10 +226,10 @@ public class AppApplication extends Application {
     /**
      * 发送数据
      */
-    public void publishMsgToServer(CmdControlBean controlBean) {
+    public boolean publishMsgToServer(CmdControlBean controlBean) {
         if (mConnectService == null || !mConnectService.isConnect()) {
             ToastUtils.showToast(this, R.string.label_unlink);
-            return;
+            return false;
         }
         seq++;
         controlBean.setSeq(seq);
@@ -224,6 +242,7 @@ public class AppApplication extends Application {
         if (mControlCacheList.size() > 1000) {
             mControlCacheList = mControlCacheList.subList(800, mControlCacheList.size());
         }
+        return true;
     }
 
     /**

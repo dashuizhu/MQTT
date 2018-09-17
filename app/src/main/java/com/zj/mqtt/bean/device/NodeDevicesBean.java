@@ -33,19 +33,19 @@ public class NodeDevicesBean implements Parcelable {
         return deviceEndpoint;
     }
 
-    public String getDeviceMac() {
-        if (deviceEndpoint == null) {
-            return null;
-        }
-        return deviceEndpoint.getMac();
-    }
-
-    public void setDeviceMac(String mac) {
-        if (deviceEndpoint == null) {
-            deviceEndpoint = new DeviceEndpointBean();
-        }
-        deviceEndpoint.setMac(mac);
-    }
+    //public String getDeviceMac() {
+    //    if (deviceEndpoint == null) {
+    //        return null;
+    //    }
+    //    return deviceEndpoint.getMac();
+    //}
+    //
+    //public void setDeviceMac(String mac) {
+    //    if (deviceEndpoint == null) {
+    //        deviceEndpoint = new DeviceEndpointBean();
+    //    }
+    //    deviceEndpoint.setMac(mac);
+    //}
 
     @Override
     public int describeContents() {

@@ -17,6 +17,10 @@ public class AppType {
      * 灯
      */
     public static final String DEVICE_LIGHT = "0x0100";
+    /**
+     * 传感器
+     */
+    public static final String DEVICE_SENSOR = "0x0402";
 
     /**
      * 开关

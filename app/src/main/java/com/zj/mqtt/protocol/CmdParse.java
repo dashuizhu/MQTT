@@ -18,6 +18,7 @@ import com.zj.mqtt.bean.todev.CmdControlBean;
 import com.zj.mqtt.constant.CmdString;
 import com.zj.mqtt.constant.RxBusString;
 import com.zj.mqtt.database.DeviceDao;
+import java.util.List;
 
 /**
  * @author zhuj 2018/8/29 上午11:43.
@@ -74,17 +75,15 @@ public class CmdParse {
                     break;
                 case CMD_NODE_LIST:
                     result = JSONObject.parseObject(msg, CmdNodeListResult.class);
-                    AppApplication.getApp().setDeviceList(((CmdNodeListResult) result).getDevices());
-                    DeviceDao.saveOrUpdate(((CmdNodeListResult) result).getDevices());
+                    List<DeviceBean> deviceList = ((CmdNodeListResult) result).castDeviceList();
+                    AppApplication.getApp().updateDeviceList(deviceList);
+                    DeviceDao.saveOrUpdate(deviceList);
 
                     break;
                 case CMD_DEVICE_JOIN:
                     result = JSONObject.parseObject(msg, CmdNodeResult.class);
-                    DeviceBean deviceBean = ((CmdNodeResult) result).getDevice();
-
-                    DeviceDao.saveOrUpdate(deviceBean);
-
-                    AppApplication.getApp().addDevice(deviceBean);
+                    //重新读取节点列表
+                    AppApplication.getApp().publishMsgToServer(CmdPackage.getNodeList());
                     break;
                 case CMD_NODE_STATE:
                     result = JSONObject.parseObject(msg, CmdStateChagneResult.class);

@@ -1,5 +1,6 @@
 package com.zj.mqtt.database;
 
+import android.text.TextUtils;
 import android.util.Log;
 import com.zj.mqtt.bean.device.DeviceBean;
 import io.realm.Realm;
@@ -27,12 +28,11 @@ public class DeviceDao extends RealmObject {
     @PrimaryKey private String id;
     private String mac;
     private int nodeId;
-    private int endPoint;
+    //private int endPoint;
     private String deviceType;
     private String name;
     private int seq;
     private String place;
-    private String picture;
 
     public static void saveOrUpdate(final DeviceBean bean) {
         Log.w(TAG, "save " + bean.getDeviceMac() + " " + bean.getName());
@@ -77,8 +77,7 @@ public class DeviceDao extends RealmObject {
                     bean = list.get(i);
 
                     DeviceDao dao = realm.where(DeviceDao.class)
-                            .equalTo(COLUMN_ID,
-                                    bean.getDeviceMac() + bean.getDeviceEndpoint().getEndpoint())
+                            .equalTo(COLUMN_ID, bean.getDeviceMac())
                             .findFirst();
                     if (dao == null) {
                         bean.setSeq(seq);
@@ -153,6 +152,10 @@ public class DeviceDao extends RealmObject {
         Set<String> set = new HashSet<>();
 
         for (DeviceDao dao : results) {
+            //空地名 直接跳过
+            if (TextUtils.isEmpty(dao.place)) {
+                continue;
+            }
             if (!set.contains(dao.place)) {
                 set.add(dao.place);
             }
@@ -174,15 +177,13 @@ public class DeviceDao extends RealmObject {
 
     private static DeviceDao castDao(DeviceBean bean) {
         DeviceDao dao = new DeviceDao();
-        dao.id = bean.getDeviceMac() + bean.getDeviceEndpoint().getEndpoint();
+        dao.id = bean.getDeviceMac();
         dao.nodeId = bean.getNodeId();
         dao.name = bean.getName();
-        dao.endPoint = bean.getDeviceEndpoint().getEndpoint();
         dao.deviceType = bean.getDeviceType();
         dao.seq = bean.getSeq();
         dao.mac = bean.getDeviceMac();
         dao.place = bean.getPlace();
-        dao.picture = bean.getPicture();
         return dao;
     }
 
@@ -190,13 +191,11 @@ public class DeviceDao extends RealmObject {
         DeviceBean bean = new DeviceBean();
         bean.setId(id);
         bean.setDeviceMac(mac);
-        bean.getDeviceEndpoint().setEndpoint(endPoint);
         bean.setDeviceType(deviceType);
         bean.setNodeId(nodeId);
         bean.setName(this.name);
         bean.setSeq(seq);
         bean.setPlace(place);
-        bean.setPicture(picture);
         return bean;
     }
 

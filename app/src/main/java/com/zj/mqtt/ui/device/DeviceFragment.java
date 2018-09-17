@@ -1,6 +1,5 @@
 package com.zj.mqtt.ui.device;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -10,13 +9,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.person.commonlib.utils.DensityUtil;
+import com.person.commonlib.view.RecyclerViewSpaceItemDecoration;
 import com.zj.mqtt.AppApplication;
 import com.zj.mqtt.R;
 import com.zj.mqtt.adapter.DeviceAdapter;
 import com.zj.mqtt.bean.device.DeviceBean;
 import com.zj.mqtt.constant.AppString;
-import com.zj.mqtt.constant.AppType;
 import com.zj.mqtt.database.DeviceDao;
+import com.zj.mqtt.utils.ActivityUtils;
 import java.util.List;
 
 /**
@@ -56,9 +57,11 @@ public class DeviceFragment extends Fragment {
     }
 
     private void initViews() {
-        mDeviceAdapter = new DeviceAdapter();
+        mDeviceAdapter = new DeviceAdapter("全部".equals(mPlace));
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
         mRecyclerView.setLayoutManager(gridLayoutManager);
+        int padding = DensityUtil.dip2px(getContext(), 16);
+        mRecyclerView.addItemDecoration(new RecyclerViewSpaceItemDecoration(padding, 3, false));
         mRecyclerView.setAdapter(mDeviceAdapter);
 
         mDeviceAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -66,39 +69,11 @@ public class DeviceFragment extends Fragment {
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 AppApplication app = (AppApplication) getActivity().getApplication();
                 String mac = mDeviceAdapter.getData().get(position).getDeviceMac();
-                int endPoint = mDeviceAdapter.getData().get(position).getDeviceEndpoint().getEndpoint();
-                DeviceBean bean = app.getDevice(mac, endPoint);
+                DeviceBean bean = app.getDevice(mac);
                 if (bean == null) {
                     return;
                 }
-                if (bean.isMoreDevice()) {
-                    Intent intent = new Intent(getContext(), DeviceListActivity.class);
-                    startActivity(intent);
-                } else {
-                    Intent intent = null;
-
-                    switch (bean.getDeviceType()) {
-                        case AppType.DEVICE_SWITCH:
-                            intent = new Intent(getContext(), DeviceDetailSwitchActivity.class);
-                            break;
-                        case AppType.DEVICE_LIGHT:
-                            //int endPoint = bean.getDeviceEndpoint().getEndpoint();
-                            if (endPoint == 3) {
-                                intent = new Intent(getContext(), DeviceDetailLight1Activity.class);
-                            } else if (endPoint == 4) {
-                                intent = new Intent(getContext(), DeviceDetailLight2Activity.class);
-                            } else if (endPoint == 5) {
-                                intent = new Intent(getContext(), DeviceDetailLight3Activity.class);
-                            }
-                            break;
-                        default:
-                    }
-                    if (intent != null) {
-                        intent.putExtra(AppString.KEY_MAC,
-                                mDeviceAdapter.getData().get(position).getDeviceMac());
-                        startActivity(intent);
-                    }
-                }
+                ActivityUtils.startDeviceDetail(getContext(), bean);
             }
         });
     }
@@ -106,7 +81,9 @@ public class DeviceFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        refresh();
+        if (!isHidden()) {
+            refresh();
+        }
     }
 
     @Override

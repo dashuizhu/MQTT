@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <com.person.commonlib.view.HeaderView
+        android:id="@+id/headerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleText="@string/title_device_info" />
+
+    <com.zj.mqtt.view.MyItemView
+        android:id="@+id/item_company"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:item_title="@string/label_device_company" />
+
+    <com.zj.mqtt.view.MyItemView
+        android:id="@+id/item_mac"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:item_title="@string/label_device_info_mac" />
+
+    <com.zj.mqtt.view.MyItemView
+        android:id="@+id/item_serial"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:item_title="@string/label_device_serial" />
+
+    <com.zj.mqtt.view.MyItemView
+        android:id="@+id/item_model"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:item_title="@string/label_device_model" />
+
+</LinearLayout>

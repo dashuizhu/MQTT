@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/text_light">
+    <item
+        android:id="@android:id/mask"
+        android:drawable="@color/divide_line"
+        android:state_enabled="true"
+        android:state_pressed="false" />
+
+    <item android:drawable="@color/white" />
+</ripple>

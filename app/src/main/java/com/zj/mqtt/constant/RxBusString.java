@@ -12,7 +12,7 @@ public class RxBusString {
     /**
      * 解析结果
      */
-    public final static String RXBUS_PARSE= "scences_change";
+    public final static String RXBUS_PARSE= "cmd_parse";
 
     public static final String LINKING = "linking";
     public static final String LINKFAIL = "linkFail";

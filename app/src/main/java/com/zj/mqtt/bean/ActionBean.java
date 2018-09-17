@@ -3,6 +3,7 @@ package com.zj.mqtt.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 import com.alibaba.fastjson.JSON;
+import com.zj.mqtt.R;
 import com.zj.mqtt.bean.device.DeviceBean;
 import com.zj.mqtt.bean.device.DeviceEndpointBean;
 import com.zj.mqtt.bean.todev.CmdControlBean;
@@ -33,6 +34,10 @@ public class ActionBean implements Parcelable {
 
     public ActionBean() {
 
+    }
+
+    public int getPictureRes() {
+        return R.mipmap.device_model_switch_img;
     }
 
     //public CmdControlBean getControlBean() {
@@ -74,5 +79,4 @@ public class ActionBean implements Parcelable {
             return new ActionBean[size];
         }
     };
-
 }

@@ -1,8 +1,6 @@
 package com.zj.mqtt.adapter;
 
-import android.view.View;
 import com.chad.library.adapter.base.BaseItemDraggableAdapter;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.zj.mqtt.R;
 import com.zj.mqtt.bean.ScenesBean;
@@ -21,8 +19,8 @@ public class ScenesListAdapter extends BaseItemDraggableAdapter<ScenesBean, Base
 
     @Override
     protected void convert(BaseViewHolder helper, ScenesBean item) {
-        helper.setText(R.id.tv_name, item.getName())
-                .setGone(R.id.iv_drag, mEdit);
+        helper.setText(R.id.tv_name, item.getName());
+        helper.setImageResource(R.id.iv, item.getPictureResByList());
         helper.addOnClickListener(R.id.btn_send);
     }
 

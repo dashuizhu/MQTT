@@ -16,7 +16,7 @@
     <string name="label_level">level</string>
     <string name="label_level_control">调光控制</string>
     <string name="label_hua">hua</string>
-    <string name="label_set">set</string>
+    <string name="label_set">sat</string>
     <string name="label_execute">执行</string>
     <string name="label_device_add">添加设备</string>
     <string name="label_device_name">输入设备名称</string>
@@ -41,11 +41,20 @@
     <string name="toast_service_unlink">未连接到服务端</string>
     <string name="toast_device_notfound">未找到设备</string>
     <string name="label_all">全部</string>
-    <string name="label_light_on">已开启</string>
+    <string name="label_click_on">点击开启</string>
+    <string name="label_click_off">点击关闭</string>
     <string name="label_device_add_fail">设备连接超时，是否重新连接</string>
     <string name="label_add_again">重新添加</string>
-    <string name="label_device_adding">设备正在添加中,请耐心等待</string>
+    <string name="label_device_adding">设备正在添加中,请耐心等待...</string>
     <string name="label_add_scenes">新建场景</string>
     <string name="label_add_device">添加设备</string>
-    <string name="label_light_off">已关闭</string>
+    <string name="label_device_light2">二路开关</string>
+    <string name="label_device_light3">三路开关</string>
+    <string name="title_device_info">设备信息</string>
+    <string name="label_device_company">安富讯</string>
+    <string name="label_device_info_mac">MAC地址</string>
+    <string name="label_device_serial">序列号</string>
+    <string name="label_device_model">设备型号</string>
+    <string name="label_device_manager">设备管理</string>
+    <string name="label_unonline">设备不在线</string>
 </resources>

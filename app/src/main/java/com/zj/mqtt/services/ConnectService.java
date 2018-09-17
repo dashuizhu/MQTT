@@ -181,7 +181,7 @@ public class ConnectService extends Service {
 
     public void publishMsgToServer(final String msg) {
         try {
-            Log.w(TAG, " isConnect " + mMqttClient.isConnected());
+            Log.w(TAG, " send " + msg);
 
             mMqttClient.publish(TOPIC_PUBLISH, msg.getBytes(), 2, false, null,
                     new IMqttActionListener() {
@@ -237,6 +237,7 @@ public class ConnectService extends Service {
         if (mMqttClient != null) {
             mMqttClient.close();
             mMqttClient.unregisterResources();
+            mMqttClient = null;
         }
     }
 

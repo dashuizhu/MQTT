@@ -35,9 +35,9 @@ public class DeviceDetailLight2Activity extends DeviceDetailActivity {
 
     private void initViews() {
         mTvLight1.setSelected(true);
-        mTvLight1.setText(R.string.label_light_on);
+        mTvLight1.setText(R.string.label_click_on);
 
-        mTvOnoff1.setText(R.string.label_light_on);
+        mTvOnoff1.setText(R.string.label_click_on);
         mTvOnoff1.setSelected(true);
     }
 

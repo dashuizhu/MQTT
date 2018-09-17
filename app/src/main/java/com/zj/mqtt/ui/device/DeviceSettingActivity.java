@@ -116,4 +116,10 @@ public class DeviceSettingActivity extends BaseActivity {
         }
         mPlaceDialog.show();
     }
+
+    @OnClick(R.id.item_info)
+    public void onDeviceInfoClicked() {
+        Intent intent = new Intent(this, DeviceInfoActivity.class);
+        startActivity(intent);
+    }
 }

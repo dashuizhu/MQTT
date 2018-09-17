@@ -9,7 +9,7 @@
     <com.person.commonlib.view.HeaderView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:titleText="设备添加流程过度界面" />
+        app:titleText="@string/label_device_add" />
 
     <TextView
         android:id="@+id/tv_device"
@@ -19,9 +19,9 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:drawablePadding="@dimen/activity_horizontal_margin"
-        android:drawableTop="@mipmap/device_light_3_img"
+        android:drawableTop="@drawable/btn_device_add"
         android:gravity="center"
-        android:textColor="@color/text_normal"
+        android:textColor="@color/red"
         android:textSize="@dimen/text_normal" />
 
 

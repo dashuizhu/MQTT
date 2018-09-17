@@ -29,6 +29,7 @@ import com.zj.mqtt.protocol.CmdPackage;
 import com.zj.mqtt.protocol.CmdParse;
 import com.zj.mqtt.ui.device.DeviceAddOneActivity;
 import com.zj.mqtt.ui.device.DeviceFragment;
+import com.zj.mqtt.ui.device.DeviceListActivity;
 import com.zj.mqtt.utils.StatusBarUtil;
 import java.util.ArrayList;
 import java.util.List;
@@ -118,6 +119,12 @@ public class HomeActivity extends BaseActivity {
     @OnClick(R.id.btn_device_add)
     public void onViewAddDeviceClicked() {
         Intent intent = new Intent(this, DeviceAddOneActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.tv_device_manager)
+    public void onDeviceManager() {
+        Intent intent = new Intent(this, DeviceListActivity.class);
         startActivity(intent);
     }
 
@@ -211,11 +218,14 @@ public class HomeActivity extends BaseActivity {
     public void onReceiveAction(CmdResult result) {
         switch (result.getCmd()) {
             case CmdParse.CMD_NODE_LIST:
-                DeviceFragment deviceFragment =
-                        (DeviceFragment) mFragmentPagerAdapter.getItem(mViewPager.getCurrentItem());
-                if (deviceFragment.isAdded()) {
-                    deviceFragment.refresh();
-                }
+                int curr = mViewPager.getCurrentItem();
+                int count = mFragmentPagerAdapter.getCount();
+                // TODO: 2018/9/17 get 是new出来的问题
+                //DeviceFragment deviceFragment =
+                //        (DeviceFragment) mFragmentPagerAdapter.get(curr);
+                //if (deviceFragment.isAdded()) {
+                //    deviceFragment.refresh();
+                //}
                 break;
             default:
         }
