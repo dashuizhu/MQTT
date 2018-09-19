@@ -37,7 +37,7 @@ public class DeviceInfoActivity extends BaseActivity {
     private void initViews() {
         mDeviceBean = getIntent().getParcelableExtra(AppString.KEY_BEAN);
         mItemMac.setTextContent(mDeviceBean.getDeviceMac());
-        mItemMac.setTextContent(mDeviceBean.getDeviceType());
+        mItemModel.setTextContent(mDeviceBean.getDeviceType());
     }
 
     @OnClick(R.id.layout_header_back)

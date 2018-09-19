@@ -83,7 +83,7 @@ public class ActionDeviceListActivity extends BaseActivity {
                 Intent intent =
                         new Intent(ActionDeviceListActivity.this, DeviceControlActivity.class);
 
-                // TODO: 2018/8/31 这里默认值，一定要注意 设备类型， 和 默认控制数据
+                // TODO: 2018/8/31 这里默认值，一定要注意 设备类型， 和 默认控制数据, 暂时不处理
                 CmdControlBean controlBean = new CmdControlBean(CmdString.DEV_ONOFF);
                 controlBean.setDeviceMac(mAdapter.getData().get(position).getDeviceMac());
                 intent.putExtra(AppString.KEY_BEAN, controlBean);
@@ -91,14 +91,6 @@ public class ActionDeviceListActivity extends BaseActivity {
             }
         });
 
-        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
-            @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                DeviceBean bean = mAdapter.getData().get(position);
-                bean.setControlOnOff(!bean.isControlOnOff());
-                mAdapter.notifyItemChanged(position);
-            }
-        });
 
         if (mAdapter.getData().size() == 0) {
             Intent intent = new Intent(this, DeviceAddOneActivity.class);

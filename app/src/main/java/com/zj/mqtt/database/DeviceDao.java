@@ -61,9 +61,6 @@ public class DeviceDao extends RealmObject {
             @Override
             public void execute(Realm realm) {
                 //先清空旧的，再保存新的
-                // TODO: 2018/9/14 这里只更新局部信息
-                //realm.where(DeviceDao.class).findAll().deleteAllFromRealm();
-
                 Number number = realm.where(DeviceDao.class).max(COLUMN_SEQ);
                 int seq = 0;
                 if (number != null) {
@@ -132,7 +129,7 @@ public class DeviceDao extends RealmObject {
         Realm realm = Realm.getDefaultInstance();
         DeviceDao results;
         realm.beginTransaction();
-        results = realm.where(DeviceDao.class).equalTo(COLUMN_NODEID, mac).findFirst();
+        results = realm.where(DeviceDao.class).equalTo(COLUMN_MAC, mac).findFirst();
         realm.commitTransaction();
 
         if (results != null) {

@@ -27,7 +27,7 @@
             android:paddingTop="4dp"
             android:textColor="@color/text_light_gray"
             android:textSize="@dimen/text_small"
-            android:visibility="gone"
+            android:visibility="invisible"
             tools:text="厨房"
             tools:visibility="visible" />
 

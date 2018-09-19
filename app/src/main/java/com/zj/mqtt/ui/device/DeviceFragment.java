@@ -1,7 +1,6 @@
 package com.zj.mqtt.ui.device;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -9,21 +8,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.hwangjr.rxbus.annotation.Subscribe;
+import com.hwangjr.rxbus.annotation.Tag;
+import com.hwangjr.rxbus.thread.EventThread;
 import com.person.commonlib.utils.DensityUtil;
 import com.person.commonlib.view.RecyclerViewSpaceItemDecoration;
 import com.zj.mqtt.AppApplication;
 import com.zj.mqtt.R;
 import com.zj.mqtt.adapter.DeviceAdapter;
 import com.zj.mqtt.bean.device.DeviceBean;
+import com.zj.mqtt.bean.toapp.CmdResult;
 import com.zj.mqtt.constant.AppString;
+import com.zj.mqtt.constant.RxBusString;
 import com.zj.mqtt.database.DeviceDao;
+import com.zj.mqtt.protocol.CmdParse;
+import com.zj.mqtt.ui.BaseFragment;
 import com.zj.mqtt.utils.ActivityUtils;
 import java.util.List;
 
 /**
  * @author zhuj 2018/9/9 下午1:11
  */
-public class DeviceFragment extends Fragment {
+public class DeviceFragment extends BaseFragment {
 
     private RecyclerView mRecyclerView;
     private DeviceAdapter mDeviceAdapter;
@@ -81,15 +87,51 @@ public class DeviceFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        Log.w("Test", "fagment onresume " + mPlace);
         if (!isHidden()) {
             refresh();
         }
     }
 
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.w("Test", "fagment onStart " + mPlace);
+        if (!isHidden()) {
+            registerRxBus();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        unRegisterRxBus();
+    }
+
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        Log.w("Test", " onHiddenChanged " + hidden);
+        Log.w("Test", " onHiddenChanged " + mPlace + hidden);
+        if (hidden) {
+            unRegisterRxBus();
+        } else {
+            registerRxBus();
+            refresh();
+        }
+
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {
+            @Tag, @Tag(RxBusString.RXBUS_PARSE)
+    })
+    public void onReceiveAction(CmdResult result) {
+        switch (result.getCmd()) {
+            case CmdParse.CMD_NODE_LIST:
+                refresh();
+                break;
+            default:
+        }
     }
 
     public void refresh() {
@@ -99,7 +141,6 @@ public class DeviceFragment extends Fragment {
         } else {
             list = DeviceDao.queryListByPlace(mPlace);
         }
-        Log.w("Test", " onresumt " + mPlace + " " + list.size());
         mDeviceAdapter.setNewData(list);
     }
 }

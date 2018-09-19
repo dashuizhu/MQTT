@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author zhuj 2018/8/28 下午4:01
  */
-public class DeviceDetailActivity extends BaseActivity {
+public abstract class DeviceDetailActivity extends BaseActivity {
 
     HeaderView mHeaderView;
     DeviceBean mDeviceBean;
@@ -25,11 +25,7 @@ public class DeviceDetailActivity extends BaseActivity {
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
         mHeaderView = findViewById(R.id.headerView);
-        initViews();
         registerRxBus();
-    }
-
-    private void initViews() {
         String mac = getIntent().getStringExtra("mac");
         mDeviceBean = getApp().getDevice(mac);
         if (mDeviceBean == null) {
@@ -54,6 +50,8 @@ public class DeviceDetailActivity extends BaseActivity {
                 startActivityForResult(intent, 11);
             }
         });
+
+        sendReadnodeCmd();
     }
 
     @Override
@@ -74,4 +72,6 @@ public class DeviceDetailActivity extends BaseActivity {
         super.onDestroy();
         unRegisterRxBus();
     }
+
+    abstract void sendReadnodeCmd();
 }

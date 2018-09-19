@@ -2,6 +2,7 @@ package com.zj.mqtt.bean.todev;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.zj.mqtt.bean.device.DeviceBean;
 import com.zj.mqtt.bean.toapp.NodeBean;
 import com.zj.mqtt.bean.toapp.NodedataBean;
 import com.zj.mqtt.constant.CmdString;

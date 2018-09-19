@@ -27,9 +27,11 @@ import com.person.commonlib.view.RecyclerViewSpaceItemDecoration;
 import com.zj.mqtt.AppApplication;
 import com.zj.mqtt.R;
 import com.zj.mqtt.adapter.DeviceListAdapter;
+import com.zj.mqtt.bean.device.DeviceBean;
 import com.zj.mqtt.constant.AppString;
 import com.zj.mqtt.database.DeviceDao;
 import com.zj.mqtt.ui.BaseActivity;
+import com.zj.mqtt.utils.ActivityUtils;
 
 /**
  * @author zhuj 2018/8/27 下午3:51.
@@ -188,9 +190,8 @@ public class DeviceListActivity extends BaseActivity {
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent = new Intent(DeviceListActivity.this, DeviceDetailActivity.class);
-                intent.putExtra(AppString.KEY_MAC, mAdapter.getData().get(position).getDeviceMac());
-                startActivity(intent);
+                DeviceBean bean = mAdapter.getData().get(position);
+                ActivityUtils.startDeviceDetail(DeviceListActivity.this, bean);
             }
         });
     }

@@ -15,15 +15,15 @@ import lombok.Data;
 @Data
 public class DeviceBean implements Parcelable {
 
-    private final int STATE_JOIN = 16;
+    public final int STATE_JOIN = 16;
     /**
      * 无应答
      */
-    private final int STATE_UNRESPONSE = 17;
+    public static final int STATE_UNRESPONSE = 17;
     /**
      * 离开
      */
-    private final int STATE_LEfT = 30;
+    public static final int STATE_LEfT = 30;
 
     /**
      * nodeId : 1
@@ -53,6 +53,10 @@ public class DeviceBean implements Parcelable {
     private int controlTime;
     private int controlHua;
     private int controlSet;
+
+    public String getId() {
+        return deviceMac;
+    }
 
     public String getName() {
         if (!TextUtils.isEmpty(name)) {

@@ -212,24 +212,23 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
-    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {
-            @Tag, @Tag(RxBusString.RXBUS_PARSE)
-    })
-    public void onReceiveAction(CmdResult result) {
-        switch (result.getCmd()) {
-            case CmdParse.CMD_NODE_LIST:
-                int curr = mViewPager.getCurrentItem();
-                int count = mFragmentPagerAdapter.getCount();
-                // TODO: 2018/9/17 get 是new出来的问题
-                //DeviceFragment deviceFragment =
-                //        (DeviceFragment) mFragmentPagerAdapter.get(curr);
-                //if (deviceFragment.isAdded()) {
-                //    deviceFragment.refresh();
-                //}
-                break;
-            default:
-        }
-    }
+    //@Subscribe(thread = EventThread.MAIN_THREAD, tags = {
+    //        @Tag, @Tag(RxBusString.RXBUS_PARSE)
+    //})
+    //public void onReceiveAction(CmdResult result) {
+    //    switch (result.getCmd()) {
+    //        case CmdParse.CMD_NODE_LIST:
+    //            int curr = mViewPager.getCurrentItem();
+    //            int count = mFragmentPagerAdapter.getCount();
+    //            //DeviceFragment deviceFragment =
+    //            //        (DeviceFragment) mFragmentPagerAdapter.get(curr);
+    //            //if (deviceFragment.isAdded()) {
+    //            //    deviceFragment.refresh();
+    //            //}
+    //            break;
+    //        default:
+    //    }
+    //}
 
     @OnClick(R.id.tv_status)
     public void onStatusClick() {

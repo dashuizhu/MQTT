@@ -82,7 +82,6 @@ public class ScenesDetailActivity extends BaseActivity {
             return;
         }
         mScenesBean.setName(name);
-        // TODO: 2018/8/28 数据库保存
 
         ScenesDao.saveOrUpdate(mScenesBean);
         setResult(RESULT_OK);

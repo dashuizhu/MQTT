@@ -74,11 +74,12 @@ public class DeviceAddOneActivity extends BaseActivity {
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = @Tag(RxBusString.RXBUS_PARSE))
     public void onReceive(CmdResult cmdResult) {
         if (cmdResult.getCmd().equals(CmdParse.CMD_DEVICE_JOIN)) {
-            // TODO: 2018/9/10 这里就要加入数据库了
             CmdNodeResult nodeResult = (CmdNodeResult) cmdResult;
             mMac = nodeResult.getDevice().getDeviceEndpoint().getMac();
 
             getApp().publishMsgToServer(CmdPackage.stopDevice());
+
+            //节点添加， 走cmdparse 里刷新列表流程
 
             Intent intent = new Intent(this, DeviceNameActivity.class);
             intent.putExtra(AppString.KEY_MAC, mMac);

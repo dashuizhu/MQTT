@@ -48,6 +48,10 @@ public class DeviceDetailLight3Activity extends DeviceDetailActivity {
         initLight(mTvLight2, false);
         initLight(mTvLight3, false);
 
+    }
+
+    @Override
+    void sendReadnodeCmd() {
         //读取数据
         List<DeviceEndpointBean> list = mDeviceBean.getEndpointList();
         DeviceEndpointBean endpointBean;
@@ -98,6 +102,12 @@ public class DeviceDetailLight3Activity extends DeviceDetailActivity {
         } else if (result.getCmd().equals(CmdString.DEV_READ_NODE)) {
             //读取属性
             CmdReadNodeResult nodeResult = (CmdReadNodeResult) result;
+
+            //mac过滤
+            if (!mDeviceBean.getDeviceMac().equals(nodeResult.getNodedata().getMac())) {
+                return;
+            }
+
             int clusterId = nodeResult.getNodedata().getClusterId();
             int data = nodeResult.getNodedata().getData();
             if (AppType.CLUSTER_ONOFF == clusterId) {

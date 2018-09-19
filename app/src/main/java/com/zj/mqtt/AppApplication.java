@@ -21,7 +21,9 @@ import com.zj.mqtt.database.ScenesDao;
 import com.zj.mqtt.services.ConnectService;
 import io.realm.Realm;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 /**
@@ -119,6 +121,7 @@ public class AppApplication extends Application {
             mDeviceList = list;
             return;
         }
+        Set<String> updateSet = new HashSet<>();
         for (DeviceBean bean : list) {
 
             DeviceBean nowBean = getDevice(bean.getDeviceMac());
@@ -128,7 +131,15 @@ public class AppApplication extends Application {
             }  else {
                 mDeviceList.add(bean);
             }
+            updateSet.add(nowBean.getDeviceMac());
+        }
 
+
+        for (DeviceBean bean : mDeviceList) {
+            //不在节点列表返回的数据， 就直接当做不在线。
+            if (!updateSet.contains(bean.getDeviceMac())) {
+                bean.setDeviceState(DeviceBean.STATE_LEfT);
+            }
         }
 
 
@@ -178,12 +189,12 @@ public class AppApplication extends Application {
         }
     }
 
-    public void addDevice(DeviceBean deviceBean) {
-        if (mDeviceList == null) {
-            mDeviceList = new ArrayList<>();
-        }
-        mDeviceList.add(deviceBean);
-    }
+    //public void addDevice(DeviceBean deviceBean) {
+    //    if (mDeviceList == null) {
+    //        mDeviceList = new ArrayList<>();
+    //    }
+    //    mDeviceList.add(deviceBean);
+    //}
 
     public DeviceBean getDevice(String mac) {
         if (mDeviceList == null || mDeviceList.size() == 0) {
@@ -286,6 +297,10 @@ public class AppApplication extends Application {
      */
     public void connectService() {
         if (mConnectService == null) {
+            if (mServiceConnection != null) {
+                unbindService(mServiceConnection);
+            }
+            bindService();
             return;
         }
         try {
@@ -343,4 +358,12 @@ public class AppApplication extends Application {
             mConnectService = null;
         }
     };
+
+    @Override
+    public void onTerminate() {
+        if (mServiceConnection != null) {
+            unbindService(mServiceConnection);
+        }
+        super.onTerminate();
+    }
 }

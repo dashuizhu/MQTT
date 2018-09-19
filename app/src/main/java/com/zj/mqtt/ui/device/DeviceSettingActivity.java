@@ -120,6 +120,7 @@ public class DeviceSettingActivity extends BaseActivity {
     @OnClick(R.id.item_info)
     public void onDeviceInfoClicked() {
         Intent intent = new Intent(this, DeviceInfoActivity.class);
+        intent.putExtra(AppString.KEY_BEAN, mDeviceBean);
         startActivity(intent);
     }
 }

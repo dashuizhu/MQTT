@@ -16,7 +16,8 @@
         android:id="@+id/item_company"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:item_title="@string/label_device_company" />
+        app:item_title=""
+        app:item_content="@string/label_device_company" />
 
     <com.zj.mqtt.view.MyItemView
         android:id="@+id/item_mac"
