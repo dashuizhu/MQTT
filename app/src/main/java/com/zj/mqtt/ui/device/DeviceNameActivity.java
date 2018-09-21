@@ -63,8 +63,13 @@ public class DeviceNameActivity extends BaseActivity {
         String place = mAdapter.getData().get(postion);
 
         String mac = getIntent().getStringExtra(AppString.KEY_MAC);
+        String deviceType = getIntent().getStringExtra(AppString.KEY_STRING);
         DeviceBean bean = getApp().getDevice(mac);
 
+        if (bean == null) {
+            bean = new DeviceBean();
+            bean.setDeviceType(deviceType);
+        }
         bean.setName(name);
         bean.setPlace(place);
         bean.setDeviceMac(mac);

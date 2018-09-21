@@ -14,6 +14,10 @@ public class AppType {
      */
     public static final String DEVICE_SWITCH_LIGHT = "0x0001";
     /**
+     * 调光设备
+     */
+    public static final String DEVICE_DIM = "0x0104";
+    /**
      * 灯
      */
     public static final String DEVICE_LIGHT = "0x0100";

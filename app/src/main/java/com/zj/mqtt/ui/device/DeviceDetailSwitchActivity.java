@@ -64,6 +64,10 @@ public class DeviceDetailSwitchActivity extends DeviceDetailActivity {
 
     @OnClick(R.id.tv_onoff1)
     public void onClickSwitch(View view) {
+        if (!mDeviceBean.isOnline()) {
+            showToast(R.string.label_unonline);
+            return;
+        }
         DeviceEndpointBean endpointBean = mDeviceBean.getEndpointList().get(0);
         if (endpointBean == null) {
             return;
@@ -98,7 +102,7 @@ public class DeviceDetailSwitchActivity extends DeviceDetailActivity {
             }
 
             int clusterId = nodeResult.getNodedata().getClusterId();
-            int data = nodeResult.getNodedata().getData();
+            int data = nodeResult.getNodedata().getAttributeBuffer();
             if (AppType.CLUSTER_ONOFF == clusterId) {
                 int endPoint = nodeResult.getNodedata().getEndpoint();
                 boolean isOnoff = (data == 1);

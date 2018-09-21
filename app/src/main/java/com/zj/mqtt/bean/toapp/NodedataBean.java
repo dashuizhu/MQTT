@@ -19,8 +19,10 @@ public class NodedataBean implements Parcelable {
     private int endpoint;
     private int clusterId;
     private int attributeId;
-    private int dataType;
-    private int data;
+    private int attributeDataType;
+    private int attributeBuffer;
+
+    public NodedataBean() {}
 
     @Override
     public int describeContents() {
@@ -33,11 +35,8 @@ public class NodedataBean implements Parcelable {
         dest.writeInt(this.endpoint);
         dest.writeInt(this.clusterId);
         dest.writeInt(this.attributeId);
-        dest.writeInt(this.dataType);
-        dest.writeInt(this.data);
-    }
-
-    public NodedataBean() {
+        dest.writeInt(this.attributeDataType);
+        dest.writeInt(this.attributeBuffer);
     }
 
     protected NodedataBean(Parcel in) {
@@ -45,20 +44,19 @@ public class NodedataBean implements Parcelable {
         this.endpoint = in.readInt();
         this.clusterId = in.readInt();
         this.attributeId = in.readInt();
-        this.dataType = in.readInt();
-        this.data = in.readInt();
+        this.attributeDataType = in.readInt();
+        this.attributeBuffer = in.readInt();
     }
 
-    public static final Parcelable.Creator<NodedataBean> CREATOR =
-            new Parcelable.Creator<NodedataBean>() {
-                @Override
-                public NodedataBean createFromParcel(Parcel source) {
-                    return new NodedataBean(source);
-                }
+    public static final Creator<NodedataBean> CREATOR = new Creator<NodedataBean>() {
+        @Override
+        public NodedataBean createFromParcel(Parcel source) {
+            return new NodedataBean(source);
+        }
 
-                @Override
-                public NodedataBean[] newArray(int size) {
-                    return new NodedataBean[size];
-                }
-            };
+        @Override
+        public NodedataBean[] newArray(int size) {
+            return new NodedataBean[size];
+        }
+    };
 }

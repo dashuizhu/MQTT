@@ -30,7 +30,7 @@ import com.zj.mqtt.constant.RxBusString;
 import com.zj.mqtt.ui.device.DeviceAddOneActivity;
 
 /**
- * 设备列表
+ * 用来选择动作 的  设备列表
  *
  * @author zhuj 2018/8/28 下午4:03
  */

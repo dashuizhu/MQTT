@@ -3,7 +3,9 @@ package com.zj.mqtt.database;
 import android.text.TextUtils;
 import android.util.Log;
 import com.zj.mqtt.bean.device.DeviceBean;
+import com.zj.mqtt.bean.device.DeviceEndpointBean;
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 import io.realm.annotations.PrimaryKey;
@@ -33,6 +35,7 @@ public class DeviceDao extends RealmObject {
     private String name;
     private int seq;
     private String place;
+    private RealmList<EndpointDao> endpointList;
 
     public static void saveOrUpdate(final DeviceBean bean) {
         Log.w(TAG, "save " + bean.getDeviceMac() + " " + bean.getName());
@@ -40,7 +43,7 @@ public class DeviceDao extends RealmObject {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-
+                //如果没有排序号， 就查找本地最大的 +1
                 if (bean.getSeq() == 0) {
                     Number number = realm.where(DeviceDao.class).max(COLUMN_SEQ);
                     int seq = 0;
@@ -50,7 +53,18 @@ public class DeviceDao extends RealmObject {
                     }
                     bean.setSeq(seq);
                 }
-                realm.copyToRealmOrUpdate(castDao(bean));
+                //查询本地是否有记录
+                DeviceDao dao =
+                        realm.where(DeviceDao.class).equalTo(COLUMN_ID, bean.getId()).findFirst();
+                //没有记录
+                if (dao == null) {
+                    realm.copyToRealmOrUpdate(castDao(bean));
+                } else {
+                    //有记录
+                    dao.place = bean.getPlace();
+                    dao.name = bean.getName();
+                    dao.seq = bean.getSeq();
+                }
             }
         });
     }
@@ -80,6 +94,18 @@ public class DeviceDao extends RealmObject {
                         bean.setSeq(seq);
                         seq++;
                         realm.copyToRealmOrUpdate(castDao(bean));
+                    } else {
+                        //更新endpoint
+                        RealmList<EndpointDao> actionList = new RealmList<>();
+                        if (bean.getEndpointList() != null) {
+                            for (DeviceEndpointBean actBean : bean.getEndpointList()) {
+                                EndpointDao actDao = new EndpointDao();
+                                actDao.setEndPoint(actBean.getEndpoint());
+                                actionList.add(actDao);
+                            }
+                        }
+                        dao.deviceType = bean.getDeviceType();
+                        dao.endpointList = actionList;
                     }
                 }
             }
@@ -87,7 +113,7 @@ public class DeviceDao extends RealmObject {
     }
 
     public static List<DeviceBean> queryList() {
-        return queryList(99999);
+        return queryList(9999);
     }
 
     public static List<DeviceBean> queryList(int querySize) {
@@ -181,6 +207,17 @@ public class DeviceDao extends RealmObject {
         dao.seq = bean.getSeq();
         dao.mac = bean.getDeviceMac();
         dao.place = bean.getPlace();
+
+        RealmList<EndpointDao> actionList = new RealmList<>();
+        if (bean.getEndpointList() != null) {
+            for (DeviceEndpointBean actBean : bean.getEndpointList()) {
+                EndpointDao actDao = new EndpointDao();
+                actDao.setEndPoint(actBean.getEndpoint());
+                actionList.add(actDao);
+            }
+        }
+        dao.endpointList = actionList;
+
         return dao;
     }
 
@@ -193,6 +230,18 @@ public class DeviceDao extends RealmObject {
         bean.setName(this.name);
         bean.setSeq(seq);
         bean.setPlace(place);
+
+        List<DeviceEndpointBean> list = new ArrayList<>();
+        if (endpointList != null) {
+            for (EndpointDao actDao : endpointList) {
+                DeviceEndpointBean actBean = new DeviceEndpointBean();
+                actBean.setEndpoint(actDao.getEndPoint());
+
+                list.add(actBean);
+            }
+        }
+        bean.setEndpointList(list);
+
         return bean;
     }
 

@@ -134,20 +134,20 @@ public class ConnectService extends Service {
                 isLinking = false;
                 disLinkTimeoutCheck();
                 RxBus.get().post(RxBusString.LINKFAIL);
-                if (exception != null) {
-                    exception.printStackTrace();
+
                     //if ("已连接客户机".equals(exception.getMessage())) {
                     try {
-                        String str2 = exception.getMessage();
-                        String str = exception.getCause().getMessage();
-                        Log.e(TAG, "onFailure  " + str2);
-                        Log.e(TAG, "onFailure  " + str);
                         mMqttClient.disconnect();
-                    } catch (MqttException e) {
+                        if (exception != null) {
+                            exception.printStackTrace();
+                            String str2 = exception.getMessage();
+                            String str = exception.getCause().getMessage();
+                            Log.e(TAG, "onFailure  " + str2);
+                            Log.e(TAG, "onFailure  " + str);
+                        }
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    //}
-                }
             }
         });
         mMqttClient.setCallback(new MqttCallback() {

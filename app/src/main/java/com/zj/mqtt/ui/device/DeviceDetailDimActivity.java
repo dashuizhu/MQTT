@@ -95,7 +95,7 @@ public class DeviceDetailDimActivity extends DeviceDetailActivity {
                 return;
             }
             int clusterId = nodeResult.getNodedata().getClusterId();
-            int data = nodeResult.getNodedata().getData();
+            int data = nodeResult.getNodedata().getAttributeBuffer();
 
             switch (clusterId) {
                 case AppType.CLUSTER_ONOFF:

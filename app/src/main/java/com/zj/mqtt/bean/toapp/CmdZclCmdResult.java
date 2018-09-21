@@ -24,7 +24,7 @@ public class CmdZclCmdResult extends CmdResult {
     private int seq;
     private int clusterId;
     private int commandId;
-    private int commandData;
+    private String commandData;
     private boolean clusterSpecific;
     private NodeBean node;
 

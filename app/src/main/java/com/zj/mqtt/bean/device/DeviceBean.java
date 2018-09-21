@@ -15,7 +15,7 @@ import lombok.Data;
 @Data
 public class DeviceBean implements Parcelable {
 
-    public final int STATE_JOIN = 16;
+    public static final int STATE_JOIN = 16;
     /**
      * 无应答
      */
@@ -62,24 +62,27 @@ public class DeviceBean implements Parcelable {
         if (!TextUtils.isEmpty(name)) {
             return name;
         }
-        String str = "";
+        name = "";
         switch (deviceType) {
             case AppType.DEVICE_SWITCH:
-                str = "插座";
+                name = "插座";
                 break;
             case AppType.DEVICE_LIGHT:
-                str = "开关";
+                name = "开关";
+                break;
+            case AppType.DEVICE_DIM:
+                name = "调光设备";
                 break;
             case AppType.DEVICE_SWITCH_LIGHT:
-                str = "调光设备";
+                name = "调光设备";
                 break;
             case AppType.DEVICE_SENSOR:
-                str = "传感器";
+                name = "传感器";
                 break;
 
             default:
         }
-        return str;
+        return name;
     }
 
     //public List<DeviceEndpointBean> getEndpointList() {
@@ -101,7 +104,15 @@ public class DeviceBean implements Parcelable {
      * @return
      */
     public boolean isDeviceDim() {
-        return AppType.DEVICE_SWITCH_LIGHT.equals(getDeviceType());
+        return AppType.DEVICE_DIM.equals(getDeviceType());
+    }
+
+    /**
+     * 是否是传感器设备
+     * @return
+     */
+    public boolean isDeviceSensor() {
+        return AppType.DEVICE_SENSOR.equals(getDeviceType());
     }
 
     /**
@@ -170,6 +181,23 @@ public class DeviceBean implements Parcelable {
 
     public boolean isOnline() {
         return (deviceState == STATE_JOIN);
+    }
+
+    public String getInfo() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("deviceState:");
+        sb.append(deviceState);
+        sb.append(", deviceMac:");
+        sb.append(deviceMac);
+        sb.append(", deviceType:");
+        sb.append(deviceType);
+        sb.append(", endPoint [");
+        if (endpointList != null) {
+            for (DeviceEndpointBean end : endpointList) {
+                sb.append(end.getEndpoint()+", ");
+            }
+        }
+        return sb.toString();
     }
 
     @Override

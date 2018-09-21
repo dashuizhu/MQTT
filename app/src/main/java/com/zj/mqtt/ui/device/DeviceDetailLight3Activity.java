@@ -15,11 +15,14 @@ import com.zj.mqtt.R;
 import com.zj.mqtt.bean.device.DeviceEndpointBean;
 import com.zj.mqtt.bean.toapp.CmdReadNodeResult;
 import com.zj.mqtt.bean.toapp.CmdResult;
+import com.zj.mqtt.bean.toapp.CmdZclAttributeResult;
+import com.zj.mqtt.bean.toapp.CmdZclCmdResult;
 import com.zj.mqtt.bean.todev.CmdControlBean;
 import com.zj.mqtt.constant.AppType;
 import com.zj.mqtt.constant.CmdString;
 import com.zj.mqtt.constant.RxBusString;
 import com.zj.mqtt.protocol.CmdPackage;
+import com.zj.mqtt.protocol.CmdParse;
 import com.zj.mqtt.utils.StatusBarUtil;
 import java.util.List;
 
@@ -65,6 +68,10 @@ public class DeviceDetailLight3Activity extends DeviceDetailActivity {
 
     @OnClick({ R.id.tv_light1, R.id.tv_light2, R.id.tv_light3 })
     public void onClickSwitch(View view) {
+        if (!mDeviceBean.isOnline()) {
+            showToast(R.string.label_unonline);
+            return;
+        }
         DeviceEndpointBean endpointBean;
         switch (view.getId()) {
             case R.id.tv_light1:
@@ -109,9 +116,23 @@ public class DeviceDetailLight3Activity extends DeviceDetailActivity {
             }
 
             int clusterId = nodeResult.getNodedata().getClusterId();
-            int data = nodeResult.getNodedata().getData();
+            int data = nodeResult.getNodedata().getAttributeBuffer();
             if (AppType.CLUSTER_ONOFF == clusterId) {
                 int endPoint = nodeResult.getNodedata().getEndpoint();
+                boolean isOnoff = (data == 1);
+
+                TextView tv = getTvLightByEndpoint(endPoint);
+                initLight(tv, isOnoff);
+            }
+        } else if (result.getCmd().equals(CmdParse.CMD_ZCL_ATTRIBUTE)) {
+            CmdZclAttributeResult zclResult = (CmdZclAttributeResult) result;
+            if (!mDeviceBean.getDeviceMac().equals(zclResult.getNode().getMac())) {
+                return;
+            }
+            int clusterId = zclResult.getClusterId();
+            int data = zclResult.getAttributeBuffer();
+            if (AppType.CLUSTER_ONOFF == clusterId) {
+                int endPoint = zclResult.getNode().getEndpoint();
                 boolean isOnoff = (data == 1);
 
                 TextView tv = getTvLightByEndpoint(endPoint);

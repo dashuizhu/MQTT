@@ -20,11 +20,11 @@ public class CmdString {
     /**
      * 允许加网
      */
-    public final static String DEV_OPEN_NETWORK_KEYS = "open-network-keys";
+    public final static String DEV_OPEN_NETWORK_KEYS = "open_network_keys";
     /**
      * 停止加网
      */
-    public final static String DEV_CLOSE_NETWORK= "close-network";
+    public final static String DEV_CLOSE_NETWORK= "close_network";
     /**
      * 开关
      */
@@ -32,19 +32,19 @@ public class CmdString {
     /**
      * 调光控制
      */
-    public final static String DEV_LEVEL_CONTROL = "level-control";
+    public final static String DEV_LEVEL_CONTROL = "level_control";
     /**
      * 颜色控制
      */
-    public final static String DEV_COLOR_CONTROL = "color-control";
+    public final static String DEV_COLOR_CONTROL = "color_control";
     /**
      * 读取节点
      */
-    public final static String DEV_READ_NODE = "read-node";
+    public final static String DEV_READ_NODE = "read_node";
     /**
      * 节点数据上报
      */
-    public final static String DEV_NODE_REPORT = "send-me-a-report";
+    public final static String DEV_NODE_REPORT = "send_me_a_report";
     /**
      * OTA升级
      */

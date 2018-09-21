@@ -57,4 +57,5 @@
     <string name="label_device_model">设备型号</string>
     <string name="label_device_manager">设备管理</string>
     <string name="label_unonline">设备不在线</string>
+    <string name="label_device_unsupport">未识别设备，暂不支持</string>
 </resources>

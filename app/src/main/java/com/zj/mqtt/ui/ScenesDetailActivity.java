@@ -116,6 +116,7 @@ public class ScenesDetailActivity extends BaseActivity {
                 Intent intent = new Intent(ScenesDetailActivity.this, DeviceControlActivity.class);
                 intent.putExtra(AppString.KEY_BEAN,
                         mAdapter.getData().get(position).getControlBean());
+                intent.putExtra(AppString.KEY_POSITION, position);
                 startActivityForResult(intent, ACTIVITY_DEVICE);
             }
         });
@@ -154,18 +155,25 @@ public class ScenesDetailActivity extends BaseActivity {
                 break;
             case ACTIVITY_DEVICE:
                 bean = data.getParcelableExtra(AppString.KEY_BEAN);
+                int position = data.getIntExtra(AppString.KEY_POSITION, -1);
                 Log.d(TAG, "device: " + bean.toString());
                 //deviceMac = data.getStringExtra(AppString.KEY_MAC);
                 //cmdJson = JSON.toJSONString(CmdPackage.getCmdByDevice(bean));
 
-                int listSize = mAdapter.getData().size();
-                for (int i = 0; i < listSize; i++) {
-                    if (mAdapter.getData().get(i).getDeviceMac().equals(bean.getDeviceMac())) {
-                        mAdapter.getData().get(i).setControlBean(bean);
-                        mAdapter.notifyItemChanged(i);
-                        break;
-                    }
+                if (position < 0 || position >= mAdapter.getData().size()) {
+                    return;
                 }
+                mAdapter.getData().get(position).setControlBean(bean);
+                mAdapter.notifyItemChanged(position);
+
+                //int listSize = mAdapter.getData().size();
+                //for (int i = 0; i < listSize; i++) {
+                //    if (mAdapter.getData().get(i).getDeviceMac().equals(bean.getDeviceMac())) {
+                //        mAdapter.getData().get(i).setControlBean(bean);
+                //        mAdapter.notifyItemChanged(i);
+                //        break;
+                //    }
+                //}
                 break;
             default:
         }

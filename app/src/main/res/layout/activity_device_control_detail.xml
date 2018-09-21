@@ -19,13 +19,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <RadioButton
-            android:id="@+id/rb_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/layout_height"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:visibility="gone"
-            android:text="开关" />
 
         <RelativeLayout
             android:id="@+id/layout_switch"
@@ -33,8 +26,16 @@
             android:layout_height="@dimen/layout_height"
             android:orientation="horizontal"
             android:visibility="gone"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <RadioButton
+                android:id="@+id/rb_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/layout_height"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:visibility="gone"
+                android:text="开关" />
+
 
             <CheckBox
                 android:id="@+id/cb_switch"
@@ -47,13 +48,7 @@
 
         </RelativeLayout>
 
-        <RadioButton
-            android:id="@+id/rb_switch2"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/layout_height"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:visibility="gone"
-            android:text="@string/label_device_light2" />
+
 
         <RelativeLayout
             android:id="@+id/layout_switch2"
@@ -61,8 +56,15 @@
             android:layout_height="@dimen/layout_height"
             android:orientation="horizontal"
             android:visibility="gone"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <RadioButton
+                android:id="@+id/rb_switch2"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/layout_height"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:visibility="gone"
+                android:text="@string/label_device_light2" />
 
             <CheckBox
                 android:id="@+id/cb_switch2"
@@ -75,13 +77,6 @@
 
         </RelativeLayout>
 
-        <RadioButton
-            android:id="@+id/rb_switch3"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/layout_height"
-            android:visibility="gone"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:text="@string/label_device_light3" />
 
         <RelativeLayout
             android:id="@+id/layout_switch3"
@@ -89,8 +84,15 @@
             android:layout_height="@dimen/layout_height"
             android:visibility="gone"
             android:orientation="horizontal"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <RadioButton
+                android:id="@+id/rb_switch3"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/layout_height"
+                android:visibility="gone"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:text="@string/label_device_light3" />
 
             <CheckBox
                 android:id="@+id/cb_switch3"

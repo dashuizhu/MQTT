@@ -3,6 +3,7 @@ package com.zj.mqtt.ui;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -22,6 +23,7 @@ import com.zj.mqtt.bean.todev.LevelBean;
 import com.zj.mqtt.constant.AppString;
 import com.zj.mqtt.constant.CmdString;
 import com.zj.mqtt.protocol.CmdPackage;
+import com.zj.mqtt.utils.RadioGroupUtils;
 
 /**
  * 设备控制详情
@@ -68,6 +70,8 @@ public class DeviceControlActivity extends BaseActivity {
     }
 
     private void initViews() {
+
+        new RadioGroupUtils(mRbGroup).supportNest();
         mControlBean = getIntent().getParcelableExtra(AppString.KEY_BEAN);
         mDeviceBean = getApp().getDevice(mControlBean.getDeviceMac());
         if (mDeviceBean == null) {
@@ -76,6 +80,19 @@ public class DeviceControlActivity extends BaseActivity {
             return;
         }
         mHeaderView.setTitle(mDeviceBean.getName());
+
+        mRbGroup.setOnHierarchyChangeListener(new ViewGroup.OnHierarchyChangeListener() {
+            @Override
+            public void onChildViewAdded(View parent, View child) {
+
+            }
+
+            @Override
+            public void onChildViewRemoved(View parent, View child) {
+
+            }
+        });
+
 
         if (mDeviceBean.isDeviceSwith()) {
             mRbSwitch.setVisibility(View.VISIBLE);
@@ -100,9 +117,9 @@ public class DeviceControlActivity extends BaseActivity {
         } else if (mDeviceBean.isDeviceDim()) {
             mLayoutSwitch.setVisibility(View.VISIBLE);
             mLayoutColor.setVisibility(View.VISIBLE);
+            initSeekBarListener();
         }
 
-        initSeekBarListener();
         initData();
     }
 
@@ -131,6 +148,7 @@ public class DeviceControlActivity extends BaseActivity {
 
     private void initDataSwitch() {
         if (mControlBean.getNode() == null) {
+            mRbSwitch.setChecked(true);
             return;
         }
         int controlEndpoint = mControlBean.getNode().getEndpoint();
@@ -145,7 +163,7 @@ public class DeviceControlActivity extends BaseActivity {
                 mCbSwitch2.setChecked(isOnoff);
             }
         } else if (mDeviceBean.isDeviceLight3()) {
-
+            //3路开关设备
             if (controlEndpoint == mDeviceBean.getEndpointList().get(0).getEndpoint()) {
                 //是第一个endpoint
                 mRbSwitch.setChecked(true);
@@ -267,12 +285,12 @@ public class DeviceControlActivity extends BaseActivity {
                 break;
             case R.id.rb_switch2:
                 mControlBean =
-                        CmdPackage.setOnOff(mCbSwitch.isChecked(), mDeviceBean.getDeviceMac(),
+                        CmdPackage.setOnOff(mCbSwitch2.isChecked(), mDeviceBean.getDeviceMac(),
                                 mDeviceBean.getEndpointList().get(1).getEndpoint());
                 break;
             case R.id.rb_switch3:
                 mControlBean =
-                        CmdPackage.setOnOff(mCbSwitch.isChecked(), mDeviceBean.getDeviceMac(),
+                        CmdPackage.setOnOff(mCbSwitch3.isChecked(), mDeviceBean.getDeviceMac(),
                                 mDeviceBean.getEndpointList().get(2).getEndpoint());
                 break;
 

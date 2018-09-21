@@ -58,7 +58,7 @@ public class ScenesBean implements Parcelable {
                 resId = R.mipmap.btn_scenes_out_normal;
                 break;
             default:
-                resId = R.mipmap.btn_scenes_custom_press;
+                resId = R.mipmap.btn_scenes_custom_normal;
         }
         return resId;
     }

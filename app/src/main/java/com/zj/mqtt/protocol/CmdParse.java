@@ -30,7 +30,7 @@ public class CmdParse {
     /**
      * 读取属性
      */
-    public final static String CMD_READ_NODE = "read-node";
+    public final static String CMD_READ_NODE = "read_node";
     /**
      * 节点列表
      */
@@ -50,11 +50,11 @@ public class CmdParse {
     /**
      * ZCL数据上报，COMMAND
      */
-    public final static String CMD_ZCL_CMD = "zcl-command";
+    public final static String CMD_ZCL_CMD = "zcl_command";
     /**
      * ZCL数据，属性
      */
-    public final static String CMD_ZCL_ATTRIBUTE = "zcl-attribute";
+    public final static String CMD_ZCL_ATTRIBUTE = "zcl_attribute";
     /**
      * 心跳包
      */
@@ -105,6 +105,7 @@ public class CmdParse {
                     break;
                 case CMD_HEART_BEAT:
                     result = JSONObject.parseObject(msg, HeartBeatResult.class);
+                    return result;
                 default:
                     result = JSONObject.parseObject(msg, CmdResult.class);
                     parseNormal(result);

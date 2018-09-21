@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.util.Log;
 import com.alibaba.fastjson.JSON;
 import com.person.commonlib.utils.DensityHelp;
 import com.person.commonlib.utils.ToastUtils;
@@ -125,6 +126,7 @@ public class AppApplication extends Application {
         for (DeviceBean bean : list) {
 
             DeviceBean nowBean = getDevice(bean.getDeviceMac());
+            Log.d("mqttDebug","application update:" +nowBean.getDeviceMac() + " "+  bean.getInfo());
             if (nowBean != null) {
                 nowBean.setEndpointList(bean.getEndpointList());
                 nowBean.setDeviceState(bean.getDeviceState());

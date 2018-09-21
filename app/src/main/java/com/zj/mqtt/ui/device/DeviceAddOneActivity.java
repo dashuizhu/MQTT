@@ -80,9 +80,10 @@ public class DeviceAddOneActivity extends BaseActivity {
             getApp().publishMsgToServer(CmdPackage.stopDevice());
 
             //节点添加， 走cmdparse 里刷新列表流程
-
+            //然后设置设备
             Intent intent = new Intent(this, DeviceNameActivity.class);
             intent.putExtra(AppString.KEY_MAC, mMac);
+            intent.putExtra(AppString.KEY_STRING, nodeResult.getDevice().getDeviceType());
             startActivity(intent);
             finish();
         }
