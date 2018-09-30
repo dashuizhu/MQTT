@@ -126,8 +126,8 @@ public class AppApplication extends Application {
         for (DeviceBean bean : list) {
 
             DeviceBean nowBean = getDevice(bean.getDeviceMac());
-            Log.d("mqttDebug","application update:" +nowBean.getDeviceMac() + " "+  bean.getInfo());
             if (nowBean != null) {
+                Log.d("mqttDebug","application update:" +nowBean.getDeviceMac() + " "+  bean.getInfo());
                 nowBean.setEndpointList(bean.getEndpointList());
                 nowBean.setDeviceState(bean.getDeviceState());
             }  else {
@@ -292,6 +292,12 @@ public class AppApplication extends Application {
             }
         }
         return null;
+    }
+
+    public void resetService() {
+        if (mConnectService != null) {
+            mConnectService.resetServer();
+        }
     }
 
     /**

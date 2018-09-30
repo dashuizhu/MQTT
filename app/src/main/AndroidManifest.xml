@@ -16,7 +16,8 @@
         android:roundIcon="@mipmap/icon_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.LogoActivity"
+        <activity
+            android:name=".ui.LogoActivity"
             android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -65,7 +66,8 @@
         <activity
             android:name=".ui.device.DeviceNameActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".ui.device.DeviceListActivity"
             android:screenOrientation="portrait" />
@@ -84,10 +86,10 @@
         <activity
             android:name=".ui.device.DeviceDetailLight3Activity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.device.DeviceInfoActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".ui.MacInputActivity"></activity>
     </application>
 
 </manifest>

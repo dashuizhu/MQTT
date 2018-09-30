@@ -90,7 +90,7 @@ public class DeviceDao extends RealmObject {
                     DeviceDao dao = realm.where(DeviceDao.class)
                             .equalTo(COLUMN_ID, bean.getDeviceMac())
                             .findFirst();
-                    if (dao == null) {
+                    if (dao == null ) {
                         bean.setSeq(seq);
                         seq++;
                         realm.copyToRealmOrUpdate(castDao(bean));
@@ -101,10 +101,12 @@ public class DeviceDao extends RealmObject {
                             for (DeviceEndpointBean actBean : bean.getEndpointList()) {
                                 EndpointDao actDao = new EndpointDao();
                                 actDao.setEndPoint(actBean.getEndpoint());
+                                actDao = realm.copyToRealm(actDao);
                                 actionList.add(actDao);
                             }
                         }
                         dao.deviceType = bean.getDeviceType();
+                        Log.w("test", dao.isValid()+"acitonLIst " + actionList.isValid() + actionList.size());
                         dao.endpointList = actionList;
                     }
                 }

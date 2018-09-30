@@ -15,11 +15,13 @@ import com.zj.mqtt.R;
 import com.zj.mqtt.bean.device.DeviceEndpointBean;
 import com.zj.mqtt.bean.toapp.CmdReadNodeResult;
 import com.zj.mqtt.bean.toapp.CmdResult;
+import com.zj.mqtt.bean.toapp.CmdZclAttributeResult;
 import com.zj.mqtt.bean.todev.CmdControlBean;
 import com.zj.mqtt.constant.AppType;
 import com.zj.mqtt.constant.CmdString;
 import com.zj.mqtt.constant.RxBusString;
 import com.zj.mqtt.protocol.CmdPackage;
+import com.zj.mqtt.protocol.CmdParse;
 import com.zj.mqtt.utils.StatusBarUtil;
 import java.util.List;
 
@@ -46,7 +48,6 @@ public class DeviceDetailSwitchActivity extends DeviceDetailActivity {
 
     private void initViews() {
         initLight(mTvSwitch, false);
-
     }
 
     @Override
@@ -112,6 +113,22 @@ public class DeviceDetailSwitchActivity extends DeviceDetailActivity {
                     initLight(mTvSwitch, isOnoff);
                 }
             }
+        } else if (result.getCmd().equals(CmdParse.CMD_ZCL_ATTRIBUTE)) {
+            CmdZclAttributeResult zclResult = (CmdZclAttributeResult) result;
+            if (!mDeviceBean.getDeviceMac().equals(zclResult.getNode().getMac())) {
+                return;
+            }
+            int clusterId = zclResult.getClusterId();
+            int data = zclResult.getAttributeBuffer();
+            if (AppType.CLUSTER_ONOFF == clusterId) {
+                int endPoint = zclResult.getNode().getEndpoint();
+                boolean isOnoff = (data == 1);
+
+                boolean islight = mDeviceBean.getEndpointList().get(0).getEndpoint() == endPoint;
+                if (islight) {
+                    initLight(mTvSwitch, isOnoff);
+                }
+            }
         }
     }
 
@@ -119,6 +136,4 @@ public class DeviceDetailSwitchActivity extends DeviceDetailActivity {
         tv.setSelected(isOnoff);
         tv.setText(isOnoff ? R.string.label_click_off : R.string.label_click_on);
     }
-
-
 }

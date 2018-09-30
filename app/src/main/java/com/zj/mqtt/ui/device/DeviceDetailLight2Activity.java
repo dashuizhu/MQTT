@@ -2,6 +2,7 @@ package com.zj.mqtt.ui.device;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,11 +17,13 @@ import com.zj.mqtt.R;
 import com.zj.mqtt.bean.device.DeviceEndpointBean;
 import com.zj.mqtt.bean.toapp.CmdReadNodeResult;
 import com.zj.mqtt.bean.toapp.CmdResult;
+import com.zj.mqtt.bean.toapp.CmdZclAttributeResult;
 import com.zj.mqtt.bean.todev.CmdControlBean;
 import com.zj.mqtt.constant.AppType;
 import com.zj.mqtt.constant.CmdString;
 import com.zj.mqtt.constant.RxBusString;
 import com.zj.mqtt.protocol.CmdPackage;
+import com.zj.mqtt.protocol.CmdParse;
 import com.zj.mqtt.ui.BaseActivity;
 import com.zj.mqtt.utils.StatusBarUtil;
 import java.util.List;
@@ -118,6 +121,7 @@ public class DeviceDetailLight2Activity extends DeviceDetailActivity {
         } else if (result.getCmd().equals(CmdString.DEV_READ_NODE)) {
             //读取属性
             CmdReadNodeResult nodeResult = (CmdReadNodeResult) result;
+            //Log.d(TAG, " readnode " + JSON.toJSONString(nodeResult));
 
             //mac过滤
             if (!mDeviceBean.getDeviceMac().equals(nodeResult.getNodedata().getMac())) {
@@ -126,8 +130,27 @@ public class DeviceDetailLight2Activity extends DeviceDetailActivity {
 
             int clusterId = nodeResult.getNodedata().getClusterId();
             int data = nodeResult.getNodedata().getAttributeBuffer();
+            int endPoint = nodeResult.getNodedata().getEndpoint();
             if (AppType.CLUSTER_ONOFF == clusterId) {
-                int endPoint = nodeResult.getNodedata().getEndpoint();
+                boolean isOnoff = (data == 1);
+
+                if (isLight1(endPoint)) {
+                    initLight(mTvOnoff1, isOnoff);
+                    initLight(mTvLight1, isOnoff);
+                } else {
+                    initLight(mTvOnoff2, isOnoff);
+                    initLight(mTvLight2, isOnoff);
+                }
+            }
+        }else if (result.getCmd().equals(CmdParse.CMD_ZCL_ATTRIBUTE)) {
+            CmdZclAttributeResult zclResult = (CmdZclAttributeResult) result;
+            if (!mDeviceBean.getDeviceMac().equals(zclResult.getNode().getMac())) {
+                return;
+            }
+            int clusterId = zclResult.getClusterId();
+            int data = zclResult.getAttributeBuffer();
+            int endPoint = zclResult.getNode().getEndpoint();
+            if (AppType.CLUSTER_ONOFF == clusterId) {
                 boolean isOnoff = (data == 1);
 
                 if (isLight1(endPoint)) {
@@ -152,4 +175,6 @@ public class DeviceDetailLight2Activity extends DeviceDetailActivity {
         tv.setSelected(isOnoff);
         tv.setText(isOnoff ? R.string.label_click_off : R.string.label_click_on);
     }
+
+
 }

@@ -17,8 +17,8 @@ android {
     applicationId "com.zj.mqtt"
     minSdkVersion 16
     targetSdkVersion 27
-    versionCode 1
-    versionName "1.0"
+    versionCode 3
+    versionName "1.02"
     signingConfig signingConfigs.signing
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     javaCompileOptions {
@@ -29,6 +29,13 @@ android {
   }
   buildTypes {
     release {
+//      zipAlignEnabled true
+//      minifyEnabled true
+//      shrinkResources true //去掉不用资源
+      signingConfig signingConfigs.signing
+//      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+    debug {
       zipAlignEnabled true
       minifyEnabled true
       shrinkResources true //去掉不用资源
@@ -51,7 +58,7 @@ android {
 }
 
 def releaseTime() {
-  return new Date().format("yyyyMMdd", TimeZone.getTimeZone("UTC"))
+  return new Date().format("yyyyMMdd-HHmm", TimeZone.getTimeZone("UTC"))
 }
 
 dependencies {

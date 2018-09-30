@@ -3,10 +3,12 @@ package com.zj.mqtt.ui.device;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.alibaba.fastjson.JSON;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
@@ -126,6 +128,10 @@ public class DeviceFragment extends BaseFragment {
             @Tag, @Tag(RxBusString.RXBUS_PARSE)
     })
     public void onReceiveAction(CmdResult result) {
+        Log.w("DeviceFragnt", JSON.toJSONString(result));
+        if (TextUtils.isEmpty(result.getCmd())) {
+            return;
+        }
         switch (result.getCmd()) {
             case CmdParse.CMD_NODE_LIST:
                 refresh();
@@ -141,6 +147,13 @@ public class DeviceFragment extends BaseFragment {
         } else {
             list = DeviceDao.queryListByPlace(mPlace);
         }
+        StringBuffer sb = new StringBuffer();
+        sb.append("refresh ");
+        sb.append(mPlace);
+        for (DeviceBean db : list) {
+            sb.append(db.getDeviceMac() +  db.getEndpointList());
+        }
+        Log.d("test", sb.toString());
         mDeviceAdapter.setNewData(list);
     }
 }

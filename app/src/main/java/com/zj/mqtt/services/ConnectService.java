@@ -9,6 +9,7 @@ import android.util.Log;
 import com.hwangjr.rxbus.RxBus;
 import com.zj.mqtt.constant.RxBusString;
 import com.zj.mqtt.protocol.CmdParse;
+import com.zj.mqtt.utils.sharedPresenter.SharedPreApp;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -29,9 +30,9 @@ public class ConnectService extends Service {
 
     private final static String TAG = "MQTT_service";
 
-    private final static String TOPIC_PUBLISH = "gw/90FD9FFFFE0130BD/todev";
-    private final static String TOPIC_SUBSCRIBE = "gw/90FD9FFFFE0130BD/toapp";
-    private final static String CLIENT_ID = "MQTT_FX_Client";
+    private static String TOPIC_PUBLISH = "gw/000D6FFFFE02C0F2/todev";
+    private static String TOPIC_SUBSCRIBE = "gw/000D6FFFFE02C0F2/toapp";
+    private static String CLIENT_ID = "mqtt_";
     private String serverUrl = "tcp://39.106.24.176:1883";
 
     private final IBinder mBinder = new LocalBinder();
@@ -42,9 +43,25 @@ public class ConnectService extends Service {
 
     Disposable mLinkingDisposable;
 
+
+    public void resetServer() {
+        String server = SharedPreApp.getInstance().getServerMac();
+        TOPIC_PUBLISH = String.format("gw/%1$s/todev", server);
+        TOPIC_SUBSCRIBE = String.format("gw/%1$s/toapp", server);
+        stopConnect();
+        try {
+            connectMQTT();
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
+        String server = SharedPreApp.getInstance().getServerMac();
+        TOPIC_PUBLISH = String.format("gw/%1$s/todev", server);
+        TOPIC_SUBSCRIBE = String.format("gw/%1$s/toapp", server);
     }
 
     @Nullable
@@ -57,7 +74,18 @@ public class ConnectService extends Service {
         if (mMqttClient == null) {
             return false;
         }
-        return mMqttClient.isConnected();
+        boolean isLink = false;
+        try {
+            isLink = mMqttClient.isConnected();
+        } catch (IllegalArgumentException e) {
+            stopConnect();
+            try {
+                connectMQTT();
+            } catch (MqttException e1) {
+                e1.printStackTrace();
+            }
+        }
+        return isLink;
     }
 
     public boolean isConnecting() {
@@ -79,6 +107,7 @@ public class ConnectService extends Service {
      */
     public void connectMQTT() throws MqttException {
         if (mMqttClient == null) {
+            CLIENT_ID = "mqtt_"+System.currentTimeMillis();
             //连接时使用的clientId
             mMqttClient = new MqttAndroidClient(this, serverUrl, CLIENT_ID);
         }
@@ -137,7 +166,7 @@ public class ConnectService extends Service {
 
                     //if ("已连接客户机".equals(exception.getMessage())) {
                     try {
-                        mMqttClient.disconnect();
+                        stopConnect();
                         if (exception != null) {
                             exception.printStackTrace();
                             String str2 = exception.getMessage();
@@ -146,7 +175,7 @@ public class ConnectService extends Service {
                             Log.e(TAG, "onFailure  " + str);
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        //e.printStackTrace();
                     }
             }
         });
@@ -234,6 +263,7 @@ public class ConnectService extends Service {
      * 停止连接
      */
     public void stopConnect() {
+        Log.w("test"," stopConnect " );
         if (mMqttClient != null) {
             mMqttClient.close();
             mMqttClient.unregisterResources();

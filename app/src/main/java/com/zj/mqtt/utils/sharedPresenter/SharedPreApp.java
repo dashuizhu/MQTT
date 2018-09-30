@@ -2,6 +2,8 @@ package com.zj.mqtt.utils.sharedPresenter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import com.zj.mqtt.AppApplication;
+import com.zj.mqtt.constant.AppConstants;
 
 /**
  * 用来保存app的 数据，更换用户时可以不清空
@@ -31,6 +33,8 @@ public class SharedPreApp extends BaseSharedPre {
 
     public static final String KEY_LAST_VERSION_TIME = "key_last_version_time";
 
+    public static final String KEY_SERVER_MAC = "key_server_mac";
+
     @Override
     SharedPreferences getSharedPreferences(Context context) {
         return context.getApplicationContext()
@@ -47,4 +51,9 @@ public class SharedPreApp extends BaseSharedPre {
         }
         return mSharedPre;
     }
+
+    public String getServerMac() {
+        return (String) get(AppApplication.getApp(), KEY_SERVER_MAC, AppConstants.SERVER_MAC);
+    }
+
 }

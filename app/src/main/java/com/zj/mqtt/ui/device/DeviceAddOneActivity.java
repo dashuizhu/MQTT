@@ -76,7 +76,7 @@ public class DeviceAddOneActivity extends BaseActivity {
         if (cmdResult.getCmd().equals(CmdParse.CMD_DEVICE_JOIN)) {
             CmdNodeResult nodeResult = (CmdNodeResult) cmdResult;
             mMac = nodeResult.getDevice().getDeviceEndpoint().getMac();
-
+            unRegisterRxBus();
             getApp().publishMsgToServer(CmdPackage.stopDevice());
 
             //节点添加， 走cmdparse 里刷新列表流程

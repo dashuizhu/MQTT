@@ -16,7 +16,7 @@ public class CmdString {
     /**
      * 允许加网
      */
-    public final static String DEV_OPEN_NETWORK = "open-network";
+    public final static String DEV_OPEN_NETWORK = "open_network";
     /**
      * 允许加网
      */

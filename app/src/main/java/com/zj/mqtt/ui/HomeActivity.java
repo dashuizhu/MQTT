@@ -11,6 +11,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnLongClick;
 import butterknife.Unbinder;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hwangjr.rxbus.annotation.Subscribe;
@@ -22,13 +23,10 @@ import com.zj.mqtt.adapter.DeviceFragmentPagerAdapter;
 import com.zj.mqtt.adapter.ScenesAdapter;
 import com.zj.mqtt.bean.ActionBean;
 import com.zj.mqtt.bean.ScenesBean;
-import com.zj.mqtt.bean.toapp.CmdResult;
 import com.zj.mqtt.constant.RxBusString;
 import com.zj.mqtt.database.DeviceDao;
 import com.zj.mqtt.protocol.CmdPackage;
-import com.zj.mqtt.protocol.CmdParse;
 import com.zj.mqtt.ui.device.DeviceAddOneActivity;
-import com.zj.mqtt.ui.device.DeviceFragment;
 import com.zj.mqtt.ui.device.DeviceListActivity;
 import com.zj.mqtt.utils.StatusBarUtil;
 import java.util.ArrayList;
@@ -46,6 +44,7 @@ import rx.functions.Action1;
  */
 public class HomeActivity extends BaseActivity {
 
+    private static final int ACTIVITY_MAC_RESET = 12;
     private final int ACTIVITY_SCENES = 11;
 
     @BindView(R.id.recyclerViewScenes) RecyclerView mRecyclerViewScenes;
@@ -122,6 +121,13 @@ public class HomeActivity extends BaseActivity {
         startActivity(intent);
     }
 
+    @OnLongClick(R.id.btn_device_add)
+    public boolean onViewServerMac() {
+        Intent intent = new Intent(this, MacInputActivity.class);
+        startActivityForResult(intent, ACTIVITY_MAC_RESET);
+        return true;
+    }
+
     @OnClick(R.id.tv_device_manager)
     public void onDeviceManager() {
         Intent intent = new Intent(this, DeviceListActivity.class);
@@ -136,6 +142,8 @@ public class HomeActivity extends BaseActivity {
         }
         if (requestCode == ACTIVITY_SCENES) {
             mScenesAdapter.setNewData(getApp().getScenesListShow());
+        } else if (requestCode == ACTIVITY_MAC_RESET) {
+            getApp().resetService();
         }
     }
 
