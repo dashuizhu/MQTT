@@ -29,18 +29,18 @@ android {
   }
   buildTypes {
     release {
-//      zipAlignEnabled true
-//      minifyEnabled true
-//      shrinkResources true //去掉不用资源
-      signingConfig signingConfigs.signing
-//      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-    }
-    debug {
       zipAlignEnabled true
       minifyEnabled true
       shrinkResources true //去掉不用资源
       signingConfig signingConfigs.signing
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+    debug {
+//      zipAlignEnabled true
+//      minifyEnabled true
+//      shrinkResources true //去掉不用资源
+      signingConfig signingConfigs.signing
+//      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
   }
 
@@ -93,4 +93,6 @@ dependencies {
   implementation 'com.umeng.sdk:analytics:7.5.0'
 
   implementation 'com.alibaba:fastjson:1.1.70.android'
+
+  implementation 'com.tbruyelle.rxpermissions:rxpermissions:0.9.4@aar'
 }

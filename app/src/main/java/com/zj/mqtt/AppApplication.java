@@ -5,7 +5,6 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
-import android.util.Log;
 import com.alibaba.fastjson.JSON;
 import com.person.commonlib.utils.DensityHelp;
 import com.person.commonlib.utils.ToastUtils;
@@ -20,6 +19,7 @@ import com.zj.mqtt.database.DeviceDao;
 import com.zj.mqtt.database.MqttRealm;
 import com.zj.mqtt.database.ScenesDao;
 import com.zj.mqtt.services.ConnectService;
+import com.zj.mqtt.utils.LogUtils;
 import io.realm.Realm;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -76,7 +76,6 @@ public class AppApplication extends Application {
             bean2.setName("睡眠");
             bean2.setPicture(ScenesBean.SCENES_SLEEP);
 
-
             ScenesBean bean3 = new ScenesBean();
             bean3.setName("离家");
             bean3.setPicture(ScenesBean.SCENES_OUT);
@@ -124,18 +123,17 @@ public class AppApplication extends Application {
         }
         Set<String> updateSet = new HashSet<>();
         for (DeviceBean bean : list) {
-
             DeviceBean nowBean = getDevice(bean.getDeviceMac());
             if (nowBean != null) {
-                Log.d("mqttDebug","application update:" +nowBean.getDeviceMac() + " "+  bean.getInfo());
+                LogUtils.logD("applica",
+                        "application update:" + nowBean.getDeviceMac() + " " + bean.getInfo());
                 nowBean.setEndpointList(bean.getEndpointList());
                 nowBean.setDeviceState(bean.getDeviceState());
-            }  else {
+            } else {
                 mDeviceList.add(bean);
             }
-            updateSet.add(nowBean.getDeviceMac());
+            updateSet.add(bean.getDeviceMac());
         }
-
 
         for (DeviceBean bean : mDeviceList) {
             //不在节点列表返回的数据， 就直接当做不在线。
@@ -143,8 +141,6 @@ public class AppApplication extends Application {
                 bean.setDeviceState(DeviceBean.STATE_LEfT);
             }
         }
-
-
     }
 
     public void updateDevice(CmdNodeLeftResult.DeviceLeftBean leftBean) {
@@ -204,6 +200,10 @@ public class AppApplication extends Application {
         }
         int listSize = mDeviceList.size();
         for (int i = 0; i < listSize; i++) {
+
+            //Log.d("mqttDebug","application update2:" +mac
+            //        + " "+  mDeviceList.get(i).getInfo());
+
             if (mac.equals(mDeviceList.get(i).getDeviceMac())) {
                 return mDeviceList.get(i);
             }

@@ -86,6 +86,8 @@ public class CmdParse {
                 case CMD_NODE_LIST:
                     result =  sGson.fromJson(msg, CmdNodeListResult.class);
                     List<DeviceBean> deviceList = ((CmdNodeListResult) result).castDeviceList();
+
+
                     AppApplication.getApp().updateDeviceList(deviceList);
                     try {
                         DeviceDao.saveOrUpdate(deviceList);

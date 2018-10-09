@@ -22,7 +22,7 @@ import com.zj.mqtt.ui.device.DeviceDetailSwitchActivity;
 public class ActivityUtils {
 
     public static void startDeviceDetail(Context context, DeviceBean bean) {
-        Log.i("mqttDebug", "click bean:" + bean.getInfo());
+        LogUtils.logD("activity",  " click bean " + bean.getInfo());
         //if (!bean.isOnline()) {
         //    ToastUtils.showToast(AppApplication.getApp(), R.string.label_unonline);
         //    return;

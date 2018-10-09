@@ -51,7 +51,7 @@
     <string name="label_device_light2">二路开关</string>
     <string name="label_device_light3">三路开关</string>
     <string name="title_device_info">设备信息</string>
-    <string name="label_device_company">安富讯</string>
+    <string name="label_device_company">厂家信息</string>
     <string name="label_device_info_mac">MAC地址</string>
     <string name="label_device_serial">序列号</string>
     <string name="label_device_model">设备型号</string>

@@ -95,7 +95,6 @@ public class DeviceFragment extends BaseFragment {
         }
     }
 
-
     @Override
     public void onStart() {
         super.onStart();
@@ -121,7 +120,6 @@ public class DeviceFragment extends BaseFragment {
             registerRxBus();
             refresh();
         }
-
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {
@@ -151,7 +149,7 @@ public class DeviceFragment extends BaseFragment {
         sb.append("refresh ");
         sb.append(mPlace);
         for (DeviceBean db : list) {
-            sb.append(db.getDeviceMac() +  db.getEndpointList());
+            sb.append(db.getDeviceMac() + db.getEndpointList());
         }
         Log.d("test", sb.toString());
         mDeviceAdapter.setNewData(list);

@@ -28,7 +28,6 @@ import com.zj.mqtt.AppApplication;
 import com.zj.mqtt.R;
 import com.zj.mqtt.adapter.DeviceListAdapter;
 import com.zj.mqtt.bean.device.DeviceBean;
-import com.zj.mqtt.constant.AppString;
 import com.zj.mqtt.database.DeviceDao;
 import com.zj.mqtt.ui.BaseActivity;
 import com.zj.mqtt.utils.ActivityUtils;
@@ -62,22 +61,8 @@ public class DeviceListActivity extends BaseActivity {
 
     @OnClick(R.id.layout_header_right)
     public void onClickEdit() {
-        //boolean isEdit = !mAdapter.isEdit();
-        //mAdapter.setEdit(isEdit);
-        //
-        //if (isEdit) {
-        //    mHeaderView.setRightText(R.string.label_save);
-        //    mAdapter.enableSwipeItem();
-        //    mAdapter.enableDragItem(mItemTouchHelper);
-        //} else {
-        //    mHeaderView.setRightText(R.string.label_edit);
-        //    //保存
-        DeviceDao.saveOrUpdate(mAdapter.getData());
+        DeviceDao.updateSeq(mAdapter.getData());
         showToast(R.string.toast_save_success);
-        //    mAdapter.disableDragItem();
-        //    mAdapter.disableSwipeItem();
-        //    setResult(RESULT_OK);
-        //}
     }
 
     @OnClick(R.id.btn_add)

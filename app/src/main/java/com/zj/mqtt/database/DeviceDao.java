@@ -114,6 +114,31 @@ public class DeviceDao extends RealmObject {
         });
     }
 
+    public static void updateSeq(final List<DeviceBean> list) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                int size = list.size();
+                DeviceBean bean;
+                for (int i = 0; i < size; i++) {
+                    bean = list.get(i);
+
+                    DeviceDao dao = realm.where(DeviceDao.class)
+                            .equalTo(COLUMN_ID, bean.getDeviceMac())
+                            .findFirst();
+                    int seq = i+1;
+                    if (dao == null ) {
+                        bean.setSeq(seq++);
+                        realm.copyToRealmOrUpdate(castDao(bean));
+                    } else {
+                        dao.seq = seq;
+                    }
+                }
+            }
+        });
+    }
+
     public static List<DeviceBean> queryList() {
         return queryList(9999);
     }

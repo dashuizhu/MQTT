@@ -65,19 +65,19 @@ public class DeviceBean implements Parcelable {
         name = "";
         switch (deviceType) {
             case AppType.DEVICE_SWITCH:
-                name = "插座";
+                name = "插座"+getDeviceMac();
                 break;
             case AppType.DEVICE_LIGHT:
-                name = "开关";
+                name = "开关"+getDeviceMac();
                 break;
             case AppType.DEVICE_DIM:
-                name = "调光设备";
+                name = "调光设备"+getDeviceMac();
                 break;
             case AppType.DEVICE_SWITCH_LIGHT:
-                name = "调光设备";
+                name = "调光设备"+getDeviceMac();
                 break;
             case AppType.DEVICE_SENSOR:
-                name = "传感器";
+                name = "传感器"+getDeviceMac();
                 break;
 
             default:
