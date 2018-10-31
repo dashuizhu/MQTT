@@ -1,9 +1,7 @@
 package com.zj.mqtt.ui;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.view.TextureView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -17,6 +15,7 @@ public class MacInputActivity extends BaseActivity {
 
     @BindView(R.id.headerView) HeaderView mHeaderView;
     @BindView(R.id.et) ClearEditText mEt;
+    @BindView(R.id.et_url) ClearEditText mEtUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,9 +23,11 @@ public class MacInputActivity extends BaseActivity {
         setContentView(R.layout.activity_mac_input);
         ButterKnife.bind(this);
 
-        String  server = SharedPreApp.getInstance().getServerMac();
+        String server = SharedPreApp.getInstance().getServerMac();
         mEt.setText(server);
 
+        String serverUrl = SharedPreApp.getInstance().getServerURL();
+        mEtUrl.setText(serverUrl);
     }
 
     @OnClick(R.id.layout_header_back)
@@ -42,6 +43,15 @@ public class MacInputActivity extends BaseActivity {
             ToastUtils.showToast(this, "mac格式错误");
             return;
         }
+
+        String serverUrl = mEtUrl.getText().toString().trim();
+        if (TextUtils.isEmpty(serverUrl)) {
+            ToastUtils.showToast(this, "服务器地址不能为空");
+            return;
+        }
+
+
+        SharedPreApp.getInstance().put(this, SharedPreApp.KEY_SERVER_URL, serverUrl);
         SharedPreApp.getInstance().put(this, SharedPreApp.KEY_SERVER_MAC, input);
         setResult(RESULT_OK);
         finish();

@@ -14,6 +14,7 @@ import com.zj.mqtt.ui.device.DeviceDetailDimActivity;
 import com.zj.mqtt.ui.device.DeviceDetailLight1Activity;
 import com.zj.mqtt.ui.device.DeviceDetailLight2Activity;
 import com.zj.mqtt.ui.device.DeviceDetailLight3Activity;
+import com.zj.mqtt.ui.device.DeviceDetailRGBActivity;
 import com.zj.mqtt.ui.device.DeviceDetailSwitchActivity;
 
 /**
@@ -40,6 +41,8 @@ public class ActivityUtils {
             intent = new Intent(context, DeviceDetailDimActivity.class);
         } else if (bean.isDeviceSensor()){
 
+        } else if (bean.isDeviceRGB()) {
+            //intent = new Intent(context, DeviceDetailRGBActivity.class);
         }
         if (intent != null) {
             intent.putExtra(AppString.KEY_MAC, bean.getDeviceMac());

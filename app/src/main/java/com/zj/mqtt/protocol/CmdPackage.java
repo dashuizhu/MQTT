@@ -1,6 +1,5 @@
 package com.zj.mqtt.protocol;
 
-import com.zj.mqtt.bean.device.DeviceBean;
 import com.zj.mqtt.bean.toapp.NodeBean;
 import com.zj.mqtt.bean.todev.CmdControlBean;
 import com.zj.mqtt.bean.todev.CmdNetworkParaBean;

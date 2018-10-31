@@ -115,6 +115,8 @@ public class DeviceControlActivity extends BaseActivity {
             mLayoutSwitch2.setVisibility(View.VISIBLE);
             mLayoutSwitch3.setVisibility(View.VISIBLE);
         } else if (mDeviceBean.isDeviceDim()) {
+            mRbSwitch.setVisibility(View.VISIBLE);
+            mRbColor.setVisibility(View.VISIBLE);
             mLayoutSwitch.setVisibility(View.VISIBLE);
             mLayoutColor.setVisibility(View.VISIBLE);
             initSeekBarListener();

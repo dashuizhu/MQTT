@@ -23,7 +23,7 @@ import com.zj.mqtt.protocol.CmdPackage;
 import com.zj.mqtt.utils.StatusBarUtil;
 
 /**
- * 开关类设备
+ * 调光类设备
  *
  * @author zhuj 2018/9/13 下午7:35.
  */

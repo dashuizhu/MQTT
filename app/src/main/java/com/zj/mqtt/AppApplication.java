@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.util.Log;
 import com.alibaba.fastjson.JSON;
 import com.person.commonlib.utils.DensityHelp;
 import com.person.commonlib.utils.ToastUtils;
@@ -304,6 +305,7 @@ public class AppApplication extends Application {
      * 连接服务器
      */
     public void connectService() {
+        Log.d("App", "开始连接");
         if (mConnectService == null) {
             if (mServiceConnection != null) {
                 unbindService(mServiceConnection);

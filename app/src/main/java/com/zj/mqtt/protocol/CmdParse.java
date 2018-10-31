@@ -1,6 +1,5 @@
 package com.zj.mqtt.protocol;
 
-import android.util.Log;
 import com.google.gson.Gson;
 import com.hwangjr.rxbus.RxBus;
 import com.zj.mqtt.AppApplication;
@@ -18,6 +17,7 @@ import com.zj.mqtt.bean.todev.CmdControlBean;
 import com.zj.mqtt.constant.CmdString;
 import com.zj.mqtt.constant.RxBusString;
 import com.zj.mqtt.database.DeviceDao;
+import com.zj.mqtt.utils.LogUtils;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -68,7 +68,7 @@ public class CmdParse {
     public final static String CMD_HEART_BEAT = "heartbeat";
 
     public static CmdResult parseMsg(String msg) {
-        Log.w(TAG, "解析 " + msg);
+        LogUtils.logW(TAG, "解析 " + msg);
         try {
             if (sGson == null) {
                 sGson = new Gson();
@@ -84,9 +84,8 @@ public class CmdParse {
                     result = sGson.fromJson(msg, CmdReadNodeResult.class);
                     break;
                 case CMD_NODE_LIST:
-                    result =  sGson.fromJson(msg, CmdNodeListResult.class);
+                    result = sGson.fromJson(msg, CmdNodeListResult.class);
                     List<DeviceBean> deviceList = ((CmdNodeListResult) result).castDeviceList();
-
 
                     AppApplication.getApp().updateDeviceList(deviceList);
                     try {
@@ -112,8 +111,8 @@ public class CmdParse {
                             ((CmdNodeLeftResult) result).getDeviceleft();
                     AppApplication.getApp().updateDevice(leftBean);
                     break;
-                case CMD_ZCL_CMD:
-                    result = sGson.fromJson(msg, CmdZclCmdResult.class);
+                case CMD_ZCL_CMD://无作用，暂时废弃
+                    //result = sGson.fromJson(msg, CmdZclCmdResult.class);
                     break;
                 case CMD_ZCL_ATTRIBUTE:
                     result = sGson.fromJson(msg, CmdZclAttributeResult.class);
@@ -129,9 +128,8 @@ public class CmdParse {
             if (result != null) {
 
                 //Log.w(TAG, "解析success1 " + msg);
-                Log.w(TAG, "解析success " + sGson.toJson(result));
+                //Log.w(TAG, "解析success " + sGson.toJson(result));
                 RxBus.get().post(RxBusString.RXBUS_PARSE, result);
-                Log.w(TAG, "解析success OVER " );
             }
             return result;
         } catch (Exception e) {
@@ -165,12 +163,13 @@ public class CmdParse {
             mDelay = null;
         }
         mDelay = Observable.timer(500, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Long>() {
-            @Override
-            public void accept(Long aLong) throws Exception {
-                //重新读取节点列表
-                AppApplication.getApp().publishMsgToServer(CmdPackage.getNodeList());
-            }
-        });
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        //重新读取节点列表
+                        AppApplication.getApp().publishMsgToServer(CmdPackage.getNodeList());
+                    }
+                });
     }
 }

@@ -183,12 +183,13 @@ public class HomeActivity extends BaseActivity {
                             mTvStatus.setVisibility(View.GONE);
                         } else {
                             mTvStatus.setVisibility(View.VISIBLE);
-                            if (getApp().isConnecting()) {
+                            if (!getApp().isConnecting()) {
+                                boolean isLing = getApp().isConnecting();
+                                mTvStatus.setEnabled(true);
+                                mTvStatus.setText(
+                                        isLing ? R.string.label_linking : R.string.label_link_fail);
 
                             }
-                            boolean isLing = getApp().isConnecting();
-                            mTvStatus.setText(
-                                    isLing ? R.string.label_linking : R.string.label_link_fail);
                         }
                     }
                 });

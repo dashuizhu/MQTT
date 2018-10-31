@@ -27,6 +27,11 @@ public class AppType {
     public static final String DEVICE_SENSOR = "0x0402";
 
     /**
+     * 传感器
+     */
+    public static final String DEVICE_RGB = "0x010D";
+
+    /**
      * 开关
      */
     public static final int CLUSTER_ONOFF = 0x0006;
@@ -38,5 +43,8 @@ public class AppType {
      * 湿度
      */
     public static final int CLUSTER_HUMIDITY = 1029;
+
+    public static final int CLUSTER_COLOR_CONTROL = 768;
+    public static final int CLUSTER_LEVEL_CONTROL = 8;
 
 }

@@ -20,8 +20,6 @@ public class CmdZclCmdResult extends CmdResult {
      * node : {"mac":"string","endpoint":1}
      */
 
-    private String cmd;
-    private int seq;
     private int clusterId;
     private int commandId;
     private String commandData;

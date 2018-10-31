@@ -79,7 +79,8 @@ public class DeviceBean implements Parcelable {
             case AppType.DEVICE_SENSOR:
                 name = "传感器"+getDeviceMac();
                 break;
-
+            case AppType.DEVICE_RGB:
+                name = "RGB" + getDeviceMac();
             default:
         }
         return name;
@@ -104,7 +105,11 @@ public class DeviceBean implements Parcelable {
      * @return
      */
     public boolean isDeviceDim() {
-        return AppType.DEVICE_DIM.equals(getDeviceType());
+        return AppType.DEVICE_RGB.equals(getDeviceType());
+    }
+
+    public boolean isDeviceRGB() {
+        return AppType.DEVICE_RGB.equals(getDeviceType());
     }
 
     /**

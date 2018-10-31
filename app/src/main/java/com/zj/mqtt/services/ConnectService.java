@@ -9,6 +9,7 @@ import android.util.Log;
 import com.hwangjr.rxbus.RxBus;
 import com.zj.mqtt.constant.RxBusString;
 import com.zj.mqtt.protocol.CmdParse;
+import com.zj.mqtt.utils.LogUtils;
 import com.zj.mqtt.utils.sharedPresenter.SharedPreApp;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
@@ -33,7 +34,7 @@ public class ConnectService extends Service {
     private static String TOPIC_PUBLISH = "gw/000D6FFFFE02C0F2/todev";
     private static String TOPIC_SUBSCRIBE = "gw/000D6FFFFE02C0F2/toapp";
     private static String CLIENT_ID = "mqtt_";
-    private String serverUrl = "tcp://39.106.24.176:1883";
+    private String serverUrl;
 
     private final IBinder mBinder = new LocalBinder();
 
@@ -43,11 +44,11 @@ public class ConnectService extends Service {
 
     Disposable mLinkingDisposable;
 
-
     public void resetServer() {
         String server = SharedPreApp.getInstance().getServerMac();
         TOPIC_PUBLISH = String.format("gw/%1$s/todev", server);
         TOPIC_SUBSCRIBE = String.format("gw/%1$s/toapp", server);
+        serverUrl = SharedPreApp.getInstance().getServerURL();
         stopConnect();
         try {
             connectMQTT();
@@ -62,6 +63,7 @@ public class ConnectService extends Service {
         String server = SharedPreApp.getInstance().getServerMac();
         TOPIC_PUBLISH = String.format("gw/%1$s/todev", server);
         TOPIC_SUBSCRIBE = String.format("gw/%1$s/toapp", server);
+        serverUrl = SharedPreApp.getInstance().getServerURL();
     }
 
     @Nullable
@@ -106,12 +108,15 @@ public class ConnectService extends Service {
      * @throws MqttException
      */
     public void connectMQTT() throws MqttException {
+        Log.d(TAG, "开始连接1 " + mMqttClient);
         if (mMqttClient == null) {
-            CLIENT_ID = "mqtt_"+System.currentTimeMillis();
+            CLIENT_ID = "mqtt_" + System.currentTimeMillis();
             //连接时使用的clientId
             mMqttClient = new MqttAndroidClient(this, serverUrl, CLIENT_ID);
         }
+        Log.d(TAG, "开始连接2 " + isLinking);
         if (isLinking) {
+            LogUtils.d(TAG, " 是否连接 delay " + isLinking);
             startLinkTimeoutCheck();
             return;
         }
@@ -138,7 +143,7 @@ public class ConnectService extends Service {
         //心跳时间，单位为秒。即多长时间确认一次Client端是否在线
         options.setKeepAliveInterval(60);
         //允许同时发送几条消息（未收到broker确认信息）
-        options.setMaxInflight(15);
+        options.setMaxInflight(20);
         //进行连接  有多个重载方法  看需求选择
         RxBus.get().post(RxBusString.LINKING);
         isLinking = true;
@@ -164,19 +169,19 @@ public class ConnectService extends Service {
                 disLinkTimeoutCheck();
                 RxBus.get().post(RxBusString.LINKFAIL);
 
-                    //if ("已连接客户机".equals(exception.getMessage())) {
-                    try {
-                        stopConnect();
-                        if (exception != null) {
-                            exception.printStackTrace();
-                            String str2 = exception.getMessage();
-                            String str = exception.getCause().getMessage();
-                            Log.e(TAG, "onFailure  " + str2);
-                            Log.e(TAG, "onFailure  " + str);
-                        }
-                    } catch (Exception e) {
-                        //e.printStackTrace();
+                //if ("已连接客户机".equals(exception.getMessage())) {
+                try {
+                    stopConnect();
+                    if (exception != null) {
+                        exception.printStackTrace();
+                        String str2 = exception.getMessage();
+                        String str = exception.getCause().getMessage();
+                        Log.e(TAG, "onFailure  " + str2);
+                        Log.e(TAG, "onFailure  " + str);
                     }
+                } catch (Exception e) {
+                    //e.printStackTrace();
+                }
             }
         });
         mMqttClient.setCallback(new MqttCallback() {
@@ -263,7 +268,7 @@ public class ConnectService extends Service {
      * 停止连接
      */
     public void stopConnect() {
-        Log.w("test"," stopConnect " );
+        Log.w("test", " stopConnect ");
         if (mMqttClient != null) {
             mMqttClient.close();
             mMqttClient.unregisterResources();
@@ -279,19 +284,20 @@ public class ConnectService extends Service {
 
     private void startLinkTimeoutCheck() {
         if (mLinkingDisposable == null || mLinkingDisposable.isDisposed()) {
-            mLinkingDisposable = Observable.timer(15, TimeUnit.SECONDS).subscribe(new Consumer<Long>() {
-                @Override
-                public void accept(Long aLong) throws Exception {
-                    if (isLinking) {
-                        if (mMqttClient.isConnected()) {
-                            RxBus.get().post(RxBusString.LINK_SUCCESS);
-                        } else {
-                            RxBus.get().post(RxBusString.LINKFAIL);
+            mLinkingDisposable =
+                    Observable.timer(15, TimeUnit.SECONDS).subscribe(new Consumer<Long>() {
+                        @Override
+                        public void accept(Long aLong) throws Exception {
+                            if (isLinking) {
+                                if (mMqttClient.isConnected()) {
+                                    RxBus.get().post(RxBusString.LINK_SUCCESS);
+                                } else {
+                                    RxBus.get().post(RxBusString.LINKFAIL);
+                                }
+                                isLinking = false;
+                            }
                         }
-                        isLinking = false;
-                    }
-                }
-            });
+                    });
         }
     }
 
@@ -303,5 +309,4 @@ public class ConnectService extends Service {
             mLinkingDisposable = null;
         }
     }
-
 }

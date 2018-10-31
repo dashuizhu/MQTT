@@ -18,41 +18,32 @@ import com.zj.mqtt.bean.toapp.CmdReadNodeResult;
 import com.zj.mqtt.bean.toapp.CmdResult;
 import com.zj.mqtt.bean.toapp.CmdZclAttributeResult;
 import com.zj.mqtt.bean.todev.CmdControlBean;
-import com.zj.mqtt.bean.todev.HuaSetBean;
+import com.zj.mqtt.bean.todev.LevelBean;
 import com.zj.mqtt.constant.AppType;
 import com.zj.mqtt.constant.CmdString;
 import com.zj.mqtt.constant.RxBusString;
 import com.zj.mqtt.protocol.CmdPackage;
 import com.zj.mqtt.protocol.CmdParse;
 import com.zj.mqtt.utils.StatusBarUtil;
-import io.reactivex.Observable;
-import io.reactivex.Scheduler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 import java.util.List;
 
 /**
- * 调光类数据
+ * 开关类设备
  *
  * @author zhuj 2018/9/13 下午7:35.
  */
-public class DeviceDetailDimActivity extends DeviceDetailActivity
-        implements SeekBar.OnSeekBarChangeListener {
+public class DeviceDetailRGBActivity extends DeviceDetailActivity implements SeekBar.OnSeekBarChangeListener {
 
     @BindView(R.id.headerView) HeaderView mHeaderView;
     @BindView(R.id.tv_switch) TextView mTvSwitch;
-    @BindView(R.id.tv_color_set) TextView mTvColorSet;
-    @BindView(R.id.sb_color_set) SeekBar mSbColorSet;
-    @BindView(R.id.tv_color_hua) TextView mTvColorHua;
-    @BindView(R.id.sb_color_hua) SeekBar mSbColorHua;
-    @BindView(R.id.tv_color_time) TextView mTvColorTime;
-    @BindView(R.id.sb_color_time) SeekBar mSbColorTime;
+    @BindView(R.id.sb_level_value) SeekBar mSbLevelValue;
+    @BindView(R.id.tv_level_time) TextView mTvLevelTime;
+    @BindView(R.id.sb_level_time) SeekBar mSbLevelTime;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_device_detail_dim);
+        setContentView(R.layout.activity_device_detail_rgb);
         ButterKnife.bind(this);
 
         StatusBarUtil.immersive(this);
@@ -62,50 +53,41 @@ public class DeviceDetailDimActivity extends DeviceDetailActivity
 
     private void initViews() {
         initLight(mTvSwitch, false);
-        mSbColorHua.setOnSeekBarChangeListener(this);
-        mSbColorSet.setOnSeekBarChangeListener(this);
-        mSbColorTime.setOnSeekBarChangeListener(this);
+
+        mSbLevelValue.setOnSeekBarChangeListener(this);
+        mSbLevelTime.setOnSeekBarChangeListener(this);
     }
 
     @Override
     void sendReadnodeCmd() {
-
         //读取数据
         List<DeviceEndpointBean> list = mDeviceBean.getEndpointList();
-
         try {
+            DeviceEndpointBean endpointBean;
+            endpointBean = list.get(0);
 
-            DeviceEndpointBean deviceEndpointBean = list.get(0);
-            Observable.just(deviceEndpointBean).observeOn(Schedulers.io()).subscribe(new Consumer<DeviceEndpointBean>() {
-                @Override
-                public void accept(DeviceEndpointBean endpointBean) throws Exception {
-                    getApp().publishMsgToServer(
-                            CmdPackage.getReadNode(mDeviceBean.getDeviceMac(), endpointBean.getEndpoint(),
-                                    AppType.CLUSTER_ONOFF, 0));
-                    Thread.sleep(200);
-                    //hue
-                    getApp().publishMsgToServer(
-                            CmdPackage.getReadNode(mDeviceBean.getDeviceMac(), endpointBean.getEndpoint(),
-                                    AppType.CLUSTER_COLOR_CONTROL, 0));
+            getApp().publishMsgToServer(
+                    CmdPackage.getReadNode(mDeviceBean.getDeviceMac(), endpointBean.getEndpoint(),
+                            AppType.CLUSTER_ONOFF, 0));
 
-                    Thread.sleep(200);
-                    //sat
-                    getApp().publishMsgToServer(
-                            CmdPackage.getReadNode(mDeviceBean.getDeviceMac(), endpointBean.getEndpoint(),
-                                    AppType.CLUSTER_COLOR_CONTROL, 1));
-                    Thread.sleep(200);
-                    //time
-                    getApp().publishMsgToServer(
-                            CmdPackage.getReadNode(mDeviceBean.getDeviceMac(), endpointBean.getEndpoint(),
-                                    AppType.CLUSTER_COLOR_CONTROL, 2));
-                }
-            });
+            //sat
+            getApp().publishMsgToServer(
+                    CmdPackage.getReadNode(mDeviceBean.getDeviceMac(), endpointBean.getEndpoint(),
+                            AppType.CLUSTER_COLOR_CONTROL, 1));
 
+            //hua
+            getApp().publishMsgToServer(
+                    CmdPackage.getReadNode(mDeviceBean.getDeviceMac(), endpointBean.getEndpoint(),
+                            AppType.CLUSTER_LEVEL_CONTROL, 2));
+            //time
+            getApp().publishMsgToServer(
+                    CmdPackage.getReadNode(mDeviceBean.getDeviceMac(), endpointBean.getEndpoint(),
+                            AppType.CLUSTER_LEVEL_CONTROL, 3));
         } catch (Exception e) {
             e.printStackTrace();
-    }
+        }
 
-}
+    }
 
     @OnClick(R.id.tv_switch)
     public void onClickSwitch(View view) {
@@ -150,16 +132,18 @@ public class DeviceDetailDimActivity extends DeviceDetailActivity
                     break;
                 case AppType.CLUSTER_COLOR_CONTROL:
                     int attributeId = nodeResult.getNodedata().getAttributeId();
-                    if (attributeId == 0) {
-                        mSbColorHua.setProgress(data);
-                        mTvColorHua.setText("" + data);
-                    } else if (attributeId == 1) {
-                        mSbColorSet.setProgress(data);
-                        mTvColorSet.setText("" + data);
+                    if (attributeId == 1) {
+
                     } else if (attributeId == 2) {
-                        mSbColorTime.setProgress(data);
-                        mTvColorTime.setText("" + data);
+
+                    } else  if (attributeId == 3) {
+                        mSbLevelTime.setProgress(data);
+                        mTvLevelTime.setText("" + data);
                     }
+                    break;
+                case AppType.CLUSTER_LEVEL_CONTROL:
+                    mSbLevelValue.setProgress(data);
+                    //mSbLevelValue.setText("" + data);
                     break;
                 default:
             }
@@ -174,17 +158,12 @@ public class DeviceDetailDimActivity extends DeviceDetailActivity
                 boolean isOnoff = (data == 1);
                 initLight(mTvSwitch, isOnoff);
             } else if (AppType.CLUSTER_COLOR_CONTROL == clusterId) {
-                int attributeId = zclResult.getAttributeId();
-                if (attributeId == 0) {
-                    mSbColorHua.setProgress(data);
-                    mTvColorHua.setText("" + data);
-                } else if (attributeId == 1) {
-                    mSbColorSet.setProgress(data);
-                    mTvColorSet.setText("" + data);
-                } else if (attributeId == 2) {
-                    mSbColorTime.setProgress(data);
-                    mTvColorTime.setText("" + data);
-                }
+
+
+                mSbLevelTime.setProgress(data);
+                mTvLevelTime.setText("" + data);
+            } else if (AppType.CLUSTER_LEVEL_CONTROL == clusterId) {
+                mSbLevelValue.setProgress(data);
             }
         }
     }
@@ -201,22 +180,13 @@ public class DeviceDetailDimActivity extends DeviceDetailActivity
             if (endpointBean == null) {
                 return;
             }
-            HuaSetBean bean = new HuaSetBean();
-            bean.setTime(mSbColorTime.getProgress());
-            bean.setHua(mSbColorHua.getProgress());
-            bean.setSat(mSbColorSet.getProgress());
+            LevelBean levelBean = new LevelBean();
+            levelBean.setTime(mSbLevelTime.getProgress());
+            levelBean.setLevel(mSbLevelValue.getProgress());
 
-            CmdControlBean control =
-                    CmdPackage.setColorControl(endpointBean.getMac(), endpointBean.getEndpoint(),
-                            bean);
+            CmdControlBean control = CmdPackage.setLevelControl(endpointBean.getMac(),
+                    endpointBean.getEndpoint(), levelBean);
             getApp().publishMsgToServer(control);
-        }
-        if (seekBar == mSbColorHua) {
-            mTvColorHua.setText("" + progress);
-        } else if (seekBar == mSbColorSet) {
-            mTvColorSet.setText("" + progress);
-        } else if (seekBar == mSbColorTime) {
-            mTvColorTime.setText("" + progress);
         }
     }
 

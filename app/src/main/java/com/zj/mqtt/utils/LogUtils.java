@@ -18,6 +18,12 @@ public class LogUtils {
 
     private final static String Prefix = "MQTT_";
 
+    private static FileOutputStream fos = null;
+    private static String mFileName = null;
+
+    private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    private static SimpleDateFormat timelogFormatter = new SimpleDateFormat("HH:mm:ss");
+
     public static void d(String TAG, String log) {
         Log.d(Prefix + TAG, log);
     }
@@ -43,11 +49,10 @@ public class LogUtils {
         writeLogToFile(TAG, log);
     }
 
-    private static FileOutputStream fos = null;
-    private static String mFileName = null;
-
-    private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-    private static SimpleDateFormat timelogFormatter = new SimpleDateFormat("HH:mm:ss");
+    public static void logW(String TAG, String log) {
+        Log.w(Prefix + TAG, log);
+        writeLogToFile(TAG, log);
+    }
 
     public static void writeLogToFile(final String tag, final String msg) {
         if (msg == null || msg.equals("")) {
@@ -59,7 +64,7 @@ public class LogUtils {
             public void run() {
                 try {
                     if (fos != null) {
-                        Log.e(tag, tag + "写入文件" + msg);
+                        //Log.e(tag, tag + "写入文件" + msg);
                         File tmpFile = new File(mFileName);
                         if (!tmpFile.exists()) {
                             closeLogFile();

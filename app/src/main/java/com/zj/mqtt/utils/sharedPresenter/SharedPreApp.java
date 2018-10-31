@@ -34,6 +34,7 @@ public class SharedPreApp extends BaseSharedPre {
     public static final String KEY_LAST_VERSION_TIME = "key_last_version_time";
 
     public static final String KEY_SERVER_MAC = "key_server_mac";
+    public static final String KEY_SERVER_URL = "key_server_url";
 
     @Override
     SharedPreferences getSharedPreferences(Context context) {
@@ -56,4 +57,7 @@ public class SharedPreApp extends BaseSharedPre {
         return (String) get(AppApplication.getApp(), KEY_SERVER_MAC, AppConstants.SERVER_MAC);
     }
 
+    public String getServerURL() {
+        return (String) get(AppApplication.getApp(), KEY_SERVER_URL, AppConstants.SERVER_URL);
+    }
 }

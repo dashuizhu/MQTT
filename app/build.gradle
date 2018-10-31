@@ -17,8 +17,8 @@ android {
     applicationId "com.zj.mqtt"
     minSdkVersion 16
     targetSdkVersion 27
-    versionCode 3
-    versionName "1.02"
+    versionCode 5
+    versionName "1.04"
     signingConfig signingConfigs.signing
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     javaCompileOptions {
@@ -58,7 +58,7 @@ android {
 }
 
 def releaseTime() {
-  return new Date().format("yyyyMMdd-HHmm", TimeZone.getTimeZone("UTC"))
+  return new Date().format("yyyyMMdd-HHmm", TimeZone.getTimeZone("GMT+8"))
 }
 
 dependencies {
