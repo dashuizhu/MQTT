@@ -51,7 +51,7 @@ public class DeviceListActivity extends BaseActivity {
         setContentView(R.layout.activity_device_list);
         ButterKnife.bind(this);
         initViews();
-        //mast1 chagne 5
+        //flow2 change 5
         //registerRxBus();
     }
 
