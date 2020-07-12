@@ -53,6 +53,7 @@ public class DeviceListActivity extends BaseActivity {
         //master chagne 6
         initViews();
         //flow2 change 5
+        //flow2 change 5 +++
         //registerRxBus();
     }
 
