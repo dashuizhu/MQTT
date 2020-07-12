@@ -52,6 +52,7 @@ public class DeviceListActivity extends BaseActivity {
         ButterKnife.bind(this);
         //master chagne 6
         initViews();
+        //flow2 change 5
         //registerRxBus();
     }
 
