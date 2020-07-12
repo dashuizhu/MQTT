@@ -50,6 +50,7 @@ public class DeviceListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_list);
         ButterKnife.bind(this);
+        //master chagne 6
         initViews();
         //registerRxBus();
     }
