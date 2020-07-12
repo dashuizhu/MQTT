@@ -27,7 +27,7 @@ public class AppType {
     public static final String DEVICE_SENSOR = "0x0402";
 
     /**
-     * 传感器
+     * color 调光
      */
     public static final String DEVICE_RGB = "0x010D";
 

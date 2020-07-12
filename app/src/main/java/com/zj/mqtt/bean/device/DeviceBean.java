@@ -44,6 +44,7 @@ public class DeviceBean implements Parcelable {
     //private boolean moreDevice;
     private int seq;
 
+    private int mResId;
 
     /**
      * 以下是缓存的控制数据
@@ -156,7 +157,35 @@ public class DeviceBean implements Parcelable {
 
     public @DrawableRes
     int getPictureRes() {
-        return R.mipmap.device_model_switch_img;
+        if (mResId != 0) {
+            return mResId;
+        }
+        switch (deviceType) {
+            case AppType.DEVICE_SWITCH:
+                mResId = R.mipmap.device_model_switch_img;
+                break;
+            case AppType.DEVICE_LIGHT:
+                if (isDeviceLight3()) {
+                    mResId = R.mipmap.device_model_light3_img;
+                } else if (isDeviceLight2()) {
+                    mResId = R.mipmap.device_model_light2_img;
+                } else {
+                    mResId = R.mipmap.device_mode_light1_img;
+                }
+                break;
+            case AppType.DEVICE_RGB:
+                mResId = R.mipmap.device_model_dim_img;
+                break;
+            case AppType.DEVICE_SWITCH_LIGHT:
+                mResId = R.mipmap.device_model_switch_img;
+                break;
+            case AppType.DEVICE_SENSOR:
+                mResId = R.mipmap.device_model_sensors;
+                break;
+            default:
+                mResId = R.mipmap.device_model_switch_img;
+        }
+        return mResId;
     }
 
     public DeviceBean() {

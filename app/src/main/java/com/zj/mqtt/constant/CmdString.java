@@ -49,4 +49,9 @@ public class CmdString {
      * OTA升级
      */
     public final static String DEV_UPDATE = "fw_upgrade";
+
+    /**
+     *
+     */
+    public final static String DEV_BIND = "bind";
 }

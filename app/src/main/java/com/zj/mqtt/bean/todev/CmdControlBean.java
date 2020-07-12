@@ -23,6 +23,13 @@ public class CmdControlBean implements Parcelable {
 
     private String deviceMac;
 
+    private Integer nodeId;
+    private Integer clusterId;
+    private Integer src_endpoint;
+    private Integer des_endpoint;
+    private String src_mac;
+    private String des_mac;
+
     /**
      * 调光控制
      */

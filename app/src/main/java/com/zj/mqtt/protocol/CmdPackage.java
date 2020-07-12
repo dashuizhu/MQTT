@@ -152,6 +152,19 @@ public class CmdPackage {
         return bean;
     }
 
+    public static CmdControlBean setBindControl(int nodeId, int clusterId, int srcEndPoint, int desEndPoint,
+            String srcMac, String desMac) {
+        CmdControlBean bean = new CmdControlBean(CmdString.DEV_BIND);
+
+        bean.setNodeId(nodeId);
+        bean.setClusterId(clusterId);
+        bean.setSrc_endpoint(srcEndPoint);
+        bean.setDes_endpoint(desEndPoint);
+        bean.setSrc_mac(srcMac);
+        bean.setDes_mac(desMac);
+        return bean;
+    }
+
     /**
      * 软件升级
      */
