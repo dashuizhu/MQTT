@@ -49,6 +49,7 @@ public class DeviceListActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_list);
+        //flow2 chagne 1
         ButterKnife.bind(this);
         initViews();
         //registerRxBus();
